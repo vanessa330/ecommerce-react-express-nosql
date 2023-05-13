@@ -9,8 +9,6 @@ import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
 
-// URL/users/
-
 /* READ */
 router.get("/:id", getUser);
 router.get("/:id/followers", getUserFollowers);

@@ -28,6 +28,7 @@ export const createProduct = async (req, res) => {
     await newProduct.save();
 
     const products = await Product.find().sort({ updatedAt: -1 });
+    
     res.status(201).json(products);
   } catch (err) {
     res.status(409).json({ message: err.message });
@@ -53,6 +54,7 @@ export const getUserProducts = async (req, res) => {
     const { userId } = req.params;
 
     const products = await Product.find({ userId }).sort({ updatedAt: -1 });
+
     res.status(200).json(products);
   } catch (err) {
     res.status(404).json({ message: err.message });
@@ -64,15 +66,19 @@ export const getUserProducts = async (req, res) => {
 export const patchProduct = async (req, res) => {
   // URL/products/:id/:userId
   try {
-    const { id } = req.params;
+    const { id, userId } = req.params;
     const { productName, quantity, description, picturePath } = req.body;
     const product = await Product.findById(id);
 
-    // edit product details
-    product.productName = productName;
-    product.quantity = quantity;
-    product.description = description;
-    product.picturePath = picturePath;
+    if (userId === product.userId) {
+      // Edit product details
+      product.productName = productName;
+      product.quantity = quantity;
+      product.description = description;
+      product.picturePath = picturePath;
+    } else {
+      res.status(404).send({ message: "User have no permissions" });
+    }
 
     const updatedProduct = await product.save();
 
@@ -83,10 +89,9 @@ export const patchProduct = async (req, res) => {
 };
 
 export const likeProdcut = async (req, res) => {
-  // URL/products/:id/like
+  // URL/products/:id/:userId/like
   try {
-    const { id } = req.params;
-    const { userId } = req.body;
+    const { id, userId } = req.params;
     const product = await Product.findById(id);
     const isLiked = product.likes.get(userId);
 
@@ -94,7 +99,7 @@ export const likeProdcut = async (req, res) => {
     if (isLiked) {
       product.likes.delete(userId);
     } else {
-      product.like.set(userId, true);
+      product.likes.set(userId, true);
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(
@@ -102,20 +107,23 @@ export const likeProdcut = async (req, res) => {
       { likes: product.likes },
       { new: true }
     );
+
     res.status(200).json(updatedProduct);
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
 };
 
-export const patchComment = async (req, res) => {
-  // URL/products/:id/comment
+export const addComment = async (req, res) => {
+  // URL/products/:id/:userId/comment
   try {
-    const { id } = req.params;
-    const { userId, comment } = req.body;
-    const product = await product.findById(id);
+    const { id, userId } = req.params;
+    const { comment } = req.body;
+    const product = await Product.findById(id);
 
-    const updatedProduct = await product.findByIdAndUpdate(
+    product.comments.set(userId, comment);
+
+    const updatedProduct = await Product.findByIdAndUpdate(
       id,
       { comments: product.comments },
       { new: true }
@@ -130,14 +138,18 @@ export const patchComment = async (req, res) => {
 /* DELETE */
 
 export const deleteProduct = async (req, res) => {
-  // URL/products/:id/delete
+  // URL/products/:id/:userId/delete
   try {
-    const { id } = req.params;
+    const { id, userId } = req.params;
+    const product = await Product.findById(id);
 
-    // Find the product by ID and delete it
-    await Product.findByIdAndDelete(id);
+    if (userId === product.userId) {
+      await Product.findByIdAndDelete(id);
+    } else {
+      res.status(404).send({ message: "User have no permissions" });
+    }
 
-    res.status(200).json({ message: "Product deleted successfully" });
+    res.status(200).send({ message: "Product deleted successfully" });
   } catch (err) {
     res.status(404).json({ message: err.message });
   }

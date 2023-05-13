@@ -41,7 +41,7 @@
       - getUserProducts
       - patchProduct
       - likeProdcut
-      - patchComment
+      - addComment
       - deleteProduct
 
 

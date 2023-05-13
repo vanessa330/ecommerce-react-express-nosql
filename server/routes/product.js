@@ -5,7 +5,7 @@ import {
   getUserProducts,
   patchProduct,
   likeProdcut,
-  patchComment,
+  addComment,
   deleteProduct
 } from "../controllers/products.js";
 import { verifyToken } from "../middleware/auth.js";
@@ -22,10 +22,10 @@ router.get("/:userId", getUserProducts);
 
 /* UPDATE */
 router.patch("/:id/:userId", verifyToken, upload.single("picture"), patchProduct);
-router.patch("/:id/like", verifyToken, likeProdcut);
-router.patch("/:id/comment", verifyToken, patchComment);
+router.patch("/:id/:userId/like", verifyToken, likeProdcut);
+router.patch("/:id/:userId/comment", verifyToken, addComment);
 
 /* DELETE */
-router.delete("/:id/delete", verifyToken, deleteProduct);
+router.delete("/:id/:userId/delete", verifyToken, deleteProduct);
 
 export default router;

@@ -30,11 +30,11 @@ const ProductSchema = mongoose.Schema(
     },
     likes: {
       type: Map, // key/value pairs.
-      of: Boolean, 
+      of: Boolean, // userId: true
     },
     comments: {
-      type: Map, //// key/value pairs.
-      of: String,
+      type: Map, // key/value pairs.
+      of: String, // userId: comment
     },
   },
   { timestamps: true }
