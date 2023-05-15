@@ -6,7 +6,7 @@ import User from "../models/User.js";
 export const createProduct = async (req, res) => {
   // URL/products
   try {
-    const { userId, productName, quantity, description, picturePath } =
+    const { userId, productName, price, description, picturePath } =
       req.body;
     const user = await User.findById(userId);
 
@@ -18,7 +18,7 @@ export const createProduct = async (req, res) => {
       lastName: user.lastName,
       userPicturePath: user.picturePath,
       productName,
-      quantity,
+      price,
       description,
       picturePath: formattedPicPath,
       likes: {},
@@ -67,13 +67,13 @@ export const patchProduct = async (req, res) => {
   // URL/products/:id/:userId
   try {
     const { id, userId } = req.params;
-    const { productName, quantity, description, picturePath } = req.body;
+    const { productName, price, description, picturePath } = req.body;
     const product = await Product.findById(id);
 
     if (userId === product.userId) {
       // Edit product details
       product.productName = productName;
-      product.quantity = quantity;
+      product.price = price;
       product.description = description;
       product.picturePath = picturePath;
     } else {
