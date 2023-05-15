@@ -4,7 +4,7 @@
 
 <br />
 
-> Deploy to Production : [NA](NA)
+> Deploy to Production : [https://ecommerce-8t6.pages.dev/](https://ecommerce-8t6.pages.dev/)
 
 <br />
 
@@ -12,7 +12,7 @@
 
 1. Fronend Set Up
    - `npx create-react-app client`
-   - `npm i react-router-dom@6 react-redux @reduxjs/toolkit redux-persist react-dropzone dotenv formik yup @mui/material @emotion/react @emotion/styled @mui/icons-material` 
+   - `npm i react-router-dom@6 react-redux @reduxjs/toolkit redux-persist react-dropzone dotenv formik yup @mui/material @emotion/react @emotion/styled @mui/icons-material`
 2. Configuration on index.js
    - Login Redux Persist
 3. Configuration on App.js
@@ -20,13 +20,21 @@
 4. Redux for state setting
 5. UI
    - Theme
-   - LoginPage <<<<<<<<<<<>>>>>>>>>>>
+   - Navbar
    - HomePage
-      - Navbar
+     - LoginPage
       - UserWidget
-      - FollowingListWidget
-      - ProductsWidget
+      - CreateWidget
+     - ProductsWidget
    - ProfilePage
+     - UserWidget
+     - ProductsWidget
+   - UserSettings
+     - UserWidget
+      - UserWidget
+      - CreateWidget
+      - EditProductWidget
+      - EditUserWidget
 
 <br />
 
@@ -43,25 +51,22 @@
 3. User & Product models
 4. Routes
    - auth controllers
-      - Authentication: Register
-      - Authorization: Login
-      - verifyToken middleware
+     - Authentication: Register
+     - Authorization: Login
+     - verifyToken middleware
    - user controllers
-      - getUser
-      - getUserFollowers
-      - getUserFollowing
-      - addRemoveFollowing
+     - getUser
+     - getUserFollowers
+     - getUserFollowing
+     - addRemoveFollowing
    - prodcut controllers
-      - createProdcut
-      - getAllProducts
-      - getUserProducts
-      - patchProduct
-      - likeProdcut
-      - addComment
-      - deleteProduct
-
+     - createProdcut
+     - getAllProducts
+     - getUserProducts
+     - patchProduct
+     - likeProdcut
+     - addComment
+     - deleteProduct
 
 <br />
 
-## Pending to do...
-- 
