@@ -1,8 +1,6 @@
 import { Box, Typography, Divider, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Settings } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
 import UserImage from "../../components/UserImage";
 import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
@@ -63,10 +61,6 @@ const UserWidget = ({ userId, picturePath }) => {
             </Typography>
           </Box>
         </FlexBetween>
-
-        <IconButton>
-          <Settings />
-        </IconButton>
       </FlexBetween>
 
       <Divider />

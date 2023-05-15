@@ -126,6 +126,7 @@ const Navbar = () => {
               <MenuItem value={fullName}>
                 <Typography>{fullName}</Typography>
               </MenuItem>
+
               {fullName === "Guest" ? (
                 <MenuItem
                   onClick={() => {
@@ -135,13 +136,18 @@ const Navbar = () => {
                   Log In
                 </MenuItem>
               ) : (
-                <MenuItem
-                  onClick={() => {
-                    dispatch(setLogout());
-                  }}
-                >
-                  Log Out
-                </MenuItem>
+                <>
+                  <MenuItem>
+                    <Typography>Settings</Typography>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      dispatch(setLogout());
+                    }}
+                  >
+                    Log Out
+                  </MenuItem>
+                </>
               )}
             </Select>
           </FormControl>
@@ -252,14 +258,17 @@ const Navbar = () => {
                     Log In
                   </MenuItem>
                 ) : (
-                  <MenuItem
-                    onClick={() => {
-                      dispatch(setLogout());
-                      navigate("/");
-                    }}
-                  >
-                    Log Out
-                  </MenuItem>
+                  <>
+                    <MenuItem>Settings</MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        dispatch(setLogout());
+                        navigate("/");
+                      }}
+                    >
+                      Log Out
+                    </MenuItem>
+                  </>
                 )}
               </Select>
             </FormControl>
