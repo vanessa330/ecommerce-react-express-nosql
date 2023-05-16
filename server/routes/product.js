@@ -14,14 +14,14 @@ import upload from "../middleware/upload.js";
 const router = express.Router();
 
 /* CREATE */
-router.post("/", verifyToken, upload.single("picture"), createProduct);
+router.post("/", verifyToken, upload.single("file"), createProduct);
 
 /* READ */
 router.get("/", getAllProducts);
 router.get("/:userId", getUserProducts);
 
 /* UPDATE */
-router.patch("/:id/:userId", verifyToken, upload.single("picture"), patchProduct);
+router.patch("/:id/:userId", verifyToken, upload.single("file"), patchProduct);
 router.patch("/:id/:userId/like", verifyToken, likeProdcut);
 router.patch("/:id/:userId/comment", verifyToken, addComment);
 

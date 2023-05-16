@@ -78,25 +78,7 @@ export const addRemoveFollowing = async (req, res) => {
     await user.save();
     await oppositeUser.save();
 
-    // Updated user's following list and return to frontend.
-    const updatedFollowing = await Promise.all(
-      user.following.map((id) => User.findById(id))
-    );
-
-    const formattedfollowing = updatedFollowing.map(
-      ({ _id, firstName, lastName, picturePath, followers, following }) => {
-        return {
-          _id,
-          firstName,
-          lastName,
-          picturePath,
-          followers,
-          following,
-        };
-      }
-    );
-
-    res.status(200).json(formattedfollowing);
+    res.status(200).json(user);
   } catch (err) {
     res.status(404).send({ message: err.message });
   }

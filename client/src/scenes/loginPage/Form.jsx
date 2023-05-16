@@ -40,7 +40,6 @@ const initialValuesRegister = {
   password: "",
   firstName: "",
   lastName: "",
-  picture: "",
 };
 
 const initialValuesLogin = {

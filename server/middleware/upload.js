@@ -1,5 +1,4 @@
 import multer from "multer";
-// import * as fs from "fs";
 
 // const DIRECTORY = process.env.UPLOAD_DIR || "public/assets";
 
@@ -9,14 +8,11 @@ const storage = multer.diskStorage({
     const location = "public/assets";
     cb(null, location);
   },
-  filename: (req, file, cb) => {    
+  filename: (req, file, cb) => {
     cb(null, file.originalname);
   },
 });
 
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 1000000 } // 1MB
-});
+const upload = multer({ storage: storage });
 
 export default upload;

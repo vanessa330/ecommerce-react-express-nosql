@@ -7,10 +7,12 @@ import mongoose from "mongoose";
 export const createProduct = async (req, res) => {
   // URL/products
   try {
-    const { userId, productName, price, description, picturePath } = req.body;
+    const { userId, productName, price, description } = req.body;
     const user = await User.findById(userId);
 
-    const formattedPicPath = picturePath || "";
+    const formattedPicPath = req.file
+      ? `public/assets/${req.file.filename}`
+      : "";
 
     const newProduct = new Product({
       userId,

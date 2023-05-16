@@ -26,31 +26,23 @@ export const authSlice = createSlice({
       state.user = null;
       state.token = null;
     },
-    setFollowers: (state, action) => {
-      if (state.user) {
-        state.user.followers = action.payload.user.followers;
-      } else {
-        console.error("user have no followers");
-      }
-    },
+    // setFollowers: (state, action) => {
+    //   if (state.user) {
+    //     state.user.followers = action.payload.user.followers;
+    //   } else {
+    //     console.error("user have no followers");
+    //   }
+    // },
     setFollowing: (state, action) => {
       if (state.user) {
-        state.user.following = action.payload.user.following;
+        state.user = action.payload.user;
       } else {
-        console.error("user have no following");
+        console.error("user do no have following");
       }
     },
     setProducts: (state, action) => {
       state.products = action.payload.products;
     },
-    // setProduct: (state, action) => {
-    //   const updatedProducts = state.products.map((product) => {
-    //     if (product._id === action.payload.products._id)
-    //       return action.payload.products;
-    //     return product;
-    //   });
-    //   state.products = updatedProducts;
-    // },
     setProduct: (state, action) => {
       const updatedProducts = state.products.map((product) => {
         if (product._id === action.payload.product._id)

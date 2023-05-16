@@ -48,8 +48,7 @@ const CreateWidget = () => {
     formData.append("price", newProductPrice);
     formData.append("description", newProductDes);
     if (newImage) {
-    formData.append("picturePath", newImage.name);
-
+      formData.append("picturePath", newImage.name);
     }
 
     const savedProductResponse = await fetch(`${rootUrl}products`, {
