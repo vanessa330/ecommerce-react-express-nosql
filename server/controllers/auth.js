@@ -16,7 +16,7 @@ export const register = async (req, res) => {
     } = req.body;
 
     // 1. Check if the user exists
-    const userExists = await User.findOne({ email: email });
+    const userExists = await User.findOne({ email });
     if (userExists) return res.status(400).json({ msg: "User already exists" });
 
     // 2 Create a random salt and encrypt password.

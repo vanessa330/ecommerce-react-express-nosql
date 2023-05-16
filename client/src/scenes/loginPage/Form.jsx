@@ -64,14 +64,14 @@ const Form = () => {
   /* Register Control */
 
   const register = async (values, onSubmitProps) => {
-    const formData = new FormData();  
+    const formData = new FormData();
     for (let key in values) {
       formData.append(key, values[key]);
     }
 
     const savedUserResponse = await fetch(`${rootUrl}auth/register`, {
       method: "POST",
-      body: formData, // FormData() automatically sets the "Content-Type"
+      body: formData,
     });
 
     const savedUser = await savedUserResponse.json();
@@ -82,7 +82,7 @@ const Form = () => {
       setPageType("login");
     }
   };
-
+  
   /* Login Control */
 
   const login = async (values, onSubmitProps) => {
@@ -154,7 +154,6 @@ const Form = () => {
               sx={{ gridColumn: "span 2" }}
             />
 
-
             {isRegister && (
               <>
                 <TextField
@@ -183,7 +182,6 @@ const Form = () => {
             )}
           </Box>
 
-
           <Box>
             <Button
               fullWidth
@@ -198,6 +196,8 @@ const Form = () => {
             >
               {isLogin ? "LOGIN" : "REGISTER"}
             </Button>
+
+
 
             <Typography
               onClick={() => {
