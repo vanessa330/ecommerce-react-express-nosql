@@ -1,13 +1,13 @@
-import Product from "../models/Product.js";
+import { Product, Comment } from "../models/Product.js";
 import User from "../models/User.js";
+import mongoose from "mongoose";
 
 /* CREATE */
 
 export const createProduct = async (req, res) => {
   // URL/products
   try {
-    const { userId, productName, price, description, picturePath } =
-      req.body;
+    const { userId, productName, price, description, picturePath } = req.body;
     const user = await User.findById(userId);
 
     const formattedPicPath = picturePath || "";
@@ -28,7 +28,7 @@ export const createProduct = async (req, res) => {
     await newProduct.save();
 
     const products = await Product.find().sort({ updatedAt: -1 });
-    
+
     res.status(201).json(products);
   } catch (err) {
     res.status(409).json({ message: err.message });
@@ -95,6 +95,10 @@ export const likeProdcut = async (req, res) => {
     const product = await Product.findById(id);
     const isLiked = product.likes.get(userId);
 
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
     // Check the userId is already exists
     if (isLiked) {
       product.likes.delete(userId);
@@ -119,9 +123,20 @@ export const addComment = async (req, res) => {
   try {
     const { id, userId } = req.params;
     const { comment } = req.body;
+    const { firstName, lastName } = await User.findById(userId);
     const product = await Product.findById(id);
 
-    product.comments.set(userId, comment);
+    const newComment = new Comment({
+      userId,
+      firstName,
+      lastName,
+      comment,
+    });
+
+    await newComment.save();
+
+    const commentId = new mongoose.Types.ObjectId();
+    product.comments.set(commentId, newComment);
 
     const updatedProduct = await Product.findByIdAndUpdate(
       id,

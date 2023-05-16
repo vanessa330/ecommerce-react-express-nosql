@@ -133,10 +133,10 @@ const Navbar = () => {
                     navigate("/auth");
                   }}
                 >
-                  Log In
+                 Log In
                 </MenuItem>
               ) : (
-                <>
+                <div>
                   <MenuItem>
                     <Typography>Settings</Typography>
                   </MenuItem>
@@ -147,7 +147,7 @@ const Navbar = () => {
                   >
                     Log Out
                   </MenuItem>
-                </>
+                </div>
               )}
             </Select>
           </FormControl>
@@ -258,7 +258,7 @@ const Navbar = () => {
                     Log In
                   </MenuItem>
                 ) : (
-                  <>
+                  <div>
                     <MenuItem>Settings</MenuItem>
                     <MenuItem
                       onClick={() => {
@@ -268,7 +268,7 @@ const Navbar = () => {
                     >
                       Log Out
                     </MenuItem>
-                  </>
+                  </div>
                 )}
               </Select>
             </FormControl>

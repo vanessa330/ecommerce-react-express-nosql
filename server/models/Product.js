@@ -1,5 +1,28 @@
 import mongoose from "mongoose";
 
+const CommentSchema = mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
+    comment: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
 const ProductSchema = mongoose.Schema(
   {
     userId: {
@@ -29,17 +52,18 @@ const ProductSchema = mongoose.Schema(
       default: "",
     },
     likes: {
-      type: Map, // key/value pairs.
-      of: Boolean, // userId: true
+      type: Map,
+      of: Boolean,
     },
     comments: {
-      type: Map, // key/value pairs.
-      of: String, // userId: comment
+      type: Map,
+      of: CommentSchema,
     },
   },
   { timestamps: true }
 );
 
 const Product = mongoose.model("Product", ProductSchema);
+const Comment = mongoose.model("Comment", CommentSchema);
 
-export default Product;
+export { Product, Comment };

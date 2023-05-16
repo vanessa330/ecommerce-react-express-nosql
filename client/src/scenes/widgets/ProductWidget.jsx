@@ -4,7 +4,7 @@ import { setProduct } from "../../state";
 import {
   FavoriteBorderOutlined,
   FavoriteOutlined,
-  ChatBubbleRounded,
+  ChatBubble,
   ChatBubbleOutline,
   Reply,
 } from "@mui/icons-material";
@@ -41,47 +41,53 @@ const ProductWidget = ({
   const token = useSelector((state) => state.token);
   const loggedInUserId = useSelector((state) => state.user?._id);
 
-  // Product from Redux state
-  const isLiked = loggedInUserId && Boolean(likes[loggedInUserId]);
-  const likeCount = Object.keys(likes).length;
+  // Grab current product from Redux state.
+  const commentArray = Object.entries(comments);
   const [newComment, setNewComment] = useState("");
 
   // CSS
   const { palette } = useTheme();
   const isDesktopScreens = useMediaQuery("(min-width:1000px)");
+  const isLiked = false || Boolean(likes[loggedInUserId]); // Frontend liked color setting
   const [isCommentToggled, setIsCommentToggled] = useState(false);
 
+  // Grab the updated like and comment from Backend.
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const likeProduct = async () => {
-    const res = await fetch(`${rootUrl}products/${id}/${userId}like`, {
+    const res = await fetch(`${rootUrl}products/${id}/${loggedInUserId}/like`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId: loggedInUserId }),
+      body: JSON.stringify(),
     });
+
     const updatedProduct = await res.json();
     dispatch(setProduct({ product: updatedProduct }));
   };
 
   const addComment = async () => {
-    const formData = { newComment };
-    const res = await fetch(`${rootUrl}product/${id}/${userId}/comment`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: formData,
-    });
+    const res = await fetch(
+      `${rootUrl}product/${id}/${loggedInUserId}/comment`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ comment: newComment }),
+      }
+    );
     const updatedProduct = await res.json();
     dispatch(setProduct({ product: updatedProduct }));
   };
 
+  const addCart = async () => {};
+
   return (
-    <WidgetWrapper m={isDesktopScreens ? "1rem" : "2.4rem"}>
+    <WidgetWrapper m={isDesktopScreens ? "1rem" : "1rem"}>
       <FlexBetween mt="0.8rem" ml="0.8rem">
         <Typography
           variant="h4"
@@ -146,63 +152,68 @@ const ProductWidget = ({
         </FlexBetween>
       </FlexBetween>
 
-      <FlexBetween padding="0.8rem 0.3rem">
-        <FlexBetween gap="1rem">
-          <FlexBetween gap="0.3rem">
-            {isLiked !== null && (
-              <IconButton onClick={likeProduct}>
-                {isLiked ? (
-                  <FavoriteOutlined sx={{ color: palette.primary.main }} />
-                ) : (
-                  <FavoriteBorderOutlined />
-                )}
+      {token && (
+        <FlexBetween padding="0.8rem 0.3rem">
+          <FlexBetween gap="1rem">
+            <FlexBetween gap="0.3rem">
+              {isLiked !== null && (
+                <IconButton onClick={likeProduct}>
+                  {isLiked ? (
+                    <FavoriteOutlined sx={{ color: palette.primary.main }} />
+                  ) : (
+                    <FavoriteBorderOutlined />
+                  )}
+                </IconButton>
+              )}
+              <Typography>{Object.keys(likes).length}</Typography>
+            </FlexBetween>
+
+            <FlexBetween gap="0.3rem">
+              <IconButton
+                onClick={() => setIsCommentToggled(!isCommentToggled)}
+              >
+                <ChatBubbleOutline />
               </IconButton>
-            )}
-
-            <Typography>{likeCount}</Typography>
+              <Typography>{Object.keys(comments).length}</Typography>
+            </FlexBetween>
           </FlexBetween>
 
-          <FlexBetween gap="0.3rem">
-            <IconButton onClick={() => setIsCommentToggled(!isCommentToggled)}>
-              {comments ? <ChatBubbleOutline /> : <ChatBubbleRounded />}
-            </IconButton>
-            <Typography>{comments.length}</Typography>
-          </FlexBetween>
+          <Button
+            onClick={addCart}
+            sx={{
+              backgroundColor: palette.neutral.light,
+              color: palette.neutral.dark,
+              borderRadius: "3rem",
+              padding: "1rem",
+            }}
+          >
+            ADD TO CART
+          </Button>
         </FlexBetween>
-
-        <Button
-          //  onClick={}
-          sx={{
-            backgroundColor: palette.neutral.light,
-            color: palette.neutral.dark,
-            borderRadius: "3rem",
-            padding: "1rem",
-          }}
-        >
-          Add to cart
-        </Button>
-      </FlexBetween>
+      )}
 
       {isCommentToggled && (
         <Box mt="0.5rem">
           <Box>
             <Divider />
             <Typography
-              sx={{
-                color: palette.neutral.main,
-                m: "0.5rem 0",
-                pl: "1rem",
-              }}
+              sx={{ color: palette.neutral.main, }}
             >
-              {comments}
+              {commentArray.map(([key, value]) => (
+                <Typography key={key} sx={{ m: "1.2rem 0" }}>
+                  {value.firstName} {value.lastName}: {value.comment}
+                  <Divider sx={{ m: "1.2rem 0" }}/>
+                </Typography>
+                
+              ))}
             </Typography>
           </Box>
 
-          <FlexBetween m="1rem 0" gap="1rem">
+          <FlexBetween m="1rem 0" gap="0.5rem">
             <InputBase
               placeholder="Comment here..."
               onChange={(e) => setProduct(e.target.value)}
-              value={newComment}
+              value={setNewComment}
               sx={{
                 width: "100%",
                 backgroundColor: palette.neutral.light,
@@ -210,15 +221,16 @@ const ProductWidget = ({
                 padding: "1rem 2rem",
               }}
             />
-            <Button
+            <IconButton
               onClick={addComment}
               sx={{
                 color: palette.neutral.dark,
                 borderRadius: "2rem",
+                fontSize: "4rem",
               }}
             >
               <Reply />
-            </Button>
+            </IconButton>
           </FlexBetween>
         </Box>
       )}

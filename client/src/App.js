@@ -22,6 +22,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/auth" element={<LoginPage />} />
             <Route path="/profile/:userId" element={<ProfilePage />} />
+            <Route path="/setting/:userId" element={<ProfilePage />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

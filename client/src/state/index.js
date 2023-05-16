@@ -43,10 +43,18 @@ export const authSlice = createSlice({
     setProducts: (state, action) => {
       state.products = action.payload.products;
     },
+    // setProduct: (state, action) => {
+    //   const updatedProducts = state.products.map((product) => {
+    //     if (product._id === action.payload.products._id)
+    //       return action.payload.products;
+    //     return product;
+    //   });
+    //   state.products = updatedProducts;
+    // },
     setProduct: (state, action) => {
       const updatedProducts = state.products.map((product) => {
-        if (product._id === action.payload.products._id)
-          return action.payload.products;
+        if (product._id === action.payload.product._id)
+          return action.payload.product;
         return product;
       });
       state.products = updatedProducts;

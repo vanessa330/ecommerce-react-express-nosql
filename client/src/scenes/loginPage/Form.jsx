@@ -7,14 +7,11 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
 import * as yup from "yup";
-import Dropzone from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../state";
-import FlexBetween from "../../components/FlexBetween";
 
 /* Formik validationSchema settings */
 
@@ -26,7 +23,6 @@ const registerSchema = yup.object().shape({
     .required("required"),
   firstName: yup.string().required("required"),
   lastName: yup.string().required("required"),
-  picture: yup.string(),
 });
 
 const loginSchema = yup.object().shape({
@@ -68,24 +64,21 @@ const Form = () => {
   /* Register Control */
 
   const register = async (values, onSubmitProps) => {
-    const formData = new FormData();
+    const formData = new FormData();  
     for (let key in values) {
       formData.append(key, values[key]);
-    }
-    if (values.picture) {
-      formData.append("picturePath", values.picture.name);
-    } else {
-      formData.append("picturePath", "");
     }
 
     const savedUserResponse = await fetch(`${rootUrl}auth/register`, {
       method: "POST",
-      body: formData,
+      body: formData, // FormData() automatically sets the "Content-Type"
     });
+
     const savedUser = await savedUserResponse.json();
     onSubmitProps.resetForm();
 
     if (savedUser) {
+      window.alert("You have successfully registered!");
       setPageType("login");
     }
   };
@@ -95,7 +88,7 @@ const Form = () => {
   const login = async (values, onSubmitProps) => {
     const loggedInResponse = await fetch(`${rootUrl}auth/login`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" }, // Send JSON req.body
       body: JSON.stringify(values),
     });
 
@@ -128,7 +121,6 @@ const Form = () => {
         handleBlur,
         handleChange,
         handleSubmit,
-        setFieldValue,
         resetForm,
       }) => (
         <form onSubmit={handleSubmit}>
@@ -187,40 +179,6 @@ const Form = () => {
                   helperText={touched.lastName && errors.lastName}
                   sx={{ gridColumn: "span 1" }}
                 />
-
-                <Box
-                  gridColumn="span 2"
-                  border={`1px solid ${palette.neutral.medium}`}
-                  borderRadius="5px"
-                  p="1rem"
-                >
-                  <Dropzone
-                    acceptedFiles=".jpg,.jpeg,.png,.gif,.webp"
-                    multiple={false}
-                    onDrop={(acceptedFiles) =>
-                      setFieldValue("picturePath", acceptedFiles[0])
-                    }
-                  >
-                    {({ getRootProps, getInputProps }) => (
-                      <Box
-                        {...getRootProps()}
-                        border={`2px dashed ${palette.primary.main}`}
-                        p="1rem"
-                        sx={{ "&:hover": { cursor: "pointer" } }}
-                      >
-                        <input {...getInputProps()} />
-                        {!values.picture ? (
-                          <p>Add Picture Here</p>
-                        ) : (
-                          <FlexBetween>
-                            <Typography>{values.picture.name}</Typography>
-                            <EditOutlinedIcon />
-                          </FlexBetween>
-                        )}
-                      </Box>
-                    )}
-                  </Dropzone>
-                </Box>
               </>
             )}
           </Box>

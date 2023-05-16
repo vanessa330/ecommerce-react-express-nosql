@@ -96,7 +96,7 @@ const CreateWidget = () => {
               <form onSubmit={handleSubmit}>
                 <Box
                   display="grid"
-                  gap="15px"
+                  gap="18px"
                   gridTemplateColumns="repeat(2, minmax(0, 1fr))"
                   sx={{
                     "& > div": { gridColumn: isDesktop ? undefined : "span 2" },
@@ -124,7 +124,6 @@ const CreateWidget = () => {
                     value={values.price}
                     name="price"
                     error={Boolean(touched.price) && Boolean(errors.price)}
-                    helperText={touched.price && errors.price}
                     sx={{
                       gridColumn: "span 1",
                       width: "100%",
@@ -143,7 +142,6 @@ const CreateWidget = () => {
                     error={
                       Boolean(touched.description) && Boolean(errors.description)
                     }
-                    helperText={touched.description && errors.description}
                     sx={{
                       gridColumn: "span 2",
                       width: "100%",
@@ -221,7 +219,6 @@ const CreateWidget = () => {
                       </FlexBetween>
     
                       <Button
-                        disable={!newProduct}
                         type="submit"
                         sx={{
                           p: "0.6rem",

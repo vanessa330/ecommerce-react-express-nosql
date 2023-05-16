@@ -19,7 +19,7 @@ const LoginPage = () => {
         borderRadius="1.5rem"
         backgroundColor={theme.palette.background.alt}
       >
-        <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem", lineHeight: 1.5 }}>
+        <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem", lineHeight: "2rem" }}>
           Welcome to my FAKE e-commerce website! Please note that this is for
           demonstration purposes only, so we kindly ask that you refrain from
           using your real personal information.

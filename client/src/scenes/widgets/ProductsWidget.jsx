@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "../../state";
 import { Box } from "@mui/material";
@@ -7,9 +7,10 @@ import ProductWidget from "./ProductWidget";
 const ProductsWidget = ({ userId, isProfile }) => {
   const dispatch = useDispatch();
 
-  // Grab user token from Redux state
+  // Grab current products from Redux state []
   const products = useSelector((state) => state.products);
 
+  // Grab updated products from Backend
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const getAllProducts = async () => {
@@ -21,7 +22,6 @@ const ProductsWidget = ({ userId, isProfile }) => {
     dispatch(setProducts({ products: data }));
   };
 
-  // Get user products from Backend.
   const getUserProducts = async () => {
     const res = await fetch(`${rootUrl}products/${userId}`, {
       method: "GET",
@@ -33,11 +33,11 @@ const ProductsWidget = ({ userId, isProfile }) => {
 
   useEffect(() => {
     if (isProfile) {
-      getUserProducts(); // ProfilePage
+      getUserProducts(); // ProfilePage show specify user products
     } else {
-      getAllProducts(); // HomePage
+      getAllProducts(); // HomePage show all products
     }
-  }, [isProfile]);
+  }, []);
 
   return (
     <Box
@@ -70,7 +70,6 @@ const ProductsWidget = ({ userId, isProfile }) => {
             picturePath={picturePath}
             likes={likes}
             comments={comments}
-            // isProfile={{isProfile}}
           />
         )
       )}

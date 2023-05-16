@@ -4,7 +4,6 @@ import Navbar from "../navbar";
 import ProductsWidget from "../widgets/ProductsWidget";
 import UserWidget from "../widgets/UserWidget";
 import CreateWidget from "../widgets/CreateWidget";
-import FlexBetween from "../../components/FlexBetween";
 
 const HomePage = () => {
   const isAuth = Boolean(useSelector((state) => state.token));
@@ -15,6 +14,8 @@ const HomePage = () => {
   return (
     <Box>
       <Navbar />
+
+      
 
       {isAuth && (
         <Box
@@ -41,6 +42,8 @@ const HomePage = () => {
           </Box>
         </Box>
       )}
+
+
 
       <Box m={isDesktopScreens ? "4rem" : undefined}>
         <ProductsWidget isProfile={false} />

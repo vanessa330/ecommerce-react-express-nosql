@@ -7,7 +7,7 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import User from "./models/User.js";
-import Product from "./models/Product.js";
+import { Product, Comment } from "./models/Product.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import productRoutes from "./routes/product.js";
@@ -45,6 +45,7 @@ mongoose
       console.log(`Server Port : ${PORT}`);
       User.insertMany([]);
       Product.insertMany([]);
+      Comment.insertMany([]);
     });
   })
   .catch((err) => console.log(`${err} did not connect`));
