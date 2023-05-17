@@ -15,7 +15,6 @@ import {
   useTheme,
   Button,
   InputBase,
-  IconButton,
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
@@ -48,6 +47,7 @@ const CreateWidget = () => {
     formData.append("price", newProductPrice);
     formData.append("description", newProductDes);
     if (newImage) {
+      formData.append("file", newImage); // "file" refer to Backend
       formData.append("picturePath", newImage.name);
     }
 

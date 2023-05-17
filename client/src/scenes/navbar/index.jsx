@@ -19,9 +19,10 @@ import {
   Menu,
   Close,
   ShoppingCart,
+  ManageAccounts,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogout, setLogin } from "../../state";
+import { setMode, setLogout } from "../../state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 
@@ -92,17 +93,27 @@ const Navbar = () => {
             )}
           </IconButton>
 
-          <IconButton>
-            <Message sx={{ fontSize: "25px" }} />
-          </IconButton>
+          {fullName === "Guest" ? null : (
+            <>
+              <IconButton>
+                <Message sx={{ fontSize: "25px" }} />
+              </IconButton>
 
-          <IconButton>
-            <Notifications sx={{ fontSize: "25px" }} />
-          </IconButton>
+              <IconButton>
+                <Notifications sx={{ fontSize: "25px" }} />
+              </IconButton>
 
-          <IconButton>
-            <ShoppingCart sx={{ fontSize: "25px" }} />
-          </IconButton>
+              <IconButton>
+                <ShoppingCart sx={{ fontSize: "25px" }} />
+              </IconButton>
+
+              <IconButton onClick={() => navigate("/settings")}>
+                <ManageAccounts
+                  sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
+                />
+              </IconButton>
+            </>
+          )}
 
           {/* User fullName, Login or Logout */}
           <FormControl variant="standard" value={fullName}>
@@ -133,21 +144,16 @@ const Navbar = () => {
                     navigate("/auth");
                   }}
                 >
-                 Log In
+                  Log In
                 </MenuItem>
               ) : (
-                <div>
-                  <MenuItem>
-                    <Typography>Settings</Typography>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      dispatch(setLogout());
-                    }}
-                  >
-                    Log Out
-                  </MenuItem>
-                </div>
+                <MenuItem
+                  onClick={() => {
+                    dispatch(setLogout());
+                  }}
+                >
+                  Log Out
+                </MenuItem>
               )}
             </Select>
           </FormControl>
@@ -195,8 +201,8 @@ const Navbar = () => {
               padding="0.5rem 1rem"
             >
               <InputBase placeholder="Search..." />
-              <IconButton>
-                <Search onClick={() => {}} />
+              <IconButton onClick={() => {}}>
+                <Search />
               </IconButton>
             </FlexBetween>
             {/* SEARCH BOX END */}
@@ -214,17 +220,27 @@ const Navbar = () => {
               )}
             </IconButton>
 
-            <IconButton>
-              <Message sx={{ fontSize: "25px" }} />
-            </IconButton>
+            {fullName === "Guest" ? null : (
+              <>
+                <IconButton>
+                  <Message sx={{ fontSize: "25px" }} />
+                </IconButton>
 
-            <IconButton>
-              <Notifications sx={{ fontSize: "25px" }} />
-            </IconButton>
+                <IconButton>
+                  <Notifications sx={{ fontSize: "25px" }} />
+                </IconButton>
 
-            <IconButton>
-              <ShoppingCart sx={{ fontSize: "25px" }} />
-            </IconButton>
+                <IconButton>
+                  <ShoppingCart sx={{ fontSize: "25px" }} />
+                </IconButton>
+
+                <IconButton onClick={() => navigate("/settings")}>
+                <ManageAccounts
+                  sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
+                />
+              </IconButton>
+              </>
+            )}
 
             {/* User fullName, Login or Logout */}
             <FormControl variant="standard" value={fullName}>
@@ -252,23 +268,19 @@ const Navbar = () => {
                   <MenuItem
                     onClick={() => {
                       navigate("/auth");
-                      // dispatch(setLogin());
                     }}
                   >
                     Log In
                   </MenuItem>
                 ) : (
-                  <div>
-                    <MenuItem>Settings</MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        dispatch(setLogout());
-                        navigate("/");
-                      }}
-                    >
-                      Log Out
-                    </MenuItem>
-                  </div>
+                  <MenuItem
+                    onClick={() => {
+                      dispatch(setLogout());
+                      navigate("/");
+                    }}
+                  >
+                    Log Out
+                  </MenuItem>
                 )}
               </Select>
             </FormControl>

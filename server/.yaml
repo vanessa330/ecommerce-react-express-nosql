@@ -1,0 +1,12 @@
+services:
+  - name: backend
+    buildCommand: npm run build
+    startCommand: node index.js
+    volumes:
+      - name: render-data
+        mountPath: /mnt/data
+
+volumes:
+  - name: render-data
+    size: 1
+    mount: true
