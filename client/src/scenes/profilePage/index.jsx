@@ -1,13 +1,11 @@
 import { Box, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Navbar from "../navbar";
 import UserWidget from "../widgets/UserWidget";
 import ProductsWidget from "../widgets/ProductsWidget";
 
 const ProfilePage = () => {
-  const loggedInUserId = useSelector((state) => state.user);
   const { userId } = useParams();
   const [user, setUser] = useState(null);
 

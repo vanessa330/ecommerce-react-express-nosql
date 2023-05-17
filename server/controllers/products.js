@@ -60,32 +60,22 @@ export const getUserProducts = async (req, res) => {
   }
 };
 
-/* UPDATE */
-
-export const patchProduct = async (req, res) => {
-  // URL/products/:id/:userId
+export const searchProducts = async (req, res) => {
+  // URL/search?product=query
   try {
-    const { id, userId } = req.params;
-    const { productName, price, description, picturePath } = req.body;
-    const product = await Product.findById(id);
+    const query = req.query.product;
+    const regexString = query.replace(/\s+/g, "\\s+"); // Replace spaces with pattern that matches any white space character
+    const regex = new RegExp(regexString, "i"); // "i" ignore the uppercase or lowercase
 
-    if (userId === product.userId) {
-      // Edit product details
-      product.productName = productName;
-      product.price = price;
-      product.description = description;
-      product.picturePath = picturePath;
-    } else {
-      res.status(404).send({ message: "User have no permissions" });
-    }
+    const products = await Product.find({ productName: regex });
 
-    const updatedProduct = await product.save();
-
-    res.status(200).json(updatedProduct);
+    res.status(200).json(products);
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
 };
+
+/* UPDATE */
 
 export const likeProdcut = async (req, res) => {
   // URL/products/:id/:userId/like
@@ -149,22 +139,58 @@ export const addComment = async (req, res) => {
   }
 };
 
-/* DELETE */
+// export const addToCart = async (req, res) => {
+//   // URL/product/:id/:userId/cart
+//   try {
+//     const { id, userId } = req.params;
+//     const { product, quantity, price } = req.body;
 
-export const deleteProduct = async (req, res) => {
-  // URL/products/:id/:userId/delete
-  try {
-    const { id, userId } = req.params;
-    const product = await Product.findById(id);
+//     const productObject = {
+//       product: product,
+//       quantity: quantity,
+//       price: price,
+//     };
 
-    if (userId === product.userId) {
-      await Product.findByIdAndDelete(id);
-    } else {
-      res.status(404).send({ message: "User have no permissions" });
-    }
+//     const newOrder = await Order({
+//       id,
+//       product,
+//       price,
+//     });
 
-    res.status(200).send({ message: "Product deleted successfully" });
-  } catch (err) {
-    res.status(404).json({ message: err.message });
-  }
-};
+//     await newOrder.save();
+
+//     res.status(200).json(newOrder);
+//   } catch (err) {
+//     res.status(404).json({ message: err.message });
+//   }
+// };
+
+// export const checkout = async (req, res) => {
+//   // URL/product/:id/:userId/cart
+//   try {
+//     const { id, userId } = req.params;
+//     const { product, quantity, price } = req.body;
+
+//     const productObject = {
+//       product: product,
+//       quantity: quantity,
+//       price: price,
+//     };
+
+//     const prodcutsArray = productObject.push(productObject);
+
+//     const newOrder = await Order({
+//       userId,
+//       email,
+//       products: prodcutsArray,
+//       status: "pending",
+//       totalPrice,
+//     });
+
+//     await newOrder.save();
+
+//     res.status(200).json(newOrder);
+//   } catch (err) {
+//     res.status(404).json({ message: err.message });
+//   }
+// };

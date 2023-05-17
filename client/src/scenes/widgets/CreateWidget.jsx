@@ -51,13 +51,14 @@ const CreateWidget = () => {
       formData.append("picturePath", newImage.name);
     }
 
-    const savedProductResponse = await fetch(`${rootUrl}products`, {
+    const res = await fetch(`${rootUrl}products`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: formData,
     });
 
-    const products = await savedProductResponse.json();
+    const products = await res.json();
+    
     dispatch(setProducts({ products }));
     setNewProductName("");
     setNewProductPrice("");

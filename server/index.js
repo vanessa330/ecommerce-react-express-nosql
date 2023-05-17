@@ -10,8 +10,9 @@ import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import productRoutes from "./routes/product.js";
-import { createProduct, patchProduct } from "./controllers/products.js";
+import { createProduct } from "./controllers/products.js";
 import { verifyToken } from "./middleware/auth.js";
+import { searchProducts } from "./controllers/products.js";
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -24,8 +25,7 @@ app.use(cors()); // access server response
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use("/assets", express.static(path.join(__dirname, "public/assets")));
-// files stored in the public/assets directory will be accessible to clients making requests.
+app.use("/assets", express.static(path.join(__dirname, "public/assets"))); // files stored in the public/assets directory will be accessible to clients making requests.
 
 /* MIDDLEWARE FILE UPLOAD STORAGE */
 const storage = multer.diskStorage({
@@ -41,16 +41,11 @@ const upload = multer({ storage });
 
 /* ROUTES WIHT FILE */
 app.post("/products", verifyToken, upload.single("file"), createProduct);
-app.patch(
-  "/products/:id/:userId",
-  verifyToken,
-  upload.single("file"),
-  patchProduct
-);
 /* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/products", productRoutes);
+app.get("/search", searchProducts);
 
 /* DATABASE SETUP */
 const PORT = process.env.PORT || 6001;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   IconButton,
@@ -19,10 +19,9 @@ import {
   Menu,
   Close,
   ShoppingCart,
-  ManageAccounts,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogout } from "../../state";
+import { setMode, setLogout, setProducts } from "../../state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 
@@ -39,6 +38,27 @@ const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const theme = useTheme();
 
+  // Grab the searching results from Backend
+  const rootUrl = process.env.REACT_APP_SERVER_URL;
+
+  const [searchParam, setSearchParam] = useState("");
+
+  const searchProducts = async () => {
+    const res = await fetch(`${rootUrl}search?product=${searchParam}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const updatedProduct = await res.json();
+    dispatch(setProducts({ products: updatedProduct }));
+    setSearchParam("");
+  };
+
+  const handleNavigateAndSearch = () => {
+    navigate("/");
+    searchProducts();
+  };
+
   return (
     <FlexBetween
       padding="1rem 6%"
@@ -50,7 +70,7 @@ const Navbar = () => {
           fontWeight="bold"
           fontSize="2rem"
           color={theme.palette.primary.main}
-          onClick={() => navigate("/")}
+          onClick={handleNavigateAndSearch}
           sx={{
             "&:hover": {
               color: theme.palette.primary.light,
@@ -70,8 +90,17 @@ const Navbar = () => {
             gap="2rem"
             padding="0.5rem 0.8rem"
           >
-            <InputBase placeholder="Search..." />
-            <IconButton>
+            <InputBase
+              placeholder="Searching products..."
+              value={searchParam}
+              onChange={(e) => setSearchParam(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  searchProducts();
+                }
+              }}
+            />
+            <IconButton onClick={searchProducts}>
               <Search />
             </IconButton>
           </FlexBetween>
@@ -105,12 +134,6 @@ const Navbar = () => {
 
               <IconButton>
                 <ShoppingCart sx={{ fontSize: "25px" }} />
-              </IconButton>
-
-              <IconButton onClick={() => navigate("/settings")}>
-                <ManageAccounts
-                  sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
-                />
               </IconButton>
             </>
           )}
@@ -200,8 +223,17 @@ const Navbar = () => {
               gap="1rem"
               padding="0.5rem 1rem"
             >
-              <InputBase placeholder="Search..." />
-              <IconButton onClick={() => {}}>
+              <InputBase
+                placeholder="Searching products..."
+                value={searchParam}
+                onChange={(e) => setSearchParam(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    searchProducts();
+                  }
+                }}
+              />
+              <IconButton onClick={searchProducts}>
                 <Search />
               </IconButton>
             </FlexBetween>
@@ -233,12 +265,6 @@ const Navbar = () => {
                 <IconButton>
                   <ShoppingCart sx={{ fontSize: "25px" }} />
                 </IconButton>
-
-                <IconButton onClick={() => navigate("/settings")}>
-                <ManageAccounts
-                  sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
-                />
-              </IconButton>
               </>
             )}
 

@@ -3,6 +3,7 @@ import Navbar from "../navbar";
 import { useSelector } from "react-redux";
 import UserWidget from "../widgets/UserWidget";
 import CreateWidget from "../widgets/CreateWidget";
+import EditWidget from "../widgets/EditWidget";
 
 const ManageAccountPage = () => {
   const user = useSelector((state) => state.user);
@@ -34,11 +35,9 @@ const ManageAccountPage = () => {
           mt={isDesktopScreens ? "1.5rem" : undefined}
         >
           <CreateWidget />
+
+          <EditWidget />
         </Box>
-      </Box>
-      <Box>
-        {/* Edit */}
-        {/* Account detail */}
       </Box>
     </Box>
   );

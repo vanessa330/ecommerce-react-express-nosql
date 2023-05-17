@@ -4,7 +4,6 @@ import { setProduct } from "../../state";
 import {
   FavoriteBorderOutlined,
   FavoriteOutlined,
-  ChatBubble,
   ChatBubbleOutline,
   Reply,
 } from "@mui/icons-material";
@@ -125,7 +124,10 @@ const ProductWidget = ({
         <Typography
           variant="h5"
           color={palette.neutral.main}
-          sx={{ mt: "1rem", height: "100px", overflowY: "auto" }}
+          sx={{
+            height: "4rem",
+            overflowY: "auto",
+          }}
         >
           {description}
         </Typography>
@@ -196,15 +198,12 @@ const ProductWidget = ({
         <Box mt="0.5rem">
           <Box>
             <Divider />
-            <Typography
-              sx={{ color: palette.neutral.main, }}
-            >
+            <Typography sx={{ color: palette.neutral.main }}>
               {commentArray.map(([key, value]) => (
                 <Typography key={key} sx={{ m: "1.2rem 0" }}>
                   {value.firstName} {value.lastName}: {value.comment}
-                  <Divider sx={{ m: "1.2rem 0" }}/>
+                  <Divider sx={{ m: "1.2rem 0" }} />
                 </Typography>
-                
               ))}
             </Typography>
           </Box>

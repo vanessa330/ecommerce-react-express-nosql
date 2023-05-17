@@ -21,6 +21,9 @@
 5. UI
    - Theme
    - Navbar
+      - DarkLight mode
+      - Searchbar
+      - User Login & Logout
    - HomePage
      - LoginPage
       - UserWidget
@@ -29,12 +32,7 @@
    - ProfilePage
      - UserWidget
      - ProductsWidget
-   - UserSettings
-     - UserWidget
-      - UserWidget
-      - CreateWidget
-      - EditProductWidget
-      - EditUserWidget
+
 
 <br />
 
@@ -63,10 +61,11 @@
      - createProdcut
      - getAllProducts
      - getUserProducts
-     - patchProduct
      - likeProdcut
      - addComment
-     - deleteProduct
 
 <br />
 
+## Pending...
+1. Add to cart
+2. order schema
