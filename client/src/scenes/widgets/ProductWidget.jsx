@@ -70,7 +70,7 @@ const ProductWidget = ({
 
   const addComment = async () => {
     const res = await fetch(
-      `${rootUrl}product/${id}/${loggedInUserId}/comment`,
+      `${rootUrl}products/${id}/${loggedInUserId}/comment`,
       {
         method: "PATCH",
         headers: {
@@ -212,8 +212,9 @@ const ProductWidget = ({
           <FlexBetween m="1rem 0" gap="0.5rem">
             <InputBase
               placeholder="Comment here..."
-              onChange={(e) => setProduct(e.target.value)}
-              value={setNewComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              value={newComment}
+              name="comment"
               sx={{
                 width: "100%",
                 backgroundColor: palette.neutral.light,
@@ -221,6 +222,7 @@ const ProductWidget = ({
                 padding: "1rem 2rem",
               }}
             />
+
             <IconButton
               onClick={addComment}
               sx={{

@@ -142,7 +142,10 @@ const CreateWidget = () => {
                       <input {...getInputProps()} />
 
                       {!newImage ? (
-                        <p>Add Image Here...</p>
+                        <p>
+                          Add Image Here... (Image upload may not be supported
+                          on the free plan of Render.com.)
+                        </p>
                       ) : (
                         <FlexBetween>
                           <Typography>{newImage.name}</Typography>
