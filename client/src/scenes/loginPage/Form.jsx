@@ -63,44 +63,53 @@ const Form = () => {
   /* Register Control */
 
   const register = async (values, onSubmitProps) => {
-    const formData = new FormData();
-    for (let key in values) {
-      formData.append(key, values[key]);
-    }
+    try {
+      const res = await fetch(`${rootUrl}auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
 
-    const savedUserResponse = await fetch(`${rootUrl}auth/register`, {
-      method: "POST",
-      body: formData,
-    });
+      const data = await res.json();
 
-    const savedUser = await savedUserResponse.json();
-    onSubmitProps.resetForm();
-
-    if (savedUser) {
-      window.alert("You have successfully registered!");
-      setPageType("login");
+      if (res.status === 201) {
+        window.alert(data.success);
+        setPageType("login");
+        onSubmitProps.resetForm();
+      } else if (res.status === 400) {
+        window.alert(data.error);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
-  
+
   /* Login Control */
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch(`${rootUrl}auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" }, // Send JSON req.body
-      body: JSON.stringify(values),
-    });
+    try {
+      const res = await fetch(`${rootUrl}auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
 
-    const loggedIn = await loggedInResponse.json();
-    onSubmitProps.resetForm();
-    if (loggedIn) {
-      dispatch(
-        setLogin({
-          user: loggedIn.user,
-          token: loggedIn.token,
-        })
-      );
-      navigate("/");
+      const data = await res.json();
+      onSubmitProps.resetForm();
+
+      if (res.status === 200) {
+        dispatch(
+          setLogin({
+            token: data.token,
+            user: data.user,
+          })
+        );
+        navigate("/");
+      } else if (res.status === 400) {
+        window.alert(data.error);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -195,8 +204,6 @@ const Form = () => {
             >
               {isLogin ? "LOGIN" : "REGISTER"}
             </Button>
-
-
 
             <Typography
               onClick={() => {

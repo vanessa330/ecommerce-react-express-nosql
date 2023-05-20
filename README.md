@@ -41,7 +41,7 @@
 1. Backend installation
    - `npm i -g nodemon`
    - `npm init -y`
-   - `npm i express mongoose bcrypt jsonwebtoken dotenv cors helmet morgan multer`
+   - `npm i express mongoose mysql bcrypt jsonwebtoken dotenv cors helmet morgan multer`
 2. Configuration on index.js
    - File storage
    - Routes settings

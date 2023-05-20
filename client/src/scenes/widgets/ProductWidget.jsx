@@ -81,6 +81,7 @@ const ProductWidget = ({
     );
     const updatedProduct = await res.json();
     dispatch(setProduct({ product: updatedProduct }));
+    setNewComment("");
   };
 
   const addCart = async () => {};

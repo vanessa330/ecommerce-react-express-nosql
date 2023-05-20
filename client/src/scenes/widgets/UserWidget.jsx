@@ -28,11 +28,9 @@ const UserWidget = ({ userId, picturePath }) => {
 
   useEffect(() => {
     getUser();
-  }, []);
+  }, []); // dependency
 
   if (!user) return null;
-
-  const { firstName, lastName, email, followers, following } = user;
 
   return (
     <WidgetWrapper>
@@ -53,11 +51,11 @@ const UserWidget = ({ userId, picturePath }) => {
                 },
               }}
             >
-              {firstName} {lastName}
+              {user.firstName} {user.lastName}
             </Typography>
 
             <Typography variant="h5" color={palette.neutral.medium}>
-              {email}
+              {user.email}
             </Typography>
           </Box>
         </FlexBetween>
@@ -69,13 +67,13 @@ const UserWidget = ({ userId, picturePath }) => {
         <FlexBetween>
           <Typography color={palette.neutral.medium}>Followers :</Typography>
           <Typography color={palette.neutral.main} fontWeight="500">
-            {followers.length}
+            {user.followers.length}
           </Typography>
         </FlexBetween>
         <FlexBetween>
           <Typography color={palette.neutral.medium}>Following :</Typography>
           <Typography color={palette.neutral.main} fontWeight="500">
-            {following.length}
+            {user.following.length}
           </Typography>
         </FlexBetween>
       </Box>
