@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../state";
 
+
+
 /* Formik validationSchema settings */
 
 const registerSchema = yup.object().shape({
@@ -33,6 +35,8 @@ const loginSchema = yup.object().shape({
     .required("required"),
 });
 
+
+
 /* Formik initialValues settings */
 
 const initialValuesRegister = {
@@ -46,6 +50,8 @@ const initialValuesLogin = {
   email: "",
   password: "",
 };
+
+
 
 const Form = () => {
   const dispatch = useDispatch();

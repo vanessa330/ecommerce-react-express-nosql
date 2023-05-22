@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   IconButton,
@@ -49,8 +49,8 @@ const Navbar = () => {
       headers: { "Content-Type": "application/json" },
     });
 
-    const updatedProduct = await res.json();
-    dispatch(setProducts({ products: updatedProduct }));
+    const data = await res.json();
+    dispatch(setProducts({ products: data }));
     setSearchParam("");
   };
 

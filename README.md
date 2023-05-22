@@ -32,6 +32,9 @@
    - ProfilePage
      - UserWidget
      - ProductsWidget
+   - ProductInfoPage
+      - UserWidget
+      - ProductWidget
 
 
 <br />
@@ -59,7 +62,7 @@
      - addRemoveFollowing
    - prodcut controllers
      - createProdcut
-     - getAllProducts
+     - getProducts
      - getUserProducts
      - likeProdcut
      - addComment

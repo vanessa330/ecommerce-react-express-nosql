@@ -30,20 +30,20 @@ export const createProduct = async (req, res) => {
 
     res.status(201).json(products);
   } catch (err) {
-    res.status(409).json({ message: err.message });
+    res.status(409).json({ error: err.message });
   }
 };
 
 /* READ */
 
-export const getAllProducts = async (req, res) => {
+export const getProducts = async (req, res) => {
   // URL/products
   try {
     const products = await Product.find().sort({ updatedAt: -1 });
 
     res.status(200).json(products);
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ error: err.message });
   }
 };
 
@@ -56,7 +56,7 @@ export const getUserProducts = async (req, res) => {
 
     res.status(200).json(products);
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ error: err.message });
   }
 };
 
@@ -71,28 +71,29 @@ export const searchProducts = async (req, res) => {
 
     res.status(200).json(products);
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ error: err.message });
   }
 };
 
 /* UPDATE */
 
 export const likeProdcut = async (req, res) => {
-  // URL/products/:id/:userId/like
+  // URL/products/:id/like
   try {
-    const { id, userId } = req.params;
+    const { id } = req.params;
+    const guestOrUserId = req.body.userId || Math.floor(Math.random() * 10000000).toString();
     const product = await Product.findById(id);
-    const isLiked = product.likes.get(userId);
+    const isLiked = product.likes.get(guestOrUserId);
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({ error: "Product not found" });
     }
 
     // Check the userId is already exists
     if (isLiked) {
-      product.likes.delete(userId);
+      product.likes.delete(guestOrUserId);
     } else {
-      product.likes.set(userId, true);
+      product.likes.set(guestOrUserId, true);
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(
@@ -103,7 +104,7 @@ export const likeProdcut = async (req, res) => {
 
     res.status(200).json(updatedProduct);
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(409).json({ error: err.message });
   }
 };
 
@@ -135,7 +136,7 @@ export const addComment = async (req, res) => {
 
     res.status(200).json(updatedProduct);
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(409).json({ error: err.message });
   }
 };
 
@@ -161,7 +162,7 @@ export const addComment = async (req, res) => {
 
 //     res.status(200).json(newOrder);
 //   } catch (err) {
-//     res.status(404).json({ message: err.message });
+//     res.status(404).json({ error: err.message });
 //   }
 // };
 
@@ -191,6 +192,6 @@ export const addComment = async (req, res) => {
 
 //     res.status(200).json(newOrder);
 //   } catch (err) {
-//     res.status(404).json({ message: err.message });
+//     res.status(404).json({ error: err.message });
 //   }
 // };

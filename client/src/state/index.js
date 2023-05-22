@@ -5,8 +5,8 @@ import { createSlice } from "@reduxjs/toolkit";
 // useSelector()
 const initialState = {
   mode: "light",
-  user: null,
   token: null,
+  user: null,
   products: [],
 };
 
@@ -19,35 +19,23 @@ export const authSlice = createSlice({
       state.mode = state.mode === "light" ? "dark" : "light";
     },
     setLogin: (state, action) => {
-      state.user = action.payload.user;
       state.token = action.payload.token;
+      state.user = action.payload.user;
     },
     setLogout: (state) => {
-      state.user = null;
       state.token = null;
+      state.user = null;
     },
-    // setFollowers: (state, action) => {
-    //   if (state.user) {
-    //     state.user.followers = action.payload.user.followers;
-    //   } else {
-    //     console.error("user have no followers");
-    //   }
-    // },
-    setFollowing: (state, action) => {
-      if (state.user) {
-        state.user = action.payload.user;
-      } else {
-        console.error("user do no have following");
-      }
+    setUser: (state, action) => {
+      state.user = action.payload.user;
     },
     setProducts: (state, action) => {
       state.products = action.payload.products;
     },
     setProduct: (state, action) => {
-      const updatedProducts = state.products.map((product) => {
-        if (product._id === action.payload.product._id)
-          return action.payload.product;
-        return product;
+      const updatedProducts = state.products.map((p) => {
+        if (p._id === action.payload.product._id) return action.payload.product;
+        return p;
       });
       state.products = updatedProducts;
     },
@@ -58,8 +46,7 @@ export const {
   setMode,
   setLogin,
   setLogout,
-  setFollowers,
-  setFollowing,
+  setUser,
   setProducts,
   setProduct,
 } = authSlice.actions;

@@ -1,14 +1,18 @@
 import { Box, Typography, Divider, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import UserImage from "../../components/UserImage";
 import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
+import UserFollowing from "../../components/UserFollowing";
 
 const UserWidget = ({ userId, picturePath }) => {
   const navigate = useNavigate();
 
   // User details from Redux state
+  const token = useSelector((state) => state.token);
+
   const [user, setUser] = useState(null);
 
   // CSS
@@ -22,13 +26,15 @@ const UserWidget = ({ userId, picturePath }) => {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
+
     const data = await res.json();
     setUser(data);
   };
 
   useEffect(() => {
     getUser();
-  }, []); // dependency
+    // eslint-disable-next-line
+  }, []);
 
   if (!user) return null;
 
@@ -53,10 +59,13 @@ const UserWidget = ({ userId, picturePath }) => {
             >
               {user.firstName} {user.lastName}
             </Typography>
-
             <Typography variant="h5" color={palette.neutral.medium}>
               {user.email}
             </Typography>
+          </Box>
+
+          <Box ml="1rem">
+            {token && <UserFollowing followingId={user._id} />}
           </Box>
         </FlexBetween>
       </FlexBetween>

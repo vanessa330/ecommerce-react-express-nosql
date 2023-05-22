@@ -11,7 +11,7 @@ const UserImage = ({ image, size = "60px" }) => {
         height={size}
         alt="userImage"
         src={`${rootUrl}assets/${image}`}
-        crossOrigin="anonymous" // ERR_BLCKED_BY_RESPONSE.NotSameOrigin 200 (OK)
+        crossOrigin="anonymous"
       />
     </Box>
   );

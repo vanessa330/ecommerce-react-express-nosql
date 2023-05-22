@@ -9,8 +9,13 @@ const LoginPage = () => {
 
   return (
     <Box>
+
+
+
       <Navbar />
       
+
+
       <Box
         width={isDesktopScreens ? "70%" : "96%"}
         maxWidth="800px"
@@ -24,7 +29,9 @@ const LoginPage = () => {
           demonstration purposes only, so we kindly ask that you refrain from
           using your real personal information.
         </Typography>
+
         <Form />
+
       </Box>
     </Box>
   );

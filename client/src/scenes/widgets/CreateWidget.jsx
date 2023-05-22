@@ -57,9 +57,10 @@ const CreateWidget = () => {
       body: formData,
     });
 
-    const products = await res.json();
-    
-    dispatch(setProducts({ products }));
+    const data = await res.json();
+
+    dispatch(setProducts({ products: data }));
+    window.alert("You have successfully created a new product.");
     setNewProductName("");
     setNewProductPrice("");
     setNewProdcutDes("");

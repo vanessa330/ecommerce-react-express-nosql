@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setFollowing } from "../state";
+import { setUser } from "../state";
 import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { IconButton, useTheme } from "@mui/material";
 
@@ -8,7 +8,7 @@ const UserFollowing = ({ followingId }) => {
 
   // User information
   const token = useSelector((state) => state.token);
-  const { _id } = useSelector((state) => state.user);
+  const loggedInUser = useSelector((state) => state.user._id);
 
   // Opposite user information
   const following = useSelector((state) => state.user.following);
@@ -20,15 +20,15 @@ const UserFollowing = ({ followingId }) => {
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const addRemoveFollowing = async () => {
-    const res = await fetch(`${rootUrl}users/${_id}/${followingId}`, {
+    const res = await fetch(`${rootUrl}users/${loggedInUser}/${followingId}`, {
       method: "PATCH",
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
-    dispatch(setFollowing({ user: data }));
+    dispatch(setUser({ user: data }));
   };
 
-  if (_id !== followingId) {
+  if (loggedInUser !== followingId) {
     return (
       <IconButton
         onClick={() => addRemoveFollowing()}

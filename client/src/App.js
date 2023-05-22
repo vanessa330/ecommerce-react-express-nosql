@@ -7,7 +7,7 @@ import { themeSettings } from "./theme.js";
 import HomePage from "./scenes/homePage";
 import LoginPage from "./scenes/loginPage/index.jsx";
 import ProfilePage from "./scenes/profilePage/index.jsx";
-import ManageAccountPage from "./scenes/manageAccountPage/index.jsx";
+import ProductInfoPage from "./scenes/productInfoPage/index.jsx";
 
 function App() {
   /* REDUX : grab the state */
@@ -20,9 +20,10 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-            <Route path="/" element={<HomePage />} />
             <Route path="/auth" element={<LoginPage />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/profile/:userId" element={<ProfilePage />} />
+            <Route path="/product/:id" element={<ProductInfoPage />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

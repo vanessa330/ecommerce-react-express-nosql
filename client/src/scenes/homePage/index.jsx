@@ -6,17 +6,18 @@ import UserWidget from "../widgets/UserWidget";
 import CreateWidget from "../widgets/CreateWidget";
 
 const HomePage = () => {
-  const isAuth = Boolean(useSelector((state) => state.token));
-  const user = useSelector((state) => state.user);
+  // User details from Redux state
+  const token = Boolean(useSelector((state) => state.token));
+  const loggedInUser = useSelector((state) => state.user);
+
   // CSS
   const isDesktopScreens = useMediaQuery("(min-width:1000px)");
 
   return (
     <Box>
       <Navbar />
-      
 
-      {isAuth && (
+      {token && (
         <Box
           width="100%"
           padding="1rem 6%"
@@ -30,7 +31,10 @@ const HomePage = () => {
             mt={isDesktopScreens ? "1.5rem" : undefined}
             mb={isDesktopScreens ? undefined : "1.5rem"}
           >
-            <UserWidget userId={user._id} picturePath={user.picturePath} />
+            <UserWidget
+              userId={loggedInUser._id}
+              picturePath={loggedInUser.picturePath}
+            />
           </Box>
 
           <Box
@@ -42,9 +46,7 @@ const HomePage = () => {
         </Box>
       )}
 
-
-
-      <Box m={isDesktopScreens ? "4rem" : undefined}>
+      <Box m={isDesktopScreens ? "1rem 4rem" : "0.75rem"}>
         <ProductsWidget isProfile={false} />
       </Box>
     </Box>

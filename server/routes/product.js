@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  getAllProducts,
+  getProducts,
   getUserProducts,
   likeProdcut,
   addComment,
@@ -13,11 +13,11 @@ const router = express.Router();
 // router.post("/", verifyToken, upload.single("file"), createProduct);
 
 /* READ */
-router.get("/", getAllProducts);
+router.get("/", getProducts);
 router.get("/:userId", getUserProducts);
 
 /* UPDATE */
-router.patch("/:id/:userId/like", verifyToken, likeProdcut);
+router.patch("/:id/like", likeProdcut);
 router.patch("/:id/:userId/comment", verifyToken, addComment);
 
 export default router;
