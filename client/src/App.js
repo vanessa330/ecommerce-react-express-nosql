@@ -8,6 +8,7 @@ import HomePage from "./scenes/homePage";
 import LoginPage from "./scenes/loginPage/index.jsx";
 import ProfilePage from "./scenes/profilePage/index.jsx";
 import ProductInfoPage from "./scenes/productInfoPage/index.jsx";
+import CartPage from "./scenes/cartPage/index.jsx";
 
 function App() {
   /* REDUX : grab the state */
@@ -24,6 +25,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/profile/:userId" element={<ProfilePage />} />
             <Route path="/product/:id" element={<ProductInfoPage />} />
+            <Route path="/cart/:userId" element={<CartPage />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

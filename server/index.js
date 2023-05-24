@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import productRoutes from "./routes/product.js";
+import cartRoutes from "./routes/cart.js";
 import { createProduct } from "./controllers/products.js";
 import { verifyToken } from "./middleware/auth.js";
 import { searchProducts } from "./controllers/products.js";
@@ -46,6 +47,7 @@ app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/products", productRoutes);
 app.get("/search", searchProducts);
+app.use("/cart", cartRoutes);
 
 /* DATABASE SETUP */
 const PORT = process.env.PORT || 6001;

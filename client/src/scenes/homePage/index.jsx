@@ -46,9 +46,9 @@ const HomePage = () => {
         </Box>
       )}
 
-      <Box m={isDesktopScreens ? "1rem 4rem" : "0.75rem"}>
-        <ProductsWidget isProfile={false} />
-      </Box>
+        <Box m={isDesktopScreens ? "1rem 4rem" : "0.75rem"}>
+          <ProductsWidget isProfile={false} />
+        </Box>
     </Box>
   );
 };

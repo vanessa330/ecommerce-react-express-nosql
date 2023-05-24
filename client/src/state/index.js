@@ -8,6 +8,7 @@ const initialState = {
   token: null,
   user: null,
   products: [],
+  cart: null,
 };
 
 // useDispatch()
@@ -39,6 +40,9 @@ export const authSlice = createSlice({
       });
       state.products = updatedProducts;
     },
+    setCart: (state, action) => {
+      state.cart = action.payload.cart;
+    }
   },
 });
 
@@ -49,5 +53,6 @@ export const {
   setUser,
   setProducts,
   setProduct,
+  setCart,
 } = authSlice.actions;
 export default authSlice.reducer;

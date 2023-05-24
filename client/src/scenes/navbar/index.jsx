@@ -12,16 +12,14 @@ import {
 } from "@mui/material";
 import {
   Search,
-  Message,
   DarkMode,
   LightMode,
-  Notifications,
   Menu,
   Close,
   ShoppingCart,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogout, setProducts } from "../../state";
+import { setMode, setLogout, setProducts, setCart } from "../../state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 
@@ -124,16 +122,10 @@ const Navbar = () => {
 
           {fullName === "Guest" ? null : (
             <>
-              <IconButton>
-                <Message sx={{ fontSize: "25px" }} />
-              </IconButton>
-
-              <IconButton>
-                <Notifications sx={{ fontSize: "25px" }} />
-              </IconButton>
-
-              <IconButton>
-                <ShoppingCart sx={{ fontSize: "25px" }} />
+              <IconButton onClick={() => navigate(`/cart/${user._id}`)}>
+                <ShoppingCart
+                  sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
+                />
               </IconButton>
             </>
           )}
@@ -157,7 +149,10 @@ const Navbar = () => {
               }}
               input={<InputBase />}
             >
-              <MenuItem value={fullName}>
+              <MenuItem
+                value={fullName}
+                onClick={() => navigate(`/profile/${user._id}`)}
+              >
                 <Typography>{fullName}</Typography>
               </MenuItem>
 
@@ -254,16 +249,10 @@ const Navbar = () => {
 
             {fullName === "Guest" ? null : (
               <>
-                <IconButton>
-                  <Message sx={{ fontSize: "25px" }} />
-                </IconButton>
-
-                <IconButton>
-                  <Notifications sx={{ fontSize: "25px" }} />
-                </IconButton>
-
-                <IconButton>
-                  <ShoppingCart sx={{ fontSize: "25px" }} />
+                <IconButton onClick={() => navigate(`/cart/${user._id}`)}>
+                  <ShoppingCart
+                    sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
+                  />
                 </IconButton>
               </>
             )}
@@ -287,9 +276,13 @@ const Navbar = () => {
                 }}
                 input={<InputBase />}
               >
-                <MenuItem value={fullName}>
+                <MenuItem
+                  value={fullName}
+                  onClick={() => navigate(`/profile/${user._id}`)}
+                >
                   <Typography>{fullName}</Typography>
                 </MenuItem>
+
                 {fullName === "Guest" ? (
                   <MenuItem
                     onClick={() => {

@@ -1,6 +1,5 @@
 import { Product, Comment } from "../models/Product.js";
 import User from "../models/User.js";
-import mongoose from "mongoose";
 
 /* CREATE */
 
@@ -81,12 +80,13 @@ export const likeProdcut = async (req, res) => {
   // URL/products/:id/like
   try {
     const { id } = req.params;
-    const guestOrUserId = req.body.userId || Math.floor(Math.random() * 10000000).toString();
+    const guestOrUserId =
+      req.body.userId || Math.floor(Math.random() * 10000000).toString();
     const product = await Product.findById(id);
     const isLiked = product.likes.get(guestOrUserId);
 
     if (!product) {
-      return res.status(404).json({ error: "Product not found" });
+      return res.status(404).send({ error: "Product not found" });
     }
 
     // Check the userId is already exists
@@ -139,59 +139,3 @@ export const addComment = async (req, res) => {
     res.status(409).json({ error: err.message });
   }
 };
-
-// export const addToCart = async (req, res) => {
-//   // URL/product/:id/:userId/cart
-//   try {
-//     const { id, userId } = req.params;
-//     const { product, quantity, price } = req.body;
-
-//     const productObject = {
-//       product: product,
-//       quantity: quantity,
-//       price: price,
-//     };
-
-//     const newOrder = await Order({
-//       id,
-//       product,
-//       price,
-//     });
-
-//     await newOrder.save();
-
-//     res.status(200).json(newOrder);
-//   } catch (err) {
-//     res.status(404).json({ error: err.message });
-//   }
-// };
-
-// export const checkout = async (req, res) => {
-//   // URL/product/:id/:userId/cart
-//   try {
-//     const { id, userId } = req.params;
-//     const { product, quantity, price } = req.body;
-
-//     const productObject = {
-//       product: product,
-//       quantity: quantity,
-//       price: price,
-//     };
-
-//     const prodcutsArray = productObject.push(productObject);
-
-//     const newOrder = await Order({
-//       userId,
-//       email,
-//       products: prodcutsArray,
-//       status: "pending",
-//       totalPrice,
-//     });
-
-//     await newOrder.save();
-
-//     res.status(200).json(newOrder);
-//   } catch (err) {
-//     res.status(404).json({ error: err.message });
-//   }
-// };

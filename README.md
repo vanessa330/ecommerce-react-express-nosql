@@ -1,6 +1,6 @@
 # Shopping Cart
 
-> This is a FAKE shopping cart built on the MERN stack and Deploy through [Cloudflare](https://www.cloudflare.com/) and [Render](https://dashboard.render.com/). You can register and log in, create your own products, and sell them too the other users.
+> This is a FAKE shopping cart built on the MongoDB, Express, React, Node and deploy through [Cloudflare](https://www.cloudflare.com/) and [Render](https://dashboard.render.com/). You can register and log in, create your own products, and sell them too the other users.
 
 <br />
 
@@ -66,9 +66,9 @@
      - getUserProducts
      - likeProdcut
      - addComment
+   - cart controllers
+      - addItemToCart
+      - getCart
+      - subtractItem
 
 <br />
-
-## Pending...
-1. Add to cart
-2. order schema
