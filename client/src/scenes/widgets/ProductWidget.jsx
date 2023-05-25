@@ -29,7 +29,7 @@ const ProductWidget = ({
   const isLiked = false || Boolean(likes[loggedInUserId]); // Frontend liked color setting
 
   const rootUrl = process.env.REACT_APP_SERVER_URL;
-  
+
   const likeProduct = async () => {
     const guestOrUser = null || loggedInUserId;
     const res = await fetch(`${rootUrl}products/${id}/like`, {
@@ -43,7 +43,7 @@ const ProductWidget = ({
   };
 
   return (
-    <WidgetWrapper m={isDesktopScreens ? "1rem" : "1rem"}>
+    <WidgetWrapper m={isDesktopScreens ? undefined : "0.8rem 0.7rem"}>
       <FlexBetween m="0.8rem">
         <Typography
           variant="h4"

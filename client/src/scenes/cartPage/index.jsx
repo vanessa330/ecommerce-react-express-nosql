@@ -1,18 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  FavoriteBorderOutlined,
-  FavoriteOutlined,
-  ChatBubbleOutline,
-  Reply,
-} from "@mui/icons-material";
-import {
   Box,
   Divider,
-  IconButton,
   Typography,
   useTheme,
-  InputBase,
   Button,
   useMediaQuery,
 } from "@mui/material";
@@ -30,7 +22,7 @@ const CartPage = () => {
 
   // Cart details from Redux state
   const cart = useSelector((state) => state.cart);
-  const items = Object.values(cart.items);
+  const items = cart ? Object.values(cart.items) : [];
 
   // CSS
   const { palette } = useTheme();
@@ -40,15 +32,23 @@ const CartPage = () => {
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const getCart = async () => {
-    const res = await fetch(`${rootUrl}cart/${userId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+    setIsLoading(true);
+    try {
+      const res = await fetch(`${rootUrl}cart/${userId}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
 
-    const data = await res.json();
-    if (res.status === 200) {
-      dispatch(setCart({ cart: data }));
+      const data = await res.json();
+      if (res.status === 200) {
+        dispatch(setCart({ cart: data }));
+      } else if (res.status === 400) {
+        window.alert(data.error);
+      }
+    } catch (err) {
+      console.log(err);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -63,7 +63,6 @@ const CartPage = () => {
       <Box
         backgroundColor={palette.background.alt}
         borderRadius="8px"
-        // display={isDesktopScreens ? "flex" : "block"}
         m={isDesktopScreens ? "2rem 10rem" : "2rem 0"}
         gap="2rem"
         justifyContent="center"
@@ -78,10 +77,9 @@ const CartPage = () => {
           My cart:
         </Typography>
         <Divider />
-
         {isLoading ? (
           <Spinner />
-        ) : (
+        ) : cart === null ? null : (
           <Box>
             {items.map(({ _id, productId, quantity, price, total }) => (
               <CartItem
@@ -111,7 +109,7 @@ const CartPage = () => {
               fontWeight="500"
               margin={isDesktopScreens ? "1.5rem" : "1rem"}
             >
-              HK$ {cart.subTotal}
+              HK$ {cart === null ? "0" : `${cart.subTotal}`}
             </Typography>
           </FlexBetween>
         </Box>

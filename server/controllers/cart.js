@@ -56,7 +56,7 @@ export const getCart = async (req, res) => {
     const { userId } = req.params;
     const cart = await Cart.findOne({ userId });
 
-    if (!cart.items)
+    if (!cart)
       return res
         .status(400)
         .send({ error: "There are no products in the cart." });
