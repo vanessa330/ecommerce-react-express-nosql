@@ -9,6 +9,8 @@ import {
   FormControl,
   useTheme,
   useMediaQuery,
+  Badge,
+  Avatar,
 } from "@mui/material";
 import {
   Search,
@@ -19,7 +21,7 @@ import {
   ShoppingCart,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogout, setProducts, setCart } from "../../state";
+import { setMode, setLogout, setProducts } from "../../state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 
@@ -34,6 +36,7 @@ const Navbar = () => {
   // CSS
   const isDesktopScreens = useMediaQuery("(min-width: 1000px)");
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
+  const itemCount = useSelector((state) => state.itemCount).toString();
   const theme = useTheme();
 
   // Grab the searching results from Backend
@@ -126,6 +129,21 @@ const Navbar = () => {
                 <ShoppingCart
                   sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
                 />
+                {itemCount !== "0" && (
+                  <Avatar
+                    sx={{
+                      backgroundColor: theme.palette.primary.main,
+                      width: "20px",
+                      height: "20px",
+                      margin: "0 0 50%",
+                    }}
+                  >
+                    <Badge
+                      sx={{ color: theme.palette.primary.contrastText }}
+                      badgeContent={itemCount}
+                    />
+                  </Avatar>
+                )}
               </IconButton>
             </>
           )}
@@ -253,6 +271,21 @@ const Navbar = () => {
                   <ShoppingCart
                     sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
                   />
+                  {itemCount !== "0" && (
+                    <Avatar
+                      sx={{
+                        backgroundColor: theme.palette.primary.main,
+                        width: "20px",
+                        height: "20px",
+                        margin: "0 0 50%",
+                      }}
+                    >
+                      <Badge
+                        sx={{ color: theme.palette.primary.contrastText }}
+                        badgeContent={itemCount}
+                      />
+                    </Avatar>
+                  )}
                 </IconButton>
               </>
             )}

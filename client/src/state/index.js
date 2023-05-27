@@ -9,6 +9,7 @@ const initialState = {
   user: null,
   products: [],
   cart: null,
+  itemCount: 0,
 };
 
 // useDispatch()
@@ -42,7 +43,15 @@ export const authSlice = createSlice({
     },
     setCart: (state, action) => {
       state.cart = action.payload.cart;
-    }
+    },
+    setItemCount: (state, action) => {
+      const items = action.payload.items;
+      let totalCount = 0;
+      for (let i = 0; i < items.length; i++) {
+        totalCount += items[i].quantity;
+      }
+      state.itemCount = totalCount;
+    },
   },
 });
 
@@ -54,5 +63,6 @@ export const {
   setProducts,
   setProduct,
   setCart,
+  setItemCount,
 } = authSlice.actions;
 export default authSlice.reducer;

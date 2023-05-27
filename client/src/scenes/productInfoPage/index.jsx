@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import Navbar from "../navbar";
-import { setProducts, setProduct, setCart } from "../../state";
+import { setProducts, setProduct, setCart, setItemCount } from "../../state";
 import { useEffect, useState } from "react";
 import Spinner from "../../components/Spinner";
 import UserFollowing from "../../components/UserFollowing";
@@ -48,9 +48,6 @@ const ProductInfoPage = () => {
     likes,
     comments,
   } = product;
-
-  // Cart details from Redux state
-  const cart = useSelector((state) => state.cart);
 
   const commentArray = Object.entries(comments);
   const [newComment, setNewComment] = useState("");
@@ -124,6 +121,7 @@ const ProductInfoPage = () => {
 
     if (res.status === 201) {
       dispatch(setCart({ cart: data }));
+      dispatch(setItemCount({ items: data.items }));
     }
   };
 

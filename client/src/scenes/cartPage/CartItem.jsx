@@ -3,18 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
 import {
   Box,
-  Divider,
   IconButton,
   Typography,
   useTheme,
-  InputBase,
-  Button,
   useMediaQuery,
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
-import Navbar from "../navbar";
-import { setCart } from "../../state";
-import { useEffect, useState } from "react";
+import { setCart , setItemCount } from "../../state";
 import WidgetWrapper from "../../components/WidgetWrapper";
 
 const CartItem = ({ productId, quantity, price, total }) => {
@@ -49,6 +44,7 @@ const CartItem = ({ productId, quantity, price, total }) => {
 
     if (res.status === 201) {
       dispatch(setCart({ cart: data }));
+      dispatch(setItemCount({ items: data.items }));
     }
   };
 
@@ -65,6 +61,7 @@ const CartItem = ({ productId, quantity, price, total }) => {
 
     if (res.status === 200) {
       dispatch(setCart({ cart: data }));
+      dispatch(setItemCount({ items: data.items }));
     }
   };
 
