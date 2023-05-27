@@ -1,6 +1,6 @@
-# Shopping Cart
+# E-commerce Website
 
-> This is a FAKE shopping cart built on the MongoDB, Express, React, Node and deploy through [Cloudflare](https://www.cloudflare.com/) and [Render](https://dashboard.render.com/). You can register and log in, create your own products, and sell them too the other users. Also, you can add the product to your cart.
+> This is a FAKE shopping cart built on the MongoDB, Express, React, Node and deploy through [Cloudflare](https://www.cloudflare.com/) and [Render](https://dashboard.render.com/). You can register and log in, create your own products, and sell them too the other users. Also, you can add the product to your shopping cart.
 
 <br />
 
@@ -8,11 +8,24 @@
 
 <br />
 
+![Screenshot](./capscreen/homePage.png)
+![Screenshot](./capscreen/shoppingCart.png)
+
+<br />
+
 ## Frontend - Client Side
 
 1. Fronend Set Up
-   - `npx create-react-app client`
-   - `npm i react-router-dom@6 react-redux @reduxjs/toolkit redux-persist react-dropzone dotenv formik yup @mui/material @emotion/react @emotion/styled @mui/icons-material`
+   - React app
+   - Library
+      - react-router-dom
+      - react-redux
+      - reduxjs/toolkit
+      - redux-persist
+      - react-dropzone
+      - dotenv
+      - formik yup 
+      - mui/material mui/icons-material
 2. Configuration on index.js
    - Login Redux Persist
 3. Configuration on App.js
@@ -23,6 +36,7 @@
    - Navbar
       - DarkLight mode
       - Searchbar
+      - ShoppingCart
       - User Login & Logout
    - HomePage
      - LoginPage
@@ -35,6 +49,8 @@
    - ProductInfoPage
       - UserWidget
       - ProductWidget
+   - CartPage
+      - CartItem
 
 
 <br />
@@ -42,9 +58,17 @@
 ## Backend - Server Side
 
 1. Backend installation
-   - `npm i -g nodemon`
-   - `npm init -y`
-   - `npm i express mongoose mysql bcrypt jsonwebtoken dotenv cors helmet morgan multer`
+   - Express
+   - MongoDB
+   - Library
+      - mongoose
+      - bcrypt
+      - jsonwebtoken
+      - dotenv
+      - cors
+      - helmet
+      - morgan
+      - multer
 2. Configuration on index.js
    - File storage
    - Routes settings
@@ -70,5 +94,3 @@
       - addItemToCart
       - getCart
       - subtractItem
-
-<br />
