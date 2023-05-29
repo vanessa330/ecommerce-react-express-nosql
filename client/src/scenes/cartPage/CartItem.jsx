@@ -9,21 +9,22 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
-import { setCart , setItemCount } from "../../state";
+import { setCart, setItemCount } from "../../state";
 import WidgetWrapper from "../../components/WidgetWrapper";
 
-const CartItem = ({ productId, quantity, price, total }) => {
+const CartItem = ({
+  productId,
+  productName,
+  picturePath,
+  quantity,
+  price,
+  total,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   //   User details from Redux state
   const loggedInUserId = useSelector((state) => state.user?._id);
-
-  // Product details from Redux state
-  const products = useSelector((state) => state.products);
-  const { productName, picturePath } = products.find(
-    (product) => product._id === productId
-  );
 
   // CSS
   const { palette } = useTheme();
@@ -76,6 +77,7 @@ const CartItem = ({ productId, quantity, price, total }) => {
         <Box width={isDesktopScreens ? "20%" : undefined}>
           <img
             width="100%"
+            height={isDesktopScreens ? "130px" : undefined}
             alt="product"
             style={{
               objectFit: "cover",
@@ -114,7 +116,8 @@ const CartItem = ({ productId, quantity, price, total }) => {
           </Typography>
         </Box>
 
-        <Box width={isDesktopScreens ? "30%" : undefined}
+        <Box
+          width={isDesktopScreens ? "30%" : undefined}
           m={isDesktopScreens ? undefined : "0.8rem"}
         >
           <FlexBetween>

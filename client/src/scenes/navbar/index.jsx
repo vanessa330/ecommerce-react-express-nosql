@@ -125,7 +125,7 @@ const Navbar = () => {
 
           {fullName === "Guest" ? null : (
             <>
-              <IconButton onClick={() => navigate(`/cart/${user._id}`)}>
+              <IconButton onClick={() => navigate(`/cart`)}>
                 <ShoppingCart
                   sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
                 />
@@ -267,7 +267,7 @@ const Navbar = () => {
 
             {fullName === "Guest" ? null : (
               <>
-                <IconButton onClick={() => navigate(`/cart/${user._id}`)}>
+                <IconButton onClick={() => navigate(`/cart`)}>
                   <ShoppingCart
                     sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
                   />

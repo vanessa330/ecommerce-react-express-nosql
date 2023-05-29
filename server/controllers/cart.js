@@ -10,10 +10,12 @@ export const addItemToCart = async (req, res) => {
     const { productId, userId } = req.params;
     const product = await Product.findById(productId);
 
+    const productName = product.productName;
+    const picturePath = product.picturePath;
     let quantity = 1;
     let price = product.price;
     let total = price * quantity;
-
+    
     // 1. create a new cart schema
     let cart = await Cart.findOne({ userId });
     if (!cart) cart = new Cart({ userId });
@@ -28,6 +30,8 @@ export const addItemToCart = async (req, res) => {
       cart.items.push(
         new Item({
           productId,
+          productName,
+          picturePath,
           quantity,
           price,
           total,

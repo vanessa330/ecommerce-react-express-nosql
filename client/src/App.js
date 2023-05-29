@@ -25,7 +25,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/profile/:userId" element={<ProfilePage />} />
             <Route path="/product/:id" element={<ProductInfoPage />} />
-            <Route path="/cart/:userId" element={<CartPage />} />
+            <Route path="/cart" element={<CartPage />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

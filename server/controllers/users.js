@@ -14,49 +14,27 @@ export const getUser = async (req, res) => {
   }
 };
 
-export const getUserFollowers = async (req, res) => {
-  // URL/users/:id/followers
-  try {
-    const { id } = req.params;
-    const user = await User.findById(id);
+// export const getUserFollowing = async (req, res) => {
+//   // URL/users/:id/following
+//   try {
+//     const { id } = req.params;
+//     const user = await User.findById(id);
 
-    const followers = await Promise.all(
-      user.followers.map((id) => User.findById(id))
-    );
+//     const following = await Promise.all(
+//       user.following.map((id) => User.findById(id))
+//     );
 
-    const formattedfollowers = followers.map(
-      ({ _id, firstName, lastName, picturePath, followers, following }) => {
-        return { _id, firstName, lastName, picturePath, followers, following };
-      }
-    );
+//     const formattedFollowing = following.map(
+//       ({ _id, firstName, lastName, picturePath, followers, following }) => {
+//         return { _id, firstName, lastName, picturePath, followers, following };
+//       }
+//     );
 
-    res.status(200).json(formattedfollowers);
-  } catch (err) {
-    res.status(404).send({ message: err.message });
-  }
-};
-
-export const getUserFollowing = async (req, res) => {
-  // URL/users/:id/following
-  try {
-    const { id } = req.params;
-    const user = await User.findById(id);
-
-    const following = await Promise.all(
-      user.following.map((id) => User.findById(id))
-    );
-
-    const formattedFollowing = following.map(
-      ({ _id, firstName, lastName, picturePath, followers, following }) => {
-        return { _id, firstName, lastName, picturePath, followers, following };
-      }
-    );
-
-    res.status(200).json(formattedFollowing);
-  } catch (err) {
-    res.status(404).send({ message: err.message });
-  }
-};
+//     res.status(200).json(formattedFollowing);
+//   } catch (err) {
+//     res.status(404).send({ message: err.message });
+//   }
+// };
 
 /* UPDATE */
 

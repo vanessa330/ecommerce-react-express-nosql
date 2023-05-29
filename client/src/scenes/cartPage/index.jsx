@@ -1,4 +1,3 @@
-import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
@@ -18,7 +17,7 @@ import CartItem from "./CartItem";
 const CartPage = () => {
   const dispatch = useDispatch();
 
-  const { userId } = useParams;
+  const loggedInUser = useSelector((state) => state.user._id);
 
   // Cart details from Redux state
   const cart = useSelector((state) => state.cart);
@@ -34,7 +33,7 @@ const CartPage = () => {
   const getCart = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${rootUrl}cart/${userId}`, {
+      const res = await fetch(`${rootUrl}cart/${loggedInUser}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -43,7 +42,7 @@ const CartPage = () => {
       if (res.status === 200) {
         dispatch(setCart({ cart: data }));
       } else if (res.status === 400) {
-        window.alert(data.error);
+        console.log(data.error);
       }
     } catch (err) {
       console.log(err);
@@ -81,15 +80,27 @@ const CartPage = () => {
           <Spinner />
         ) : cart === null ? null : (
           <Box>
-            {items.map(({ _id, productId, quantity, price, total }) => (
-              <CartItem
-                key={_id}
-                productId={productId}
-                quantity={quantity}
-                price={price}
-                total={total}
-              />
-            ))}
+            {items.map(
+              ({
+                _id,
+                productId,
+                productName,
+                picturePath,
+                quantity,
+                price,
+                total,
+              }) => (
+                <CartItem
+                  key={_id}
+                  productId={productId}
+                  productName={productName}
+                  picturePath={picturePath}
+                  quantity={quantity}
+                  price={price}
+                  total={total}
+                />
+              )
+            )}
           </Box>
         )}
 

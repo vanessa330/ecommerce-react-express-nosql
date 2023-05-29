@@ -7,6 +7,12 @@ const ItemSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
     },
+    productName: {
+      type: String,
+    },
+    picturePath: {
+      type: String,
+    },
     quantity: {
       type: Number,
       required: true,
@@ -25,6 +31,17 @@ const ItemSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+ItemSchema.pre("save", async function (next) {
+  try {
+    const product = await Product.findById(this.productId);
+    this.productName = product.productName;
+    this.picturePath = product.picturePath;
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 const CartSchema = mongoose.Schema(
   {
