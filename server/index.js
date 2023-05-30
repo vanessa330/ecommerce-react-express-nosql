@@ -7,6 +7,7 @@ import morgan from "morgan";
 import path from "path";
 import multer from "multer";
 import Stripe from "stripe";
+
 import { Cart } from "./models/Cart.js";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
@@ -60,11 +61,10 @@ app.use("/cart", cartRoutes);
 const stripe = Stripe(process.env.STRIPE_KEY);
 
 app.post("/create-checkout-session", async (req, res) => {
+  const { id } = req.body;
+  const cart = await Cart.findById(id);
+  const items = cart.items;
   try {
-    const { id } = req.body;
-    const cart = await Cart.findById(id);
-    const items = cart.items;
-
     const lineItems = items.map((item) => {
       return {
         price_data: {
@@ -90,8 +90,30 @@ app.post("/create-checkout-session", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message);
+  } finally {
+    await Cart.deleteOne({ _id: id });
   }
 });
+
+// app.post("/webhook", (req, res) => {
+//   const event = req.body;
+//   // Handle the after payment event
+//   switch (event.type) {
+//     case "payment_intent.succeeded":
+//       const paymentIntent = event.data.object;
+//       console.log("PaymentIntent was successful!");
+//       break;
+//     case "payment_method.attached":
+//       const paymentMethod = event.data.object;
+//       console.log("PaymentMethod was attached to a Customer!");
+//       break;
+//     default:
+//       console.log(`Unhandled event type ${event.type}`);
+//   }
+
+//   // Return a 200 response to acknowledge receipt of the event
+//   res.json({ received: true });
+// });
 
 /* DATABASE SETUP */
 const PORT = process.env.PORT;

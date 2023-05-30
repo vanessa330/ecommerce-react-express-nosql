@@ -46,6 +46,7 @@ export const authSlice = createSlice({
     },
     setCartToNull: (state) => {
       state.cart = null;
+      state.itemCount = 0;
     },
     setItemCount: (state, action) => {
       const items = action.payload.items;
