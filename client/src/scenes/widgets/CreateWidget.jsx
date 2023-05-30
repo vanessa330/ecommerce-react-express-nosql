@@ -51,7 +51,7 @@ const CreateWidget = () => {
       formData.append("picturePath", newImage.name);
     }
 
-    const res = await fetch(`${rootUrl}/products`, {
+    const res = await fetch(`${rootUrl}products`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: formData,

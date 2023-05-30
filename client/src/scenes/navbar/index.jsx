@@ -45,7 +45,7 @@ const Navbar = () => {
   const [searchParam, setSearchParam] = useState("");
 
   const searchProducts = async () => {
-    const res = await fetch(`${rootUrl}/search?product=${searchParam}`, {
+    const res = await fetch(`${rootUrl}search?product=${searchParam}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });

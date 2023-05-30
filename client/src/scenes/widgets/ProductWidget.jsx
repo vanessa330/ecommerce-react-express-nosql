@@ -31,7 +31,7 @@ const ProductWidget = ({
 
   const likeProduct = async () => {
     const guestOrUser = null || loggedInUserId;
-    const res = await fetch(`${rootUrl}/products/${id}/like`, {
+    const res = await fetch(`${rootUrl}products/${id}/like`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: guestOrUser }),
@@ -76,7 +76,7 @@ const ProductWidget = ({
             objectFit: "cover",
             borderRadius: "0.75rem",
           }}
-          src={`${rootUrl}/assets/${picturePath}`}
+          src={`${rootUrl}assets/${picturePath}`}
           crossOrigin="anonymous"
         />
       )}

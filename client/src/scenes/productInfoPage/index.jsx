@@ -55,7 +55,7 @@ const ProductInfoPage = () => {
   const getProducts = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${rootUrl}/products`, {
+      const res = await fetch(`${rootUrl}products`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -71,7 +71,7 @@ const ProductInfoPage = () => {
 
   const likeProduct = async () => {
     const guestOrUser = null || loggedInUserId;
-    const res = await fetch(`${rootUrl}/products/${id}/like`, {
+    const res = await fetch(`${rootUrl}products/${id}/like`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: guestOrUser }),
@@ -82,7 +82,7 @@ const ProductInfoPage = () => {
   };
 
   const addItemToCart = async () => {
-    const res = await fetch(`${rootUrl}/cart/add/${id}/${loggedInUserId}`, {
+    const res = await fetch(`${rootUrl}cart/add/${id}/${loggedInUserId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
     });
@@ -129,7 +129,7 @@ const ProductInfoPage = () => {
                     objectFit: "cover",
                     borderRadius: "0.75rem",
                   }}
-                  src={`${rootUrl}/assets/${picturePath}`}
+                  src={`${rootUrl}assets/${picturePath}`}
                   crossOrigin="anonymous"
                 />
               )}

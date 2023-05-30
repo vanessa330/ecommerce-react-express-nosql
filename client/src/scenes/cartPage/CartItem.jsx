@@ -34,7 +34,7 @@ const CartItem = ({
 
   const addItemToCart = async () => {
     const res = await fetch(
-      `${rootUrl}/cart/add/${productId}/${loggedInUserId}`,
+      `${rootUrl}cart/add/${productId}/${loggedInUserId}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -51,7 +51,7 @@ const CartItem = ({
 
   const subtractItem = async () => {
     const res = await fetch(
-      `${rootUrl}/cart/subtract/${productId}/${loggedInUserId}`,
+      `${rootUrl}cart/subtract/${productId}/${loggedInUserId}`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -83,7 +83,7 @@ const CartItem = ({
               objectFit: "cover",
               borderRadius: "0.75rem",
             }}
-            src={`${rootUrl}/assets/${picturePath}`}
+            src={`${rootUrl}assets/${picturePath}`}
             crossOrigin="anonymous"
           />
         </Box>

@@ -33,7 +33,7 @@ const CartPage = () => {
   const getCart = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${rootUrl}/cart/${loggedInUser}`, {
+      const res = await fetch(`${rootUrl}cart/${loggedInUser}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -56,7 +56,7 @@ const CartPage = () => {
     const data = { id: cart._id };
 
     try {
-      const res = await fetch(`${rootUrl}/create-checkout-session`, {
+      const res = await fetch(`${rootUrl}create-checkout-session`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
