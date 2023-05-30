@@ -51,7 +51,7 @@ const CreateWidget = () => {
       formData.append("picturePath", newImage.name);
     }
 
-    const res = await fetch(`${rootUrl}products`, {
+    const res = await fetch(`${rootUrl}/products`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: formData,
@@ -59,13 +59,15 @@ const CreateWidget = () => {
 
     const data = await res.json();
 
-    dispatch(setProducts({ products: data }));
-    window.alert("You have successfully created a new product.");
-    setNewProductName("");
-    setNewProductPrice("");
-    setNewProdcutDes("");
-    setNewImage("");
-    setIsUploadImage(null);
+    if (res.status === 201) {
+      dispatch(setProducts({ products: data }));
+      window.alert("You have successfully created a new product.");
+      setNewProductName("");
+      setNewProductPrice("");
+      setNewProdcutDes("");
+      setNewImage("");
+      setIsUploadImage(null);
+    }
   };
 
   if (token) {

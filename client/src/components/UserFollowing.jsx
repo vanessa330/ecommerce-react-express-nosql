@@ -20,7 +20,7 @@ const UserFollowing = ({ followingId }) => {
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const addRemoveFollowing = async () => {
-    const res = await fetch(`${rootUrl}users/${loggedInUser}/${followingId}`, {
+    const res = await fetch(`${rootUrl}/users/${loggedInUser}/${followingId}`, {
       method: "PATCH",
       headers: { Authorization: `Bearer ${token}` },
     });

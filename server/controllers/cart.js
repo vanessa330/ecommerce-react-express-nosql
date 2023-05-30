@@ -1,5 +1,5 @@
 import { Item, Cart } from "../models/Cart.js";
-import { Product } from "../models/Product.js";
+import Product from "../models/Product.js";
 import User from "../models/User.js";
 
 /* CREATE */
@@ -15,7 +15,7 @@ export const addItemToCart = async (req, res) => {
     let quantity = 1;
     let price = product.price;
     let total = price * quantity;
-    
+
     // 1. create a new cart schema
     let cart = await Cart.findOne({ userId });
     if (!cart) cart = new Cart({ userId });

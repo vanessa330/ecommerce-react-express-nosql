@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Product } from "./Product.js";
+import Product from "./Product.js";
 
 const ItemSchema = mongoose.Schema(
   {
@@ -27,9 +27,7 @@ const ItemSchema = mongoose.Schema(
       required: true,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 ItemSchema.pre("save", async function (next) {
@@ -38,8 +36,8 @@ ItemSchema.pre("save", async function (next) {
     this.productName = product.productName;
     this.picturePath = product.picturePath;
     next();
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 });
 

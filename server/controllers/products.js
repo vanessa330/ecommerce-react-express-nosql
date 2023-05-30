@@ -1,4 +1,4 @@
-import { Product, Comment } from "../models/Product.js";
+import Product from "../models/Product.js";
 import User from "../models/User.js";
 
 /* CREATE */
@@ -20,7 +20,6 @@ export const createProduct = async (req, res) => {
       description,
       picturePath,
       likes: {},
-      comments: {},
     });
 
     await newProduct.save();
@@ -99,38 +98,6 @@ export const likeProdcut = async (req, res) => {
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
       { likes: product.likes },
-      { new: true }
-    );
-
-    res.status(200).json(updatedProduct);
-  } catch (err) {
-    res.status(409).json({ error: err.message });
-  }
-};
-
-export const addComment = async (req, res) => {
-  // URL/products/:id/:userId/comment
-  try {
-    const { id, userId } = req.params;
-    const { comment } = req.body;
-    const { firstName, lastName } = await User.findById(userId);
-    const product = await Product.findById(id);
-
-    const newComment = new Comment({
-      userId,
-      firstName,
-      lastName,
-      comment,
-    });
-
-    await newComment.save();
-
-    const commentId = new mongoose.Types.ObjectId();
-    product.comments.set(commentId, newComment);
-
-    const updatedProduct = await Product.findByIdAndUpdate(
-      id,
-      { comments: product.comments },
       { new: true }
     );
 

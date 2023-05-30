@@ -20,7 +20,7 @@ const ProductsWidget = ({ userId, isProfile }) => {
   const getProducts = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${rootUrl}products`, {
+      const res = await fetch(`${rootUrl}/products`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -36,7 +36,7 @@ const ProductsWidget = ({ userId, isProfile }) => {
   const getUserProducts = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${rootUrl}products/${userId}`, {
+      const res = await fetch(`${rootUrl}/products/${userId}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -81,7 +81,6 @@ const ProductsWidget = ({ userId, isProfile }) => {
               description,
               picturePath,
               likes,
-              comments,
             }) => (
               <ProductWidget
                 key={_id}
@@ -93,7 +92,6 @@ const ProductsWidget = ({ userId, isProfile }) => {
                 description={description}
                 picturePath={picturePath}
                 likes={likes}
-                comments={comments}
               />
             )
           )}

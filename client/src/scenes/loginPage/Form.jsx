@@ -70,7 +70,7 @@ const Form = () => {
 
   const register = async (values, onSubmitProps) => {
     try {
-      const res = await fetch(`${rootUrl}auth/register`, {
+      const res = await fetch(`${rootUrl}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
@@ -94,7 +94,7 @@ const Form = () => {
 
   const login = async (values, onSubmitProps) => {
     try {
-      const res = await fetch(`${rootUrl}auth/login`, {
+      const res = await fetch(`${rootUrl}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),

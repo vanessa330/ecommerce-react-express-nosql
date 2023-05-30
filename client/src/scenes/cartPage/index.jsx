@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import Navbar from "../navbar";
-import { setCart } from "../../state";
+import { setCart, setCartToNull } from "../../state";
 import { useEffect, useState } from "react";
 import Spinner from "../../components/Spinner";
 import CartItem from "./CartItem";
@@ -33,7 +33,7 @@ const CartPage = () => {
   const getCart = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${rootUrl}cart/${loggedInUser}`, {
+      const res = await fetch(`${rootUrl}/cart/${loggedInUser}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -48,6 +48,26 @@ const CartPage = () => {
       console.log(err);
     }
     setIsLoading(false);
+  };
+
+  const checkOut = async () => {
+    const data = { id: cart._id };
+
+    try {
+      const res = await fetch(`${rootUrl}/create-checkout-session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (res.status === 303) {
+        const session = await res.json();
+        window.location.href = session.url;
+        dispatch(setCartToNull());
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -129,6 +149,7 @@ const CartPage = () => {
           <FlexBetween padding="1rem 2rem 3rem">
             <Button
               fullWidth
+              onClick={checkOut}
               type="submit"
               sx={{
                 p: "1rem 8rem",

@@ -22,7 +22,7 @@ const UserWidget = ({ userId, picturePath }) => {
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const getUser = async () => {
-    const res = await fetch(`${rootUrl}users/${userId}`, {
+    const res = await fetch(`${rootUrl}/users/${userId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });

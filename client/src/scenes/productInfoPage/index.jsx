@@ -3,16 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   FavoriteBorderOutlined,
   FavoriteOutlined,
-  ChatBubbleOutline,
-  Reply,
 } from "@mui/icons-material";
 import {
   Box,
-  Divider,
   IconButton,
   Typography,
   useTheme,
-  InputBase,
   Button,
   useMediaQuery,
 } from "@mui/material";
@@ -46,25 +42,20 @@ const ProductInfoPage = () => {
     description,
     picturePath,
     likes,
-    comments,
   } = product;
-
-  const commentArray = Object.entries(comments);
-  const [newComment, setNewComment] = useState("");
 
   // CSS
   const { palette } = useTheme();
   const isDesktopScreens = useMediaQuery("(min-width:1000px)");
   const [isLoading, setIsLoading] = useState(false);
   const isLiked = false || Boolean(likes[loggedInUserId]); // Frontend liked color setting
-  const [isCommentToggled, setIsCommentToggled] = useState(false);
 
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const getProducts = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${rootUrl}products/`, {
+      const res = await fetch(`${rootUrl}/products`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -80,7 +71,7 @@ const ProductInfoPage = () => {
 
   const likeProduct = async () => {
     const guestOrUser = null || loggedInUserId;
-    const res = await fetch(`${rootUrl}products/${id}/like`, {
+    const res = await fetch(`${rootUrl}/products/${id}/like`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: guestOrUser }),
@@ -90,29 +81,8 @@ const ProductInfoPage = () => {
     dispatch(setProduct({ product: updatedProduct }));
   };
 
-  const addComment = async () => {
-    const res = await fetch(
-      `${rootUrl}products/${id}/${loggedInUserId}/comment`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ comment: newComment }),
-      }
-    );
-
-    const updatedProduct = await res.json();
-
-    if (res.status === 200) {
-      dispatch(setProduct({ product: updatedProduct }));
-      setNewComment("");
-    }
-  };
-
   const addItemToCart = async () => {
-    const res = await fetch(`${rootUrl}cart/add/${id}/${loggedInUserId}`, {
+    const res = await fetch(`${rootUrl}/cart/add/${id}/${loggedInUserId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
     });
@@ -159,7 +129,7 @@ const ProductInfoPage = () => {
                     objectFit: "cover",
                     borderRadius: "0.75rem",
                   }}
-                  src={`${rootUrl}assets/${picturePath}`}
+                  src={`${rootUrl}/assets/${picturePath}`}
                   crossOrigin="anonymous"
                 />
               )}
@@ -247,19 +217,6 @@ const ProductInfoPage = () => {
                     )}
                     <Typography>{Object.keys(likes).length}</Typography>
                   </FlexBetween>
-
-                  <FlexBetween gap="0.3rem">
-                    {token && (
-                      <>
-                        <IconButton
-                          onClick={() => setIsCommentToggled(!isCommentToggled)}
-                        >
-                          <ChatBubbleOutline />
-                        </IconButton>
-                        <Typography>{Object.keys(comments).length}</Typography>
-                      </>
-                    )}
-                  </FlexBetween>
                 </FlexBetween>
 
                 <Box margin="2rem">
@@ -280,84 +237,6 @@ const ProductInfoPage = () => {
               </FlexBetween>
             </Box>
           </Box>
-          {isCommentToggled && (
-            <Box
-              display={isDesktopScreens ? "flex" : "block"}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Box flexBasis={isDesktopScreens ? "50%" : undefined}>{null}</Box>
-              <Box
-                backgroundColor={palette.background.alt}
-                borderRadius="5px"
-                flexBasis={isDesktopScreens ? "50%" : undefined}
-                m={isDesktopScreens ? "0.1rem 2rem" : "2rem 0"}
-              >
-                <Typography
-                  variant="h4"
-                  color={palette.neutral.dark}
-                  p={isDesktopScreens ? "2rem 3rem" : "2rem"}
-                >
-                  Comments :
-                </Typography>
-
-                <Divider margin="1rem" />
-                <Box
-                  m={isDesktopScreens ? "0 2rem" : undefined}
-                  sx={{
-                    maxHeight: "200px",
-                    overflowY: "auto",
-                  }}
-                >
-                  <Typography sx={{ color: palette.neutral.main }}>
-                    {commentArray.map(([key, value]) => (
-                      <Box key={key} m={isDesktopScreens ? "1.2rem" : "2rem"}>
-                        <Typography ml="0.6rem">
-                          {value.firstName} {value.lastName}: {value.comment}
-                        </Typography>
-                        <Divider sx={{ m: "1.2rem 0" }} />
-                      </Box>
-                    ))}
-                  </Typography>
-                </Box>
-                <Box
-                  p={
-                    isDesktopScreens
-                      ? "0.5rem 2rem 3rem"
-                      : "0.5rem 1.5rem 2.5rem"
-                  }
-                >
-                  <FlexBetween
-                    backgroundColor={palette.neutral.light}
-                    borderRadius="6px"
-                    gap="2rem"
-                    m={isDesktopScreens ? "0.5rem 0.8rem" : "1rem"}
-                  >
-                    <InputBase
-                      placeholder="Comment here..."
-                      value={newComment}
-                      onChange={(e) => setNewComment(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          addComment();
-                        }
-                      }}
-                      name="comment"
-                      sx={{
-                        width: "100%",
-                        backgroundColor: palette.neutral.light,
-                        borderRadius: "15px",
-                        margin: "1rem",
-                      }}
-                    />
-                    <IconButton onClick={addComment}>
-                      <Reply />
-                    </IconButton>
-                  </FlexBetween>
-                </Box>
-              </Box>
-            </Box>
-          )}
         </Box>
       ) : null}
     </Box>

@@ -72,6 +72,7 @@
       - helmet
       - morgan
       - multer
+      - stripe payment
 2. Configuration on index.js
    - File storage
    - Routes settings
@@ -92,7 +93,6 @@
      - getProducts
      - getUserProducts
      - likeProdcut
-     - addComment
    - cart controllers
       - addItemToCart
       - getCart

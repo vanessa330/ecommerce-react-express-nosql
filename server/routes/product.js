@@ -3,7 +3,6 @@ import {
   getProducts,
   getUserProducts,
   likeProdcut,
-  addComment,
 } from "../controllers/products.js";
 import { verifyToken } from "../middleware/auth.js";
 
@@ -18,6 +17,5 @@ router.get("/:userId", getUserProducts);
 
 /* UPDATE */
 router.patch("/:id/like", likeProdcut);
-router.patch("/:id/:userId/comment", verifyToken, addComment);
 
 export default router;

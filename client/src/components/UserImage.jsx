@@ -10,7 +10,7 @@ const UserImage = ({ image, size = "60px" }) => {
         width={size}
         height={size}
         alt="userImage"
-        src={`${rootUrl}assets/${image}`}
+        src={`${rootUrl}/assets/${image}`}
         crossOrigin="anonymous"
       />
     </Box>

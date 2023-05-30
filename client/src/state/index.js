@@ -44,6 +44,9 @@ export const authSlice = createSlice({
     setCart: (state, action) => {
       state.cart = action.payload.cart;
     },
+    setCartToNull: (state) => {
+      state.cart = null;
+    },
     setItemCount: (state, action) => {
       const items = action.payload.items;
       let totalCount = 0;
@@ -63,6 +66,7 @@ export const {
   setProducts,
   setProduct,
   setCart,
+  setCartToNull,
   setItemCount,
 } = authSlice.actions;
 export default authSlice.reducer;
