@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import Navbar from "../navbar";
-import { setCart, setCartToNull } from "../../state";
+import { setCart, setCartToNull, setItemCount } from "../../state";
 import { useEffect, useState } from "react";
 import Spinner from "../../components/Spinner";
 import CartItem from "./CartItem";
@@ -41,13 +41,15 @@ const CartPage = () => {
       const data = await res.json();
       if (res.status === 200) {
         dispatch(setCart({ cart: data }));
+        dispatch(setItemCount({ items: data.items }));
       } else if (res.status === 400) {
         console.log(data.error);
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const checkOut = async () => {
@@ -63,10 +65,11 @@ const CartPage = () => {
       if (res.status === 303) {
         const session = await res.json();
         window.location.href = session.url;
-        dispatch(setCartToNull());
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      dispatch(setCartToNull());
     }
   };
 
