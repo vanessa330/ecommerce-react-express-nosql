@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "../../state";
-import { Box, useMediaQuery } from "@mui/material";
 import ProductWidget from "./ProductWidget";
 import Spinner from "../../components/Spinner";
+import { Box, useMediaQuery } from "@mui/material";
 
 const ProductsWidget = ({ userId, isProfile }) => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ const ProductsWidget = ({ userId, isProfile }) => {
 
   // CSS
   const [isLoading, setIsLoading] = useState(false);
-  const isDesktopScreens = useMediaQuery("(min-width:1000px)");
+  const isDesktop = useMediaQuery("(min-width:1000px)");
 
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -67,8 +67,8 @@ const ProductsWidget = ({ userId, isProfile }) => {
         <Box
           display="grid"
           gridTemplateColumns="repeat(auto-fit, minmax(350px, 1fr))"
-          gap={isDesktopScreens ? "1rem" : undefined}
-          margin={isDesktopScreens ? "1rem 0.5rem" : "1rem 0"}
+          gap={isDesktop ? "1rem" : undefined}
+          margin={isDesktop ? "1rem 0.5rem" : "1rem 0"}
         >
           {products.map(
             ({

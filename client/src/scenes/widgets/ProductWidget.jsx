@@ -1,10 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { IconButton, Typography, useTheme, useMediaQuery } from "@mui/material";
-import FlexBetween from "../../components/FlexBetween";
-import WidgetWrapper from "../../components/WidgetWrapper";
 import { useNavigate } from "react-router-dom";
 import { setProduct } from "../../state";
-import { FavoriteBorderOutlined, FavoriteOutlined } from "@mui/icons-material";
+import FlexBetween from "../../components/FlexBetween";
+import WidgetWrapper from "../../components/WidgetWrapper";
+import { IconButton, Typography, useTheme, useMediaQuery } from "@mui/material";
+import {
+  FavoriteBorderOutlined,
+  FavoriteOutlined,
+} from "@mui/icons-material";
 
 const ProductWidget = ({
   id,
@@ -24,7 +27,7 @@ const ProductWidget = ({
 
   // CSS
   const { palette } = useTheme();
-  const isDesktopScreens = useMediaQuery("(min-width:1000px)");
+  const isDesktop = useMediaQuery("(min-width:1000px)");
   const isLiked = false || Boolean(likes[loggedInUserId]); // Frontend liked color setting
 
   const rootUrl = process.env.REACT_APP_SERVER_URL;
@@ -42,7 +45,7 @@ const ProductWidget = ({
   };
 
   return (
-    <WidgetWrapper m={isDesktopScreens ? undefined : "0.8rem 0.7rem"}>
+    <WidgetWrapper m={isDesktop ? undefined : "0.8rem 0.7rem"}>
       <FlexBetween m="0.8rem">
         <Typography
           variant="h4"
@@ -82,20 +85,20 @@ const ProductWidget = ({
       )}
 
       <FlexBetween m="1rem">
-        <Typography
-          variant="h5"
-          color={palette.neutral.dark}
-          fontWeight="500"
-          onClick={() => navigate(`/profile/${userId}`)}
-          sx={{
-            "&:hover": {
-              color: palette.primary.light,
-              cursor: "pointer",
-            },
-          }}
-        >
-          {name}
-        </Typography>
+          <Typography
+            variant="h5"
+            color={palette.neutral.dark}
+            fontWeight="500"
+            onClick={() => navigate(`/profile/${userId}`)}
+            sx={{
+              "&:hover": {
+                color: palette.primary.light,
+                cursor: "pointer",
+              },
+            }}
+          >
+            {name}
+          </Typography>
 
         <FlexBetween gap="0.3rem">
           {isLiked !== null && (

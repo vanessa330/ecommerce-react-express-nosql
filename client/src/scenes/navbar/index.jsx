@@ -1,4 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setMode, setLogout, setProducts } from "../../state";
+import FlexBetween from "../../components/FlexBetween";
 import {
   Box,
   IconButton,
@@ -19,11 +23,9 @@ import {
   Menu,
   Close,
   ShoppingCart,
+  ManageAccounts,
+  AddBusiness,
 } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogout, setProducts } from "../../state";
-import { useNavigate } from "react-router-dom";
-import FlexBetween from "../../components/FlexBetween";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -34,7 +36,7 @@ const Navbar = () => {
   const fullName = user ? `${user.firstName} ${user.lastName}` : "Guest";
 
   // CSS
-  const isDesktopScreens = useMediaQuery("(min-width: 1000px)");
+  const isDesktop = useMediaQuery("(min-width: 1000px)");
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const itemCount = useSelector((state) => state.itemCount).toString();
   const theme = useTheme();
@@ -84,7 +86,7 @@ const Navbar = () => {
         {/* LOGO END */}
 
         {/* SEARCH BOX START */}
-        {isDesktopScreens && (
+        {isDesktop && (
           <FlexBetween
             backgroundColor={theme.palette.neutral.light}
             borderRadius="9px"
@@ -110,7 +112,7 @@ const Navbar = () => {
       </FlexBetween>
 
       {/* BUTTONS START */}
-      {isDesktopScreens ? (
+      {isDesktop ? (
         // DESKTOP BUTTONS
         <FlexBetween gap="1rem">
           <IconButton onClick={() => dispatch(setMode())}>
@@ -145,6 +147,18 @@ const Navbar = () => {
                   </Avatar>
                 )}
               </IconButton>
+
+              <IconButton onClick={() => navigate(`/productform`)}>
+                <AddBusiness
+                  sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
+                />
+              </IconButton>
+
+              <IconButton onClick={() => navigate(`/manage`)}>
+                <ManageAccounts
+                  sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
+                />
+              </IconButton>
             </>
           )}
 
@@ -167,9 +181,18 @@ const Navbar = () => {
               }}
               input={<InputBase />}
             >
-              <MenuItem value={fullName}>
-                <Typography>{fullName}</Typography>
-              </MenuItem>
+              {fullName !== "Guest" ? (
+                <MenuItem
+                  value={fullName}
+                  onClick={() => navigate(`/profile/${user._id}`)}
+                >
+                  <Typography>{fullName}</Typography>
+                </MenuItem>
+              ) : (
+                <MenuItem value={fullName}>
+                  <Typography>{fullName}</Typography>
+                </MenuItem>
+              )}
 
               {fullName === "Guest" ? (
                 <MenuItem
@@ -183,6 +206,7 @@ const Navbar = () => {
                 <MenuItem
                   onClick={() => {
                     dispatch(setLogout());
+                    navigate("/");
                   }}
                 >
                   Log Out
@@ -199,7 +223,7 @@ const Navbar = () => {
         </IconButton>
       )}
 
-      {!isDesktopScreens && isMobileMenuToggled && (
+      {!isDesktop && isMobileMenuToggled && (
         // MOBILE BUTTONS
         <Box
           position="fixed"
@@ -284,6 +308,18 @@ const Navbar = () => {
                     </Avatar>
                   )}
                 </IconButton>
+
+                <IconButton onClick={() => navigate(`/productform`)}>
+                  <AddBusiness
+                    sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
+                  />
+                </IconButton>
+
+                <IconButton onClick={() => navigate(`/manage`)}>
+                  <ManageAccounts
+                    sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
+                  />
+                </IconButton>
               </>
             )}
 
@@ -306,12 +342,18 @@ const Navbar = () => {
                 }}
                 input={<InputBase />}
               >
-                <MenuItem
-                  value={fullName}
-                  onClick={() => navigate(`/profile/${user._id}`)}
-                >
-                  <Typography>{fullName}</Typography>
-                </MenuItem>
+                {fullName !== "Guest" ? (
+                  <MenuItem
+                    value={fullName}
+                    onClick={() => navigate(`/profile/${user._id}`)}
+                  >
+                    <Typography>{fullName}</Typography>
+                  </MenuItem>
+                ) : (
+                  <MenuItem value={fullName}>
+                    <Typography>{fullName}</Typography>
+                  </MenuItem>
+                )}
 
                 {fullName === "Guest" ? (
                   <MenuItem

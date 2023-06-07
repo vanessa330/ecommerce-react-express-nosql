@@ -1,4 +1,10 @@
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { setCart, setCartToNull, setItemCount } from "../../state";
+import Navbar from "../navbar";
+import CartItem from "./CartItem";
+import Spinner from "../../components/Spinner";
+import FlexBetween from "../../components/FlexBetween";
 import {
   Box,
   Divider,
@@ -7,12 +13,6 @@ import {
   Button,
   useMediaQuery,
 } from "@mui/material";
-import FlexBetween from "../../components/FlexBetween";
-import Navbar from "../navbar";
-import { setCart, setCartToNull, setItemCount } from "../../state";
-import { useEffect, useState } from "react";
-import Spinner from "../../components/Spinner";
-import CartItem from "./CartItem";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -25,7 +25,7 @@ const CartPage = () => {
 
   // CSS
   const { palette } = useTheme();
-  const isDesktopScreens = useMediaQuery("(min-width:1000px)");
+  const isDesktop = useMediaQuery("(min-width:1000px)");
   const [isLoading, setIsLoading] = useState(false);
 
   const rootUrl = process.env.REACT_APP_SERVER_URL;
@@ -85,7 +85,7 @@ const CartPage = () => {
       <Box
         backgroundColor={palette.background.alt}
         borderRadius="8px"
-        m={isDesktopScreens ? "2rem 10rem" : "2rem 0"}
+        m={isDesktop ? "2rem 10rem" : "2rem 0"}
         gap="2rem"
         justifyContent="center"
         alignItems="center"
@@ -94,7 +94,7 @@ const CartPage = () => {
           variant="h2"
           color={palette.neutral.dark}
           fontWeight="500"
-          padding={isDesktopScreens ? "2.75rem" : "1rem"}
+          padding={isDesktop ? "2.75rem" : "1rem"}
         >
           My cart:
         </Typography>
@@ -133,7 +133,7 @@ const CartPage = () => {
               variant="h3"
               color={palette.neutral.dark}
               fontWeight="500"
-              margin={isDesktopScreens ? "2rem" : "1rem"}
+              margin={isDesktop ? "2rem" : "1rem"}
             >
               Total :
             </Typography>
@@ -141,7 +141,7 @@ const CartPage = () => {
               variant="h2"
               color={palette.neutral.dark}
               fontWeight="500"
-              margin={isDesktopScreens ? "1.5rem" : "1rem"}
+              margin={isDesktop ? "1.5rem" : "1rem"}
             >
               HK$ {cart === null ? "0" : `${cart.subTotal}`}
             </Typography>

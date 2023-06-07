@@ -14,7 +14,7 @@ import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import productRoutes from "./routes/product.js";
 import cartRoutes from "./routes/cart.js";
-import { createProduct } from "./controllers/products.js";
+import { createProduct, editProduct } from "./controllers/products.js";
 import { verifyToken } from "./middleware/auth.js";
 import { searchProducts } from "./controllers/products.js";
 
@@ -39,8 +39,7 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets"))); // fi
 /* MIDDLEWARE FILE UPLOAD STORAGE */
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/assets"); // local storage
-    // cb(null, "/mnt/data/uploads"); // render.com storage settings
+    cb(null, "public/assets");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -50,6 +49,7 @@ const upload = multer({ storage });
 
 /* ROUTES WIHT FILE */
 app.post("/products", verifyToken, upload.single("file"), createProduct);
+app.put("/products/:id/edit", verifyToken, upload.single("file"), editProduct);
 /* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
@@ -94,26 +94,6 @@ app.post("/create-checkout-session", async (req, res) => {
     await Cart.deleteOne({ _id: id });
   }
 });
-
-// app.post("/webhook", (req, res) => {
-//   const event = req.body;
-//   // Handle the after payment event
-//   switch (event.type) {
-//     case "payment_intent.succeeded":
-//       const paymentIntent = event.data.object;
-//       console.log("PaymentIntent was successful!");
-//       break;
-//     case "payment_method.attached":
-//       const paymentMethod = event.data.object;
-//       console.log("PaymentMethod was attached to a Customer!");
-//       break;
-//     default:
-//       console.log(`Unhandled event type ${event.type}`);
-//   }
-
-//   // Return a 200 response to acknowledge receipt of the event
-//   res.json({ received: true });
-// });
 
 /* DATABASE SETUP */
 const PORT = process.env.PORT;

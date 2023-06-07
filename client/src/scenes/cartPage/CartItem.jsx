@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
+import { setCart, setItemCount } from "../../state";
+import FlexBetween from "../../components/FlexBetween";
+import WidgetWrapper from "../../components/WidgetWrapper";
 import {
   Box,
   IconButton,
@@ -8,9 +10,8 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import FlexBetween from "../../components/FlexBetween";
-import { setCart, setItemCount } from "../../state";
-import WidgetWrapper from "../../components/WidgetWrapper";
+import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
+
 
 const CartItem = ({
   productId,
@@ -28,7 +29,7 @@ const CartItem = ({
 
   // CSS
   const { palette } = useTheme();
-  const isDesktopScreens = useMediaQuery("(min-width:1000px)");
+  const isDesktop = useMediaQuery("(min-width:1000px)");
 
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -70,14 +71,14 @@ const CartItem = ({
     <WidgetWrapper>
       <Box
         m="0.5rem 1rem 0"
-        display={isDesktopScreens ? "flex" : "block"}
-        justifyContent={isDesktopScreens ? "space-between" : "undefined"}
-        alignItems={isDesktopScreens ? "center" : "undefined"}
+        display={isDesktop ? "flex" : "block"}
+        justifyContent={isDesktop ? "space-between" : "undefined"}
+        alignItems={isDesktop ? "center" : "undefined"}
       >
-        <Box width={isDesktopScreens ? "20%" : undefined}>
+        <Box width={isDesktop ? "20%" : undefined}>
           <img
             width="100%"
-            height={isDesktopScreens ? "130px" : undefined}
+            height={isDesktop ? "130px" : undefined}
             alt="product"
             style={{
               objectFit: "cover",
@@ -89,8 +90,8 @@ const CartItem = ({
         </Box>
 
         <Box
-          width={isDesktopScreens ? "40%" : undefined}
-          m={isDesktopScreens ? undefined : "1rem"}
+          width={isDesktop ? "40%" : undefined}
+          m={isDesktop ? undefined : "1rem"}
         >
           <Typography
             variant="h4"
@@ -117,8 +118,8 @@ const CartItem = ({
         </Box>
 
         <Box
-          width={isDesktopScreens ? "30%" : undefined}
-          m={isDesktopScreens ? undefined : "0.8rem"}
+          width={isDesktop ? "30%" : undefined}
+          m={isDesktop ? undefined : "0.8rem"}
         >
           <FlexBetween>
             <FlexBetween>

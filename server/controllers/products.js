@@ -75,6 +75,31 @@ export const searchProducts = async (req, res) => {
 
 /* UPDATE */
 
+export const editProduct = async (req, res) => {
+  // URL/products/:id/edit
+  try {
+    const { id } = req.params;
+    const { productName, price, description, picturePath } = req.body;
+
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          productName: productName,
+          price: price,
+          description: description,
+          picturePath: picturePath,
+        },
+      },
+      { returnNewDocument: true }
+    );
+
+    res.status(200).json(updatedProduct);
+  } catch (err) {
+    res.status(409).json({ error: err.message });
+  }
+};
+
 export const likeProdcut = async (req, res) => {
   // URL/products/:id/like
   try {
@@ -102,6 +127,25 @@ export const likeProdcut = async (req, res) => {
     );
 
     res.status(200).json(updatedProduct);
+  } catch (err) {
+    res.status(409).json({ error: err.message });
+  }
+};
+
+/* DELETE */
+
+export const deleteProduct = async (req, res) => {
+  // URL/products/:id/delete
+  try {
+    const { id } = req.params;
+
+    const deletedProduct = await Product.findByIdAndDelete(id);
+
+    if (!deletedProduct) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    res.status(200).json({ message: "Product deleted successfully" });
   } catch (err) {
     res.status(409).json({ error: err.message });
   }

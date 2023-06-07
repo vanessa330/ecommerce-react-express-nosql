@@ -1,11 +1,12 @@
-import { Box, Typography, Divider, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import UserImage from "../../components/UserImage";
-import FlexBetween from "../../components/FlexBetween";
-import WidgetWrapper from "../../components/WidgetWrapper";
+import { useSelector } from "react-redux";
 import UserFollowing from "../../components/UserFollowing";
+import UserImage from "../../components/UserImage";
+import WidgetWrapper from "../../components/WidgetWrapper";
+import FlexBetween from "../../components/FlexBetween";
+import { Box, Typography, Divider, useTheme } from "@mui/material";
+
 
 const UserWidget = ({ userId, picturePath }) => {
   const navigate = useNavigate();

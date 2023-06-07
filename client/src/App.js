@@ -9,6 +9,8 @@ import LoginPage from "./scenes/loginPage/index.jsx";
 import ProfilePage from "./scenes/profilePage/index.jsx";
 import ProductInfoPage from "./scenes/productInfoPage/index.jsx";
 import CartPage from "./scenes/cartPage/index.jsx";
+import ManageAccountPage from "./scenes/manageAccountPage/index.jsx";
+import ProductFormPage from "./scenes/manageAccountPage/ProductFormPage.jsx";
 
 function App() {
   /* REDUX : grab the state */
@@ -25,6 +27,9 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/profile/:userId" element={<ProfilePage />} />
             <Route path="/product/:id" element={<ProductInfoPage />} />
+            <Route path="/manage" element={<ManageAccountPage />} />
+            <Route path="/productform" element={<ProductFormPage />} />
+            <Route path="/productform/:productId" element={<ProductFormPage />} />
             <Route path="/cart" element={<CartPage />} />
           </Routes>
         </ThemeProvider>

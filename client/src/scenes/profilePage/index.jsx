@@ -1,9 +1,9 @@
-import { Box, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../navbar";
 import UserWidget from "../widgets/UserWidget";
 import ProductsWidget from "../widgets/ProductsWidget";
+import { Box, useMediaQuery } from "@mui/material";
 
 const ProfilePage = () => {
   // Grab the specified user
@@ -11,7 +11,7 @@ const ProfilePage = () => {
   const [user, setUser] = useState(null);
 
   // CSS
-  const isDesktopScreens = useMediaQuery("(min-width:1000px)");
+  const isDesktop = useMediaQuery("(min-width:1000px)");
 
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -20,7 +20,7 @@ const ProfilePage = () => {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
-    
+
     const data = await res.json();
     setUser(data);
   };
@@ -34,31 +34,25 @@ const ProfilePage = () => {
 
   return (
     <Box>
-
-
-
       <Navbar />
-
-
 
       <Box
         width="100%"
         padding="1rem 6%"
-        display={isDesktopScreens ? "flex" : "block"}
+        display={isDesktop ? "flex" : "block"}
         gap="2rem"
         justifyContent="center"
       >
-
         <Box
-          flexBasis={isDesktopScreens ? "20%" : undefined}
-          m={isDesktopScreens ? "2rem 0.75rem" : undefined}
+          flexBasis={isDesktop ? "25%" : undefined}
+          m={isDesktop ? "2rem 0.75rem" : undefined}
         >
           <UserWidget userId={userId} picturePath={user.picturePath} />
         </Box>
 
         <Box
-          flexBasis={isDesktopScreens ? "75%" : undefined}
-          m={isDesktopScreens ? "1rem 0.75rem" : undefined}
+          flexBasis={isDesktop ? "75%" : undefined}
+          m={isDesktop ? "1rem 0.75rem" : undefined}
         >
           <ProductsWidget userId={userId} isProfile={true} />
         </Box>

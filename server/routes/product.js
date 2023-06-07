@@ -3,8 +3,8 @@ import {
   getProducts,
   getUserProducts,
   likeProdcut,
+  deleteProduct,
 } from "../controllers/products.js";
-import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -16,6 +16,10 @@ router.get("/", getProducts);
 router.get("/:userId", getUserProducts);
 
 /* UPDATE */
+// router.put("/:id/edit", verifyToken, upload.single("file"), editProduct);
 router.patch("/:id/like", likeProdcut);
+
+/* DELETE */
+router.delete("/:id/delete", deleteProduct);
 
 export default router;

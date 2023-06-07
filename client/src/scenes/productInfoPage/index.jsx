@@ -1,9 +1,11 @@
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  FavoriteBorderOutlined,
-  FavoriteOutlined,
-} from "@mui/icons-material";
+import { setProducts, setProduct, setCart, setItemCount } from "../../state";
+import Navbar from "../navbar";
+import FlexBetween from "../../components/FlexBetween";
+import UserFollowing from "../../components/UserFollowing";
+import Spinner from "../../components/Spinner";
 import {
   Box,
   IconButton,
@@ -12,12 +14,10 @@ import {
   Button,
   useMediaQuery,
 } from "@mui/material";
-import FlexBetween from "../../components/FlexBetween";
-import Navbar from "../navbar";
-import { setProducts, setProduct, setCart, setItemCount } from "../../state";
-import { useEffect, useState } from "react";
-import Spinner from "../../components/Spinner";
-import UserFollowing from "../../components/UserFollowing";
+import {
+  FavoriteBorderOutlined,
+  FavoriteOutlined,
+} from "@mui/icons-material";
 
 const ProductInfoPage = () => {
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ const ProductInfoPage = () => {
 
   // CSS
   const { palette } = useTheme();
-  const isDesktopScreens = useMediaQuery("(min-width:1000px)");
+  const isDesktop = useMediaQuery("(min-width:1000px)");
   const [isLoading, setIsLoading] = useState(false);
   const isLiked = false || Boolean(likes[loggedInUserId]); // Frontend liked color setting
 
@@ -111,15 +111,15 @@ const ProductInfoPage = () => {
           <Box
             backgroundColor={palette.background.alt}
             borderRadius="5px"
-            display={isDesktopScreens ? "flex" : "block"}
-            m={isDesktopScreens ? "2rem" : "0.1rem"}
+            display={isDesktop ? "flex" : "block"}
+            m={isDesktop ? "2rem" : "0.1rem"}
             gap="2rem"
             justifyContent="center"
             alignItems="center"
           >
             <Box
-              flexBasis={isDesktopScreens ? "50%" : undefined}
-              p={isDesktopScreens ? "2rem" : "1.5rem"}
+              flexBasis={isDesktop ? "50%" : undefined}
+              p={isDesktop ? "2rem" : "1.5rem"}
             >
               {picturePath && (
                 <img
@@ -136,14 +136,14 @@ const ProductInfoPage = () => {
             </Box>
 
             <Box
-              flexBasis={isDesktopScreens ? "50%" : undefined}
-              p={isDesktopScreens ? "2rem" : "1.5rem"}
+              flexBasis={isDesktop ? "50%" : undefined}
+              p={isDesktop ? "2rem" : "1.5rem"}
             >
               <Typography
                 variant="h3"
                 color={palette.neutral.dark}
                 fontWeight="500"
-                marginTop={isDesktopScreens ? "2.75rem" : undefined}
+                marginTop={isDesktop ? "2.75rem" : undefined}
               >
                 {productName}
               </Typography>

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../state";
-import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { IconButton, useTheme } from "@mui/material";
+import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 
 const UserFollowing = ({ followingId }) => {
   const dispatch = useDispatch();
