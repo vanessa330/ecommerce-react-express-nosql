@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { setProduct } from "../../state";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import FlexBetween from "../../components/FlexBetween";
-import { IconButton, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { IconButton, Typography, useTheme} from "@mui/material";
 import { FavoriteBorderOutlined, FavoriteOutlined } from "@mui/icons-material";
 
 const ProductWidget = ({
@@ -24,7 +24,6 @@ const ProductWidget = ({
 
   // CSS
   const theme = useTheme();
-  const isDesktop = useMediaQuery("(min-width:1000px)");
   const isLiked = false || Boolean(likes[loggedInUserId]); // Frontend liked color setting
 
   // Connect to server
