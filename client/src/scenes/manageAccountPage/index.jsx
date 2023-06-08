@@ -23,7 +23,7 @@ const ManageAccountPage = () => {
   const products = useSelector((state) => state.products);
 
   // User details from Redux state
-  const loggedInUser = useSelector((state) => state.user);
+  const loggedInUser = useSelector((state) => state.loggedInUser);
 
   // CSS
   const theme = useTheme();
@@ -85,12 +85,7 @@ const ManageAccountPage = () => {
         <Divider />
 
         <Box m={isDesktop ? "1rem 0" : "0.75rem"}>
-          <Box
-            display="grid"
-            gridTemplateColumns="repeat(auto-fit, minmax(350px, 1fr))"
-            gap={isDesktop ? "1rem 0" : undefined}
-            margin={isDesktop ? "1rem 0.5rem" : "1rem 0"}
-          >
+          <Box padding={isDesktop ? "1rem" : "1rem 0.5rem"}>
             {products.map(
               ({ _id, productName, price, description, picturePath }) => (
                 <MyItem

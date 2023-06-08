@@ -1,22 +1,22 @@
-import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
-import dotenv from "dotenv";
-import helmet from "helmet";
-import morgan from "morgan";
-import path from "path";
-import multer from "multer";
-import Stripe from "stripe";
-import bodyParser from "body-parser";
-import { Cart } from "./models/Cart.js";
-import { fileURLToPath } from "url";
-import authRoutes from "./routes/auth.js";
-import userRoutes from "./routes/users.js";
-import productRoutes from "./routes/product.js";
-import cartRoutes from "./routes/cart.js";
-import { createProduct, editProduct } from "./controllers/products.js";
-import { verifyToken } from "./middleware/auth.js";
-import { searchProducts } from "./controllers/products.js";
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const path = require("path");
+const multer = require("multer");
+const Stripe = require("stripe");
+const bodyParser = require("body-parser");
+const { Cart } = require("./models/Cart");
+const { fileURLToPath } = require("url");
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/users");
+const productRoutes = require("./routes/product");
+const cartRoutes = require("./routes/cart");
+const { createProduct, editProduct } = require("./controllers/products");
+const { verifyToken } = require("./middleware/auth");
+const { searchProducts } = require("./controllers/products");
 
 /* CONFIGURATIONS */
 dotenv.config();
@@ -27,14 +27,11 @@ app.use(helmet()); // HTTP header for safty.
 app.use(morgan("tiny")); // log HTTP requests
 app.use(
   cors({
-    // origin: ["http://localhost:3000", "https://checkout.stripe.com"],
     origin: [process.env.CLIENT_URL, "https://checkout.stripe.com"],
   })
 );
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-app.use("/assets", express.static(path.join(__dirname, "public/assets"))); // files stored in the public/assets directory will be accessible to clients making requests.
+app.use("/assets", express.static(path.join("public/assets"))); // files stored in the public/assets directory will be accessible to clients making requests.
 
 /* MIDDLEWARE FILE UPLOAD STORAGE */
 const storage = multer.diskStorage({

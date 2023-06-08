@@ -27,7 +27,7 @@ const ProductInfoPage = () => {
 
   //   User details from Redux state
   const token = useSelector((state) => state.token);
-  const loggedInUserId = useSelector((state) => state.user?._id);
+  const loggedInUserId = useSelector((state) => state.loggedInUser?._id);
 
   // Product details from Redux state
   const product = useSelector((state) =>

@@ -17,7 +17,7 @@ import {
 const CartPage = () => {
   const dispatch = useDispatch();
 
-  const loggedInUser = useSelector((state) => state.user._id);
+  const loggedInUser = useSelector((state) => state.loggedInUser._id);
 
   // Cart details from Redux state
   const cart = useSelector((state) => state.cart);

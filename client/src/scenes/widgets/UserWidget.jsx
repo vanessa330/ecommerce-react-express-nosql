@@ -1,25 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../state";
 import UserFollowing from "../../components/UserFollowing";
 import UserImage from "../../components/UserImage";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import FlexBetween from "../../components/FlexBetween";
 import { Box, Typography, Divider, useTheme } from "@mui/material";
 
-
 const UserWidget = ({ userId, picturePath }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // User details from Redux state
   const token = useSelector((state) => state.token);
-
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.user);
 
   // CSS
   const { palette } = useTheme();
 
-  // Get user details from Backend
+  // Connect to Backend
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const getUser = async () => {
@@ -29,7 +29,7 @@ const UserWidget = ({ userId, picturePath }) => {
     });
 
     const data = await res.json();
-    setUser(data);
+    dispatch(setUser({ user: data }));
   };
 
   useEffect(() => {

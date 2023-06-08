@@ -59,7 +59,7 @@ const MyItem = ({ id, productName, price, description, picturePath }) => {
 
         <Box
           width={isDesktop ? "50%" : undefined}
-          m={isDesktop ? undefined : "1rem"}
+          m={isDesktop ? "1.5rem" : "1rem"}
         >
           <Typography
             variant="h4"
@@ -79,7 +79,7 @@ const MyItem = ({ id, productName, price, description, picturePath }) => {
         </Box>
 
         <Box
-          width={isDesktop ? "20%" : undefined}
+          width={isDesktop ? "30%" : undefined}
           m={isDesktop ? undefined : "0.8rem"}
         >
           <Box

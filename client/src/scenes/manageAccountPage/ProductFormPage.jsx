@@ -25,7 +25,7 @@ const ProductFormPage = () => {
 
   // User details from Redux state
   const token = useSelector((state) => state.token);
-  const { _id } = useSelector((state) => state.user);
+  const { _id } = useSelector((state) => state.loggedInUser);
 
   const { productId } = useParams();
 
@@ -36,12 +36,11 @@ const ProductFormPage = () => {
   const initialProductName = product?.productName || "";
   const initialPrice = product?.price || "";
   const initialDescription = product?.description || "";
-  const initialPicturePath = product?.picturePath || "";
 
   const [newProductName, setNewProductName] = useState(initialProductName);
   const [newProductPrice, setNewProductPrice] = useState(initialPrice);
   const [newProductDes, setNewProdcutDes] = useState(initialDescription);
-  const [newImage, setNewImage] = useState(initialPicturePath);
+  const [newImage, setNewImage] = useState("");
 
   // CSS
   const theme = useTheme();
@@ -127,7 +126,7 @@ const ProductFormPage = () => {
           fontWeight="500"
           padding={isDesktop ? "2.75rem" : "1rem"}
         >
-          {productId ? "Edit the product :" : "Create a product"}
+          {productId ? "Edit the product :" : "Create a product :"}
         </Typography>
         <Divider />
 

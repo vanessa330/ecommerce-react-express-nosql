@@ -1,8 +1,8 @@
-import User from "../models/User.js";
+const User = require("../models/User");
 
 /* READ */
 
-export const getUser = async (req, res) => {
+const getUser = async (req, res) => {
   // URL/users/:id
   try {
     const { id } = req.params;
@@ -14,7 +14,7 @@ export const getUser = async (req, res) => {
   }
 };
 
-// export const getUserFollowing = async (req, res) => {
+// const getUserFollowing = async (req, res) => {
 //   // URL/users/:id/following
 //   try {
 //     const { id } = req.params;
@@ -38,26 +38,33 @@ export const getUser = async (req, res) => {
 
 /* UPDATE */
 
-export const addRemoveFollowing = async (req, res) => {
+const addRemoveFollowing = async (req, res) => {
   // URL/users/:id/:followingId
   try {
     const { id, followingId } = req.params;
-    const user = await User.findById(id);
+    const loggedInUser = await User.findById(id);
     const oppositeUser = await User.findById(followingId);
 
-    if (!user.following.includes(followingId) && user._id != followingId) {
-      user.following.push(followingId);
+    if (
+      !loggedInUser.following.includes(followingId) &&
+      loggedInUser._id != followingId
+    ) {
+      loggedInUser.following.push(followingId);
       oppositeUser.followers.push(id);
-    } else if (user.following.includes(followingId)) {
-      user.following = user.following.filter((id) => id !== followingId);
+    } else if (loggedInUser.following.includes(followingId)) {
+      loggedInUser.following = loggedInUser.following.filter(
+        (id) => id !== followingId
+      );
       oppositeUser.followers = oppositeUser.followers.filter((id) => id !== id);
     }
 
-    await user.save();
+    await loggedInUser.save();
     await oppositeUser.save();
 
-    res.status(200).json(user);
+    res.status(200).json(loggedInUser);
   } catch (err) {
     res.status(404).send({ message: err.message });
   }
 };
+
+module.exports = { getUser, addRemoveFollowing };

@@ -1,10 +1,10 @@
-import { Item, Cart } from "../models/Cart.js";
-import Product from "../models/Product.js";
-import User from "../models/User.js";
+const { Item, Cart } = require("../models/Cart");
+const Product = require("../models/Product");
+const User = require("../models/User");
 
 /* CREATE */
 
-export const addItemToCart = async (req, res) => {
+const addItemToCart = async (req, res) => {
   // URL/cart/add/:productId/:userId
   try {
     const { productId, userId } = req.params;
@@ -54,7 +54,7 @@ export const addItemToCart = async (req, res) => {
 
 /* READ */
 
-export const getCart = async (req, res) => {
+const getCart = async (req, res) => {
   // URL/cart/:userId
   try {
     const { userId } = req.params;
@@ -73,7 +73,7 @@ export const getCart = async (req, res) => {
 
 /* UPDATE */
 
-export const subtractItem = async (req, res) => {
+const subtractItem = async (req, res) => {
   // URL/subtract/:productId/:userId
   try {
     const { productId, userId } = req.params;
@@ -105,3 +105,5 @@ export const subtractItem = async (req, res) => {
     res.status(409).json({ error: err.message });
   }
 };
+
+module.exports = { addItemToCart, getCart, subtractItem };

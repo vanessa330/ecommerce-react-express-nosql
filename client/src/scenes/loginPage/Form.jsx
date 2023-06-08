@@ -107,7 +107,7 @@ const Form = () => {
         dispatch(
           setLogin({
             token: data.token,
-            user: data.user,
+            loggedInUser: data.loggedInUser,
           })
         );
         navigate("/");

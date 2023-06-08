@@ -1,5 +1,5 @@
-import express from "express";
-import { addItemToCart, getCart, subtractItem } from "../controllers/cart.js";
+const express = require("express");
+const { addItemToCart, getCart, subtractItem } = require("../controllers/cart");
 
 const router = express.Router();
 
@@ -12,4 +12,4 @@ router.get("/:userId", getCart);
 /* UPDATE */
 router.patch("/subtract/:productId/:userId", subtractItem);
 
-export default router;
+module.exports = router;

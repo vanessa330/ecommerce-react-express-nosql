@@ -1,17 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../state";
+import { setLoggedInUser } from "../state";
 import { IconButton, useTheme } from "@mui/material";
 import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 
 const UserFollowing = ({ followingId }) => {
   const dispatch = useDispatch();
 
-  // User information
+  // loggedInUser information
   const token = useSelector((state) => state.token);
-  const loggedInUser = useSelector((state) => state.user._id);
+  const loggedInUser = useSelector((state) => state.loggedInUser._id);
 
   // Opposite user information
-  const following = useSelector((state) => state.user.following);
+  const following = useSelector((state) => state.loggedInUser.following);
   const isFollowed = following.find((f) => f === followingId);
 
   // CSS
@@ -25,8 +25,9 @@ const UserFollowing = ({ followingId }) => {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
-    dispatch(setUser({ user: data }));
+    dispatch(setLoggedInUser({ loggedInUser: data }));
   };
+
 
   if (loggedInUser !== followingId) {
     return (

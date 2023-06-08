@@ -1,8 +1,8 @@
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-export const register = async (req, res) => {
+const register = async (req, res) => {
   // URL/auth/register/
   try {
     const {
@@ -43,28 +43,31 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+const login = async (req, res) => {
   // URL/auth/login/
   try {
     const { email, password } = req.body;
 
     // 1. CHECK if email exists using mongoose findOne()
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ error: "User does not exist" });
+    const loggedInUser = await User.findOne({ email });
+    if (!loggedInUser)
+      return res.status(400).json({ error: "User does not exist" });
 
     // 2. CHECK if password is correct
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, loggedInUser.password);
     if (!isMatch) return res.status(400).json({ error: "Password incorrect" });
 
     // 3. Passing token
-    const token = jwt.sign({ id: user.email }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: loggedInUser.email }, process.env.JWT_SECRET, {
       expiresIn: "30d",
     }); // "error": "secretOrPrivateKey must have a value"
 
-    delete user.password;
+    delete loggedInUser.password;
 
-    res.status(200).json({ token, user });
+    res.status(200).json({ token, loggedInUser });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
+module.exports = { register, login };

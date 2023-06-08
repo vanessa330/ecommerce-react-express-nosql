@@ -23,7 +23,7 @@ const ProductWidget = ({
   const dispatch = useDispatch();
 
   //   User details from Redux state
-  const loggedInUserId = useSelector((state) => state.user?._id);
+  const loggedInUserId = useSelector((state) => state.loggedInUser?._id);
 
   // CSS
   const { palette } = useTheme();

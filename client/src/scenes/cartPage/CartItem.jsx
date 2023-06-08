@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
 
-
 const CartItem = ({
   productId,
   productName,
@@ -25,7 +24,7 @@ const CartItem = ({
   const navigate = useNavigate();
 
   //   User details from Redux state
-  const loggedInUserId = useSelector((state) => state.user?._id);
+  const loggedInUserId = useSelector((state) => state.loggedInUser?._id);
 
   // CSS
   const { palette } = useTheme();

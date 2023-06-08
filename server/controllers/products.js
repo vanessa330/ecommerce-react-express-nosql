@@ -1,9 +1,9 @@
-import Product from "../models/Product.js";
-import User from "../models/User.js";
+const Product = require("../models/Product");
+const User = require("../models/User");
 
 /* CREATE */
 
-export const createProduct = async (req, res) => {
+const createProduct = async (req, res) => {
   // URL/products
   try {
     // req.file
@@ -34,7 +34,7 @@ export const createProduct = async (req, res) => {
 
 /* READ */
 
-export const getProducts = async (req, res) => {
+const getProducts = async (req, res) => {
   // URL/products
   try {
     const products = await Product.find().sort({ updatedAt: -1 });
@@ -45,7 +45,7 @@ export const getProducts = async (req, res) => {
   }
 };
 
-export const getUserProducts = async (req, res) => {
+const getUserProducts = async (req, res) => {
   // URL/products/:userId
   try {
     const { userId } = req.params;
@@ -58,7 +58,7 @@ export const getUserProducts = async (req, res) => {
   }
 };
 
-export const searchProducts = async (req, res) => {
+const searchProducts = async (req, res) => {
   // URL/search?product=query
   try {
     const query = req.query.product;
@@ -75,7 +75,7 @@ export const searchProducts = async (req, res) => {
 
 /* UPDATE */
 
-export const editProduct = async (req, res) => {
+const editProduct = async (req, res) => {
   // URL/products/:id/edit
   try {
     const { id } = req.params;
@@ -100,7 +100,7 @@ export const editProduct = async (req, res) => {
   }
 };
 
-export const likeProdcut = async (req, res) => {
+const likeProdcut = async (req, res) => {
   // URL/products/:id/like
   try {
     const { id } = req.params;
@@ -134,7 +134,7 @@ export const likeProdcut = async (req, res) => {
 
 /* DELETE */
 
-export const deleteProduct = async (req, res) => {
+const deleteProduct = async (req, res) => {
   // URL/products/:id/delete
   try {
     const { id } = req.params;
@@ -149,4 +149,14 @@ export const deleteProduct = async (req, res) => {
   } catch (err) {
     res.status(409).json({ error: err.message });
   }
+};
+
+module.exports = {
+  createProduct,
+  getProducts,
+  getUserProducts,
+  searchProducts,
+  editProduct,
+  likeProdcut,
+  deleteProduct,
 };

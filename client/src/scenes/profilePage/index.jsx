@@ -1,18 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../state";
 import Navbar from "../navbar";
 import UserWidget from "../widgets/UserWidget";
 import ProductsWidget from "../widgets/ProductsWidget";
 import { Box, useMediaQuery } from "@mui/material";
 
 const ProfilePage = () => {
+  const dispatch = useDispatch();
+
   // Grab the specified user
   const { userId } = useParams();
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.user);
 
   // CSS
   const isDesktop = useMediaQuery("(min-width:1000px)");
 
+  // Connect to Backend
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const getUser = async () => {
@@ -22,7 +27,7 @@ const ProfilePage = () => {
     });
 
     const data = await res.json();
-    setUser(data);
+    dispatch(setUser({ user: data }));
   };
 
   useEffect(() => {

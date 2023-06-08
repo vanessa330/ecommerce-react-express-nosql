@@ -32,8 +32,10 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   // User details from Redux state
-  const user = useSelector((state) => state.user);
-  const fullName = user ? `${user.firstName} ${user.lastName}` : "Guest";
+  const loggedInUser = useSelector((state) => state.loggedInUser);
+  const fullName = loggedInUser
+    ? `${loggedInUser.firstName} ${loggedInUser.lastName}`
+    : "Guest";
 
   // CSS
   const isDesktop = useMediaQuery("(min-width: 1000px)");
@@ -57,9 +59,13 @@ const Navbar = () => {
     setSearchParam("");
   };
 
-  const handleNavigateAndSearch = () => {
+  const handleNavigate = () => {
     navigate("/");
     searchProducts();
+  };
+
+  const handleNavigateToProfile = () => {
+    navigate(`/profile/${loggedInUser._id}`);
   };
 
   return (
@@ -73,7 +79,7 @@ const Navbar = () => {
           fontWeight="bold"
           fontSize="2rem"
           color={theme.palette.primary.main}
-          onClick={handleNavigateAndSearch}
+          onClick={handleNavigate}
           sx={{
             "&:hover": {
               color: theme.palette.primary.light,
@@ -182,10 +188,7 @@ const Navbar = () => {
               input={<InputBase />}
             >
               {fullName !== "Guest" ? (
-                <MenuItem
-                  value={fullName}
-                  onClick={() => navigate(`/profile/${user._id}`)}
-                >
+                <MenuItem value={fullName} onClick={handleNavigateToProfile}>
                   <Typography>{fullName}</Typography>
                 </MenuItem>
               ) : (
@@ -343,10 +346,7 @@ const Navbar = () => {
                 input={<InputBase />}
               >
                 {fullName !== "Guest" ? (
-                  <MenuItem
-                    value={fullName}
-                    onClick={() => navigate(`/profile/${user._id}`)}
-                  >
+                  <MenuItem value={fullName} onClick={handleNavigateToProfile}>
                     <Typography>{fullName}</Typography>
                   </MenuItem>
                 ) : (
