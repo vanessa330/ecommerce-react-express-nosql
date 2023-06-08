@@ -1,18 +1,81 @@
-import Navbar from "../navbar";
-import ProductsWidget from "../widgets/ProductsWidget";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setProducts } from "../../state";
+import ProductWidget from "../widgets/ProductWidget";
+import Spinner from "../../components/Spinner";
 import { Box, useMediaQuery } from "@mui/material";
 
 const HomePage = () => {
+  const dispatch = useDispatch();
+
+  // Redux state []
+  const products = useSelector((state) => state.products);
+
   // CSS
   const isDesktop = useMediaQuery("(min-width:1000px)");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Connect to server
+  const rootUrl = process.env.REACT_APP_SERVER_URL;
+
+  const getProducts = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(`${rootUrl}products`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      dispatch(setProducts({ products: data }));
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getProducts();
+    // eslint-disable-next-line
+  }, []);
 
   return (
-    <Box>
-      <Navbar />
-
-      <Box m={isDesktop ? "1rem 4rem" : "0.75rem"}>
-        <ProductsWidget isProfile={false} />
-      </Box>
+    <Box m={isDesktop ? "2rem auto" : "1rem auto"} maxWidth="1200px">
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <Box
+          display="grid"
+          gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+          gap="2rem"
+        >
+          {products.map(
+            ({
+              _id,
+              userId,
+              firstName,
+              lastName,
+              productName,
+              price,
+              description,
+              picturePath,
+              likes,
+            }) => (
+              <ProductWidget
+                key={_id}
+                id={_id}
+                userId={userId}
+                name={`${firstName} ${lastName}`}
+                productName={productName}
+                price={price}
+                description={description}
+                picturePath={picturePath}
+                likes={likes}
+              />
+            )
+          )}
+        </Box>
+      )}
     </Box>
   );
 };

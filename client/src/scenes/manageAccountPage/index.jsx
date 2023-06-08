@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setProducts } from "../../state";
-import Navbar from "../navbar";
 import MyItem from "./MyItem";
+import WidgetWrapper from "../../components/WidgetWrapper";
 import FlexBetween from "../../components/FlexBetween";
 import {
   Box,
@@ -19,16 +19,17 @@ const ManageAccountPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Products from Redux state []
-  const products = useSelector((state) => state.products);
-
   // User details from Redux state
   const loggedInUser = useSelector((state) => state.loggedInUser);
+
+  // Products from Redux state []
+  const products = useSelector((state) => state.products);
 
   // CSS
   const theme = useTheme();
   const isDesktop = useMediaQuery("(min-width:1000px)");
 
+  // Connect to backend
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const getUserProducts = async () => {
@@ -51,56 +52,55 @@ const ManageAccountPage = () => {
   }, []);
 
   return (
-    <Box>
-      <Navbar />
-
-      <Box
-        backgroundColor={theme.palette.background.alt}
-        borderRadius="8px"
-        m={isDesktop ? "2rem 10rem" : "2rem 0"}
-        gap="2rem"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <FlexBetween p="0 2rem 0 0">
+    <Box
+      m={isDesktop ? "2rem auto" : "1rem auto"}
+      maxWidth="1200px"
+      p={isDesktop ? "1rem 10rem" : "1rem 0"}
+    >
+      <WidgetWrapper>
+        <FlexBetween p={isDesktop ? "1rem 3rem" : "1rem"}>
           <Typography
-            variant="h3"
+            variant="h2"
             color={theme.palette.neutral.dark}
             fontWeight="500"
-            padding={isDesktop ? "2.75rem" : "1rem"}
           >
             Managing my product :
           </Typography>
 
-          <IconButton onClick={() => navigate(`/productform`)}>
-            <AddCircle
-              sx={{
-                margin: "20px",
-                color: theme.palette.neutral.dark,
-                fontSize: "20px",
-              }}
-            />
-          </IconButton>
+          <Box p={isDesktop ? "1rem" : undefined}>
+            <IconButton onClick={() => navigate(`/productform`)}>
+              <AddCircle
+                sx={{
+                  margin: "10px",
+                  color: theme.palette.neutral.dark,
+                  fontSize: "20px",
+                }}
+              />
+              <Typography fontWeight="500">Add</Typography>
+            </IconButton>
+          </Box>
         </FlexBetween>
+
         <Divider />
 
-        <Box m={isDesktop ? "1rem 0" : "0.75rem"}>
-          <Box padding={isDesktop ? "1rem" : "1rem 0.5rem"}>
-            {products.map(
-              ({ _id, productName, price, description, picturePath }) => (
-                <MyItem
-                  key={_id}
-                  id={_id}
-                  productName={productName}
-                  price={price}
-                  description={description}
-                  picturePath={picturePath}
-                />
-              )
-            )}
-          </Box>
+        <Box
+          m={isDesktop ? "1rem 0" : "0.75rem"}
+          p={isDesktop ? "1rem" : "1rem 0.5rem"}
+        >
+          {products.map(
+            ({ _id, productName, price, description, picturePath }) => (
+              <MyItem
+                key={_id}
+                id={_id}
+                productName={productName}
+                price={price}
+                description={description}
+                picturePath={picturePath}
+              />
+            )
+          )}
         </Box>
-      </Box>
+      </WidgetWrapper>
     </Box>
   );
 };

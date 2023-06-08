@@ -31,84 +31,83 @@ const MyItem = ({ id, productName, price, description, picturePath }) => {
 
     if (res.status === 200) {
       window.alert(data.message);
-      window.location.reload();
+      navigate(`/manage`);
     }
   };
 
   return (
-    <Box m={isDesktop ? "1rem" : "0.8rem"}>
+    <Box
+      p="1rem 2rem"
+      display={isDesktop ? "flex" : "block"}
+      justifyContent={isDesktop ? "space-between" : "undefined"}
+      alignItems={isDesktop ? "center" : "undefined"}
+    >
+      <Box flexBasis={isDesktop ? "20%" : undefined}>
+        <img
+          width="100%"
+          height={isDesktop ? "130px" : undefined}
+          alt="product"
+          style={{
+            objectFit: "cover",
+            borderRadius: "0.75rem",
+          }}
+          src={`${rootUrl}assets/${picturePath}`}
+          crossOrigin="anonymous"
+        />
+      </Box>
+
       <Box
-        m="0.5rem 1rem 0"
-        display={isDesktop ? "flex" : "block"}
-        justifyContent={isDesktop ? "space-between" : "undefined"}
-        alignItems={isDesktop ? "center" : "undefined"}
+        flexBasis={isDesktop ? "50%" : undefined}
+        m={isDesktop ? "1.5rem" : "1rem"}
       >
-        <Box width={isDesktop ? "20%" : undefined}>
-          <img
-            width="100%"
-            height={isDesktop ? "130px" : undefined}
-            alt="product"
-            style={{
-              objectFit: "cover",
-              borderRadius: "0.75rem",
-            }}
-            src={`${rootUrl}assets/${picturePath}`}
-            crossOrigin="anonymous"
-          />
-        </Box>
-
-        <Box
-          width={isDesktop ? "50%" : undefined}
-          m={isDesktop ? "1.5rem" : "1rem"}
+        <Typography
+          variant="h4"
+          color={theme.palette.neutral.dark}
+          fontWeight="500"
+          paddingBottom="0.8rem"
+          onClick={() => navigate(`/product/${id}`)}
+          sx={{
+            "&:hover": {
+              color: theme.palette.primary.light,
+              cursor: "pointer",
+            },
+          }}
         >
-          <Typography
-            variant="h4"
-            color={theme.palette.neutral.dark}
-            fontWeight="500"
-            paddingBottom="0.8rem"
-          >
-            {productName}
-          </Typography>
-          <Typography
-            variant="h5"
-            color={theme.palette.neutral.main}
-            fontWeight="500"
-          >
-            HK$ {price}
-          </Typography>
-        </Box>
-
-        <Box
-          width={isDesktop ? "30%" : undefined}
-          m={isDesktop ? undefined : "0.8rem"}
+          {productName}
+        </Typography>
+        <Typography
+          variant="h5"
+          color={theme.palette.neutral.main}
+          fontWeight="500"
         >
-          <Box
+          HK$ {price}
+        </Typography>
+      </Box>
+
+      <Box
+        flexBasis={isDesktop ? "30%" : undefined}
+        m={isDesktop ? undefined : "0.8rem"}
+      >
+        <IconButton onClick={() => navigate(`/productform/${id}`)}>
+          <Edit
             sx={{
-              display: "flex",
-              justifyContent: "right",
-              alignItems: "center",
+              margin: "10px",
+              color: theme.palette.neutral.dark,
+              fontSize: "25px",
             }}
-          >
-            <IconButton onClick={() => navigate(`/productform/${id}`)}>
-              <Edit
-                sx={{
-                  margin: "10px",
-                  color: theme.palette.neutral.dark,
-                  fontSize: "25px",
-                }}
-              />
-            </IconButton>
-            <IconButton onClick={deleteProduct}>
-              <Delete
-                sx={{
-                  margin: "10px",
-                  color: theme.palette.neutral.dark,
-                  fontSize: "25px",
-                }}
-              />
-            </IconButton>
-          </Box>
-        </Box>
+          />
+          <Typography fontWeight="500">Edit</Typography>
+        </IconButton>
+        <IconButton onClick={deleteProduct}>
+          <Delete
+            sx={{
+              margin: "10px",
+              color: theme.palette.neutral.dark,
+              fontSize: "25px",
+            }}
+          />
+          <Typography fontWeight="500">Delete</Typography>
+        </IconButton>
       </Box>
     </Box>
   );

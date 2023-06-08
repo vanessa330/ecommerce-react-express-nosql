@@ -12,7 +12,7 @@ const UserWidget = ({ userId, picturePath }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // User details from Redux state
+   // Specified user from Redux state
   const token = useSelector((state) => state.token);
   const user = useSelector((state) => state.user);
 

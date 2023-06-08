@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogout, setProducts } from "../../state";
-import FlexBetween from "../../components/FlexBetween";
+import { setMode, setLogout, setProducts, setSearchProducts } from "../state";
+import FlexBetween from "./FlexBetween";
 import {
   Box,
   IconButton,
@@ -55,17 +55,10 @@ const Navbar = () => {
     });
 
     const data = await res.json();
-    dispatch(setProducts({ products: data }));
+    dispatch(setSearchProducts({ searchProducts: data }));
+
+    navigate(`/search`);
     setSearchParam("");
-  };
-
-  const handleNavigate = () => {
-    navigate("/");
-    searchProducts();
-  };
-
-  const handleNavigateToProfile = () => {
-    navigate(`/profile/${loggedInUser._id}`);
   };
 
   return (
@@ -74,12 +67,11 @@ const Navbar = () => {
       backgroundColor={theme.palette.background.alt}
     >
       <FlexBetween gap="1.8rem">
-        {/* LOGO START */}
         <Typography
           fontWeight="bold"
           fontSize="2rem"
           color={theme.palette.primary.main}
-          onClick={handleNavigate}
+          onClick={() => navigate("/")}
           sx={{
             "&:hover": {
               color: theme.palette.primary.light,
@@ -89,9 +81,7 @@ const Navbar = () => {
         >
           Post & Buy
         </Typography>
-        {/* LOGO END */}
 
-        {/* SEARCH BOX START */}
         {isDesktop && (
           <FlexBetween
             backgroundColor={theme.palette.neutral.light}
@@ -114,12 +104,9 @@ const Navbar = () => {
             </IconButton>
           </FlexBetween>
         )}
-        {/* SEARCH BOX END */}
       </FlexBetween>
 
-      {/* BUTTONS START */}
       {isDesktop ? (
-        // DESKTOP BUTTONS
         <FlexBetween gap="1rem">
           <IconButton onClick={() => dispatch(setMode())}>
             {theme.palette.mode === "dark" ? (
@@ -188,7 +175,10 @@ const Navbar = () => {
               input={<InputBase />}
             >
               {fullName !== "Guest" ? (
-                <MenuItem value={fullName} onClick={handleNavigateToProfile}>
+                <MenuItem
+                  value={fullName}
+                  onClick={() => navigate(`/profile/${loggedInUser._id}`)}
+                >
                   <Typography>{fullName}</Typography>
                 </MenuItem>
               ) : (
@@ -227,7 +217,6 @@ const Navbar = () => {
       )}
 
       {!isDesktop && isMobileMenuToggled && (
-        // MOBILE BUTTONS
         <Box
           position="fixed"
           right="0"
@@ -253,7 +242,6 @@ const Navbar = () => {
             alignItems="center"
             gap="3rem"
           >
-            {/* SEARCH BOX START */}
             <FlexBetween
               backgroundColor={theme.palette.neutral.light}
               borderRadius="9px"
@@ -274,7 +262,6 @@ const Navbar = () => {
                 <Search />
               </IconButton>
             </FlexBetween>
-            {/* SEARCH BOX END */}
 
             <IconButton
               onClick={() => dispatch(setMode())}
@@ -346,7 +333,10 @@ const Navbar = () => {
                 input={<InputBase />}
               >
                 {fullName !== "Guest" ? (
-                  <MenuItem value={fullName} onClick={handleNavigateToProfile}>
+                  <MenuItem
+                    value={fullName}
+                    onClick={() => navigate(`/profile/${loggedInUser._id}`)}
+                  >
                     <Typography>{fullName}</Typography>
                   </MenuItem>
                 ) : (
@@ -378,7 +368,6 @@ const Navbar = () => {
           </FlexBetween>
         </Box>
       )}
-      {/* BUTTONS END */}
     </FlexBetween>
   );
 };

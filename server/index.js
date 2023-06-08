@@ -93,9 +93,6 @@ app.post("/create-checkout-session", async (req, res) => {
   }
 });
 
-// TESTING ENDPOINT
-const endpointSecret = process.env.STRIPE_SIGNING;
-
 const fulfillOrder = (lineItems) => {
   console.log("Fulfilling order", lineItems);
 };
@@ -118,14 +115,18 @@ app.post(
     let event;
 
     try {
-      event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
+      event = stripe.webhooks.constructEvent(
+        payload,
+        sig,
+        process.env.STRIPE_SIGNING
+      );
     } catch (err) {
-      return response.status(400).send(`Webhook Error: ${err.message}`);
+      response.status(400).send(`Webhook Error: ${err.message}`);
     }
 
     switch (event.type) {
       case "checkout.session.completed": {
-        const session = event.data.object;
+        const session = JSON.stringify(event.data.object);
         createOrder(session);
         if (session.payment_status === "paid") {
           fulfillOrder(session);
@@ -133,12 +134,12 @@ app.post(
         break;
       }
       case "checkout.session.async_payment_succeeded": {
-        const session = event.data.object;
+        const session = JSON.stringify(event.data.object);
         fulfillOrder(session);
         break;
       }
       case "checkout.session.async_payment_failed": {
-        const session = event.data.object;
+        const session = JSON.stringify(event.data.object);
         emailCustomerAboutFailedPayment(session);
         break;
       }

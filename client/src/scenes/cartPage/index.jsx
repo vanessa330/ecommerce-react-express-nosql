@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCart, setCartToNull, setItemCount } from "../../state";
-import Navbar from "../navbar";
 import CartItem from "./CartItem";
-import Spinner from "../../components/Spinner";
+import WidgetWrapper from "../../components/WidgetWrapper";
 import FlexBetween from "../../components/FlexBetween";
 import {
   Box,
@@ -17,6 +16,7 @@ import {
 const CartPage = () => {
   const dispatch = useDispatch();
 
+  // User details from Redux state
   const loggedInUser = useSelector((state) => state.loggedInUser._id);
 
   // Cart details from Redux state
@@ -24,14 +24,13 @@ const CartPage = () => {
   const items = cart ? Object.values(cart.items) : [];
 
   // CSS
-  const { palette } = useTheme();
+  const theme = useTheme();
   const isDesktop = useMediaQuery("(min-width:1000px)");
-  const [isLoading, setIsLoading] = useState(false);
 
+  // Connect to backend
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const getCart = async () => {
-    setIsLoading(true);
     try {
       const res = await fetch(`${rootUrl}cart/${loggedInUser}`, {
         method: "GET",
@@ -47,8 +46,6 @@ const CartPage = () => {
       }
     } catch (err) {
       console.log(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -79,29 +76,24 @@ const CartPage = () => {
   }, []);
 
   return (
-    <Box>
-      <Navbar />
-
-      <Box
-        backgroundColor={palette.background.alt}
-        borderRadius="8px"
-        m={isDesktop ? "2rem 10rem" : "2rem 0"}
-        gap="2rem"
-        justifyContent="center"
-        alignItems="center"
-      >
+    <Box
+      m={isDesktop ? "2rem auto" : "1rem auto"}
+      maxWidth="1200px"
+      p={isDesktop ? "1rem 10rem" : "1rem 0"}
+    >
+      <WidgetWrapper>
         <Typography
           variant="h2"
-          color={palette.neutral.dark}
+          color={theme.palette.neutral.dark}
           fontWeight="500"
-          padding={isDesktop ? "2.75rem" : "1rem"}
+          padding={isDesktop ? "1rem 3rem" : "1rem"}
         >
-          My cart:
+          My cart :
         </Typography>
+
         <Divider />
-        {isLoading ? (
-          <Spinner />
-        ) : cart === null ? null : (
+
+        {cart !== null && (
           <Box>
             {items.map(
               ({
@@ -131,7 +123,7 @@ const CartPage = () => {
           <FlexBetween padding="1rem 2rem">
             <Typography
               variant="h3"
-              color={palette.neutral.dark}
+              color={theme.palette.neutral.dark}
               fontWeight="500"
               margin={isDesktop ? "2rem" : "1rem"}
             >
@@ -139,7 +131,7 @@ const CartPage = () => {
             </Typography>
             <Typography
               variant="h2"
-              color={palette.neutral.dark}
+              color={theme.palette.neutral.dark}
               fontWeight="500"
               margin={isDesktop ? "1.5rem" : "1rem"}
             >
@@ -156,16 +148,17 @@ const CartPage = () => {
               type="submit"
               sx={{
                 p: "1rem 8rem",
-                backgroundColor: palette.primary.main,
-                color: palette.background.alt,
-                "&:hover": { color: palette.primary.main },
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.background.alt,
+                "&:hover": { color: theme.palette.primary.main },
               }}
             >
               CHECKOUT
             </Button>
           </FlexBetween>
         </Box>
-      </Box>
+        
+      </WidgetWrapper>
     </Box>
   );
 };

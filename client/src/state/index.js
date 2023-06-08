@@ -9,6 +9,7 @@ const initialState = {
   loggedInUser: null,
   user: null,
   products: [],
+  searchProducts: [],
   cart: null,
   itemCount: 0,
 };
@@ -45,6 +46,9 @@ export const authSlice = createSlice({
       });
       state.products = updatedProducts;
     },
+    setSearchProducts: (state, action) => {
+      state.searchProducts = action.payload.searchProducts;
+    },
     setCart: (state, action) => {
       state.cart = action.payload.cart;
     },
@@ -71,6 +75,7 @@ export const {
   setUser,
   setProducts,
   setProduct,
+  setSearchProducts,
   setCart,
   setCartToNull,
   setItemCount,

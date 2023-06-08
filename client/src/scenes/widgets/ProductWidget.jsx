@@ -1,13 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setProduct } from "../../state";
-import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
+import FlexBetween from "../../components/FlexBetween";
 import { IconButton, Typography, useTheme, useMediaQuery } from "@mui/material";
-import {
-  FavoriteBorderOutlined,
-  FavoriteOutlined,
-} from "@mui/icons-material";
+import { FavoriteBorderOutlined, FavoriteOutlined } from "@mui/icons-material";
 
 const ProductWidget = ({
   id,
@@ -26,10 +23,11 @@ const ProductWidget = ({
   const loggedInUserId = useSelector((state) => state.loggedInUser?._id);
 
   // CSS
-  const { palette } = useTheme();
+  const theme = useTheme();
   const isDesktop = useMediaQuery("(min-width:1000px)");
   const isLiked = false || Boolean(likes[loggedInUserId]); // Frontend liked color setting
 
+  // Connect to server
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const likeProduct = async () => {
@@ -45,11 +43,12 @@ const ProductWidget = ({
   };
 
   return (
-    <WidgetWrapper m={isDesktop ? undefined : "0.8rem 0.7rem"}>
+    <WidgetWrapper>
+      
       <FlexBetween m="0.8rem">
         <Typography
-          variant="h4"
-          color={palette.neutral.dark}
+          variant="h3"
+          color={theme.palette.neutral.dark}
           p="0.5rem"
           fontWeight="500"
           onClick={() => navigate(`/product/${id}`)}
@@ -57,7 +56,7 @@ const ProductWidget = ({
             height: "4.5rem",
             overflowY: "auto",
             "&:hover": {
-              color: palette.primary.light,
+              color: theme.palette.primary.light,
               cursor: "pointer",
             },
           }}
@@ -65,7 +64,7 @@ const ProductWidget = ({
           {productName}
         </Typography>
 
-        <Typography variant="h4" color={palette.neutral.main}>
+        <Typography variant="h4" color={theme.palette.neutral.main} p="0.5rem">
           ${price}
         </Typography>
       </FlexBetween>
@@ -73,7 +72,7 @@ const ProductWidget = ({
       {picturePath && (
         <img
           width="100%"
-          height="300px"
+          height="330px"
           alt="product"
           style={{
             objectFit: "cover",
@@ -85,26 +84,26 @@ const ProductWidget = ({
       )}
 
       <FlexBetween m="1rem">
-          <Typography
-            variant="h5"
-            color={palette.neutral.dark}
-            fontWeight="500"
-            onClick={() => navigate(`/profile/${userId}`)}
-            sx={{
-              "&:hover": {
-                color: palette.primary.light,
-                cursor: "pointer",
-              },
-            }}
-          >
-            {name}
-          </Typography>
+        <Typography
+          variant="h5"
+          color={theme.palette.neutral.dark}
+          fontWeight="500"
+          onClick={() => navigate(`/profile/${userId}`)}
+          sx={{
+            "&:hover": {
+              color: theme.palette.primary.light,
+              cursor: "pointer",
+            },
+          }}
+        >
+          {name}
+        </Typography>
 
         <FlexBetween gap="0.3rem">
           {isLiked !== null && (
             <IconButton onClick={likeProduct}>
               {isLiked ? (
-                <FavoriteOutlined sx={{ color: palette.primary.main }} />
+                <FavoriteOutlined sx={{ color: theme.palette.primary.main }} />
               ) : (
                 <FavoriteBorderOutlined />
               )}
@@ -112,7 +111,9 @@ const ProductWidget = ({
           )}
           <Typography>{Object.keys(likes).length}</Typography>
         </FlexBetween>
+
       </FlexBetween>
+
     </WidgetWrapper>
   );
 };

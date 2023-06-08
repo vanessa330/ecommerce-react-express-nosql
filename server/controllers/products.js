@@ -65,9 +65,9 @@ const searchProducts = async (req, res) => {
     const regexString = query.replace(/\s+/g, "\\s+"); // Replace spaces with pattern that matches any white space character
     const regex = new RegExp(regexString, "i"); // "i" ignore the uppercase or lowercase
 
-    const products = await Product.find({ productName: regex });
+    const searchProducts = await Product.find({ productName: regex });
 
-    res.status(200).json(products);
+    res.status(200).json(searchProducts);
   } catch (err) {
     res.status(404).json({ error: err.message });
   }

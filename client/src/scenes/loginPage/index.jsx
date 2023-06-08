@@ -1,4 +1,3 @@
-import Navbar from "../navbar";
 import Form from "./Form";
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 
@@ -9,8 +8,6 @@ const LoginPage = () => {
 
   return (
     <Box>
-      <Navbar />
-
       <Box
         width={isDesktop ? "70%" : "96%"}
         maxWidth="800px"
@@ -24,8 +21,7 @@ const LoginPage = () => {
           variant="h5"
           sx={{ mb: "1.5rem", lineHeight: "2rem" }}
         >
-          Please note that this is for demonstration purposes only, so we kindly
-          ask that you refrain from using your real personal information.
+         For demo purposes only, please do not use your real personal information.
         </Typography>
 
         <Form />

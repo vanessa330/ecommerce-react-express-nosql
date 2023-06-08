@@ -23,13 +23,14 @@ const CartItem = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  //   User details from Redux state
+  // User details from Redux state
   const loggedInUserId = useSelector((state) => state.loggedInUser?._id);
 
   // CSS
-  const { palette } = useTheme();
+  const theme = useTheme();
   const isDesktop = useMediaQuery("(min-width:1000px)");
 
+  // Connect to backend
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const addItemToCart = async () => {
@@ -40,7 +41,6 @@ const CartItem = ({
         headers: { "Content-Type": "application/json" },
       }
     );
-
     const data = await res.json();
 
     if (res.status === 201) {
@@ -57,7 +57,6 @@ const CartItem = ({
         headers: { "Content-Type": "application/json" },
       }
     );
-
     const data = await res.json();
 
     if (res.status === 200) {
@@ -67,14 +66,13 @@ const CartItem = ({
   };
 
   return (
-    <WidgetWrapper>
       <Box
-        m="0.5rem 1rem 0"
+        p="1rem 2rem"
         display={isDesktop ? "flex" : "block"}
         justifyContent={isDesktop ? "space-between" : "undefined"}
         alignItems={isDesktop ? "center" : "undefined"}
       >
-        <Box width={isDesktop ? "20%" : undefined}>
+        <Box flexBasis={isDesktop ? "20%" : undefined}>
           <img
             width="100%"
             height={isDesktop ? "130px" : undefined}
@@ -89,18 +87,18 @@ const CartItem = ({
         </Box>
 
         <Box
-          width={isDesktop ? "40%" : undefined}
+          flexBasis={isDesktop ? "40%" : undefined}
           m={isDesktop ? undefined : "1rem"}
         >
           <Typography
             variant="h4"
-            color={palette.neutral.dark}
+            color={theme.palette.neutral.dark}
             fontWeight="500"
             paddingBottom="0.8rem"
             onClick={() => navigate(`/product/${productId}`)}
             sx={{
               "&:hover": {
-                color: palette.primary.light,
+                color: theme.palette.primary.light,
                 cursor: "pointer",
               },
             }}
@@ -109,7 +107,7 @@ const CartItem = ({
           </Typography>
           <Typography
             variant="h5"
-            color={palette.neutral.main}
+            color={theme.palette.neutral.main}
             fontWeight="500"
           >
             HK$ {price} / unit
@@ -117,7 +115,7 @@ const CartItem = ({
         </Box>
 
         <Box
-          width={isDesktop ? "30%" : undefined}
+          flexBasis={isDesktop ? "30%" : undefined}
           m={isDesktop ? undefined : "0.8rem"}
         >
           <FlexBetween>
@@ -127,7 +125,7 @@ const CartItem = ({
               </IconButton>
               <Typography
                 variant="h4"
-                color={palette.neutral.dark}
+                color={theme.palette.neutral.dark}
                 fontWeight="500"
                 padding="0 7px"
               >
@@ -140,7 +138,7 @@ const CartItem = ({
             </FlexBetween>
             <Typography
               variant="h4"
-              color={palette.neutral.main}
+              color={theme.palette.neutral.main}
               fontWeight="500"
             >
               HK$ {total}
@@ -148,7 +146,6 @@ const CartItem = ({
           </FlexBetween>
         </Box>
       </Box>
-    </WidgetWrapper>
   );
 };
 

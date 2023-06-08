@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import Dropzone from "react-dropzone";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts, setProduct } from "../../state";
-import Navbar from "../navbar";
 import FlexBetween from "../../components/FlexBetween";
 import {
   useMediaQuery,
@@ -14,20 +13,17 @@ import {
   Divider,
   TextField,
 } from "@mui/material";
-import {
-  DeleteOutlined,
-  EditOutlined,
-} from "@mui/icons-material";
+import { DeleteOutlined, EditOutlined } from "@mui/icons-material";
+import WidgetWrapper from "../../components/WidgetWrapper";
 
 const ProductFormPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { productId } = useParams();
 
   // User details from Redux state
   const token = useSelector((state) => state.token);
   const { _id } = useSelector((state) => state.loggedInUser);
-
-  const { productId } = useParams();
 
   // Product details from Redux state
   const product = useSelector((state) =>
@@ -108,31 +104,24 @@ const ProductFormPage = () => {
   };
 
   return (
-    <Box>
-      <Navbar />
-
-      <Box
-        backgroundColor={theme.palette.background.alt}
-        borderRadius="8px"
-        m={isDesktop ? "2rem 10rem" : "2rem 0"}
-        p={isDesktop ? "1rem" : "1rem"}
-        gap="2rem"
-        justifyContent="center"
-        alignItems="center"
-      >
+    <Box
+      m={isDesktop ? "2rem auto" : "1rem auto"}
+      maxWidth="1200px"
+      p={isDesktop ? "1rem 10rem" : "1rem 0"}
+    >
+      <WidgetWrapper>
         <Typography
-          variant="h3"
+          variant="h2"
           color={theme.palette.neutral.dark}
           fontWeight="500"
-          padding={isDesktop ? "2.75rem" : "1rem"}
+          padding={isDesktop ? "1rem 3rem" : "1rem"}
         >
           {productId ? "Edit the product :" : "Create a product :"}
         </Typography>
+
         <Divider />
 
-        <Box
-          m={isDesktop ? "2rem" : "1rem"}
-        >
+        <Box m={isDesktop ? "2rem" : "1rem"}>
           <TextField
             label="Product Name"
             onChange={(e) => setNewProductName(e.target.value)}
@@ -251,7 +240,7 @@ const ProductFormPage = () => {
             </Button>
           </Box>
         </Box>
-      </Box>
+      </WidgetWrapper>
     </Box>
   );
 };

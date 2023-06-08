@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts, setProduct, setCart, setItemCount } from "../../state";
-import Navbar from "../navbar";
-import FlexBetween from "../../components/FlexBetween";
 import UserFollowing from "../../components/UserFollowing";
-import Spinner from "../../components/Spinner";
+import WidgetWrapper from "../../components/WidgetWrapper";
+import FlexBetween from "../../components/FlexBetween";
 import {
   Box,
   IconButton,
@@ -14,15 +13,11 @@ import {
   Button,
   useMediaQuery,
 } from "@mui/material";
-import {
-  FavoriteBorderOutlined,
-  FavoriteOutlined,
-} from "@mui/icons-material";
+import { FavoriteBorderOutlined, FavoriteOutlined } from "@mui/icons-material";
 
 const ProductInfoPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { id } = useParams();
 
   //   User details from Redux state
@@ -47,13 +42,11 @@ const ProductInfoPage = () => {
   // CSS
   const { palette } = useTheme();
   const isDesktop = useMediaQuery("(min-width:1000px)");
-  const [isLoading, setIsLoading] = useState(false);
   const isLiked = false || Boolean(likes[loggedInUserId]); // Frontend liked color setting
 
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const getProducts = async () => {
-    setIsLoading(true);
     try {
       const res = await fetch(`${rootUrl}products`, {
         method: "GET",
@@ -64,8 +57,6 @@ const ProductInfoPage = () => {
       dispatch(setProducts({ products: data }));
     } catch (err) {
       console.log(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -101,19 +92,15 @@ const ProductInfoPage = () => {
   }, []);
 
   return (
-    <Box>
-      <Navbar />
-
-      {isLoading ? (
-        <Spinner />
-      ) : product ? (
-        <Box margin="1.5rem">
+    <Box
+      m={isDesktop ? "2rem auto" : "1rem auto"}
+      maxWidth="1200px"
+      p={isDesktop ? "1rem 10rem" : "1rem 0"}
+    >
+      {product ? (
+        <WidgetWrapper>
           <Box
-            backgroundColor={palette.background.alt}
-            borderRadius="5px"
             display={isDesktop ? "flex" : "block"}
-            m={isDesktop ? "2rem" : "0.1rem"}
-            gap="2rem"
             justifyContent="center"
             alignItems="center"
           >
@@ -143,14 +130,17 @@ const ProductInfoPage = () => {
                 variant="h3"
                 color={palette.neutral.dark}
                 fontWeight="500"
-                marginTop={isDesktop ? "2.75rem" : undefined}
               >
                 {productName}
               </Typography>
 
               <FlexBetween padding="1rem 0">
                 <FlexBetween gap="1rem" marginTop="2rem">
-                  <Typography variant="h4" color={palette.neutral.dark}>
+                  <Typography
+                    variant="h4"
+                    color={palette.neutral.dark}
+                    fontWeight="500"
+                  >
                     Price :
                   </Typography>
                   <Typography variant="h3" color={palette.neutral.dark}>
@@ -162,6 +152,7 @@ const ProductInfoPage = () => {
               <Typography
                 variant="h4"
                 color={palette.neutral.dark}
+                fontWeight="500"
                 marginTop="2rem"
               >
                 Description :
@@ -177,6 +168,7 @@ const ProductInfoPage = () => {
               <Typography
                 variant="h4"
                 color={palette.neutral.dark}
+                fontWeight="500"
                 marginTop="2rem"
               >
                 Seller:
@@ -237,7 +229,7 @@ const ProductInfoPage = () => {
               </FlexBetween>
             </Box>
           </Box>
-        </Box>
+        </WidgetWrapper>
       ) : null}
     </Box>
   );

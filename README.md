@@ -8,36 +8,9 @@
 
 <br />
 
-Light Mode                 |  Dark Mode
-:-------------------------:|:-------------------------:
-![](./capscreen/homePage_light.jpeg)  |  ![](./capscreen/homePage_dark.jpeg)
-
+![](./appIMG.png)  
 
 <br />
-
-Register                   |  Login
-:-------------------------:|:-------------------------:
-![](./capscreen/register.jpeg)  |  ![](./capscreen/login.jpeg)
-
-<br />
-
-ProfilePage                |  ManagePage
-:-------------------------:|:-------------------------:
-![](./capscreen/profilePage.jpeg)  |  ![](./capscreen/managePage.jpeg)
-
-
-<br />
-
-CreateProduct              |  EditProduct
-:-------------------------:|:-------------------------:
-![](./capscreen/createProduct.jpeg)  |  ![](./capscreen/editProduct.jpeg)
-
-
-<br />
-
-CartPage                   |  Checkout
-:-------------------------:|:-------------------------:
-![](./capscreen/cartPage.jpeg)  |  ![](./capscreen/cartCheckout.jpeg)
 
 ## Frontend - Client Side
 
