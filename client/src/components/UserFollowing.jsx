@@ -11,7 +11,7 @@ const UserFollowing = ({ followingId }) => {
   const loggedInUser = useSelector((state) => state.loggedInUser?._id);
 
   // Opposite user information
-  const following = useSelector((state) => state.loggedInUser.following);
+  const following = useSelector((state) => state.loggedInUser?.following);
   const isFollowed = following.find((f) => f === followingId);
 
   // CSS
