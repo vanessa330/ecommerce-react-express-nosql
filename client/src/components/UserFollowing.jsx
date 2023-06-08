@@ -8,7 +8,7 @@ const UserFollowing = ({ followingId }) => {
 
   // loggedInUser information
   const token = useSelector((state) => state.token);
-  const loggedInUser = useSelector((state) => state.loggedInUser._id);
+  const loggedInUser = useSelector((state) => state.loggedInUser?._id);
 
   // Opposite user information
   const following = useSelector((state) => state.loggedInUser.following);
