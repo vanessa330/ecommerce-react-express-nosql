@@ -12,7 +12,7 @@ const UserFollowing = ({ followingId }) => {
 
   // Opposite user information
   const following = useSelector((state) => state.loggedInUser?.following);
-  const isFollowed = following.find((f) => f === followingId);
+  const isFollowed = following?.find((f) => f === followingId);
 
   // CSS
   const { palette } = useTheme();
