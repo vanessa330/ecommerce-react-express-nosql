@@ -37,7 +37,7 @@ const MyItem = ({ id, productName, price, description, picturePath }) => {
 
     if (res.status === 200) {
       window.alert(data.message);
-      window.location.reload();
+      navigate("/manage");
     }
   };
 
