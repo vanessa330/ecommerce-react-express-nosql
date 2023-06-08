@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCart, setItemCount } from "../../state";
 import FlexBetween from "../../components/FlexBetween";
-import WidgetWrapper from "../../components/WidgetWrapper";
 import {
   Box,
   IconButton,

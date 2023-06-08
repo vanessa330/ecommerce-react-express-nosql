@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogout, setProducts, setSearchProducts } from "../state";
+import { setMode, setLogout, setSearchProducts } from "../state";
 import FlexBetween from "./FlexBetween";
 import {
   Box,

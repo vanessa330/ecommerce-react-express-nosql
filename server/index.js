@@ -126,7 +126,7 @@ app.post(
 
     switch (event.type) {
       case "checkout.session.completed": {
-        const session = JSON.stringify(event.data.object);
+        const session = event.data.object;
         createOrder(session);
         if (session.payment_status === "paid") {
           fulfillOrder(session);
@@ -134,12 +134,12 @@ app.post(
         break;
       }
       case "checkout.session.async_payment_succeeded": {
-        const session = JSON.stringify(event.data.object);
+        const session = event.data.object;
         fulfillOrder(session);
         break;
       }
       case "checkout.session.async_payment_failed": {
-        const session = JSON.stringify(event.data.object);
+        const session = event.data.object;
         emailCustomerAboutFailedPayment(session);
         break;
       }

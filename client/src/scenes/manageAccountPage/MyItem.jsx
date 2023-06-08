@@ -22,6 +22,12 @@ const MyItem = ({ id, productName, price, description, picturePath }) => {
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const deleteProduct = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this product?"
+    );
+
+    if (!confirmed) return;
+
     const res = await fetch(`${rootUrl}products/${id}/delete`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
@@ -31,7 +37,7 @@ const MyItem = ({ id, productName, price, description, picturePath }) => {
 
     if (res.status === 200) {
       window.alert(data.message);
-      navigate(`/manage`);
+      window.location.reload();
     }
   };
 
