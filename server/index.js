@@ -7,7 +7,7 @@ import morgan from "morgan";
 import path from "path";
 import multer from "multer";
 import Stripe from "stripe";
-
+import bodyParser from "body-parser";
 import { Cart } from "./models/Cart.js";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
@@ -58,7 +58,7 @@ app.get("/search", searchProducts);
 app.use("/cart", cartRoutes);
 
 /* PAYMENT SETUP */
-const stripe = Stripe(process.env.STRIPE_KEY);
+const stripe = new Stripe(process.env.STRIPE_KEY);
 
 app.post("/create-checkout-session", async (req, res) => {
   const { id } = req.body;
@@ -79,6 +79,7 @@ app.post("/create-checkout-session", async (req, res) => {
     });
 
     const session = await stripe.checkout.sessions.create({
+      client_reference_id: id,
       payment_method_types: ["card"],
       mode: "payment",
       line_items: lineItems,
@@ -94,6 +95,60 @@ app.post("/create-checkout-session", async (req, res) => {
     await Cart.deleteOne({ _id: id });
   }
 });
+
+// TESTING ENDPOINT
+const endpointSecret = process.env.STRIPE_SIGNING;
+
+const fulfillOrder = (lineItems) => {
+  console.log("Fulfilling order", lineItems);
+};
+
+const createOrder = (session) => {
+  console.log("Creating order", session);
+};
+
+const emailCustomerAboutFailedPayment = (session) => {
+  console.log("Emailing customer", session);
+};
+
+app.post(
+  "/webhook",
+  bodyParser.raw({ type: "application/json" }),
+  (requests, response) => {
+    const payload = requests.body;
+    const sig = requests.headers["stripe-signature"];
+
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
+    } catch (err) {
+      return response.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    switch (event.type) {
+      case "checkout.session.completed": {
+        const session = event.data.object;
+        createOrder(session);
+        if (session.payment_status === "paid") {
+          fulfillOrder(session);
+        }
+        break;
+      }
+      case "checkout.session.async_payment_succeeded": {
+        const session = event.data.object;
+        fulfillOrder(session);
+        break;
+      }
+      case "checkout.session.async_payment_failed": {
+        const session = event.data.object;
+        emailCustomerAboutFailedPayment(session);
+        break;
+      }
+    }
+    response.status(200).end();
+  }
+);
 
 /* DATABASE SETUP */
 const PORT = process.env.PORT;
