@@ -7,9 +7,8 @@ const morgan = require("morgan");
 const path = require("path");
 const multer = require("multer");
 const Stripe = require("stripe");
-const bodyParser = require("body-parser");
+const { buffer } = require("micro");
 const { Cart } = require("./models/Cart");
-const { fileURLToPath } = require("url");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const productRoutes = require("./routes/product");
@@ -30,8 +29,7 @@ app.use(
     origin: [process.env.CLIENT_URL, "https://checkout.stripe.com"],
   })
 );
-
-app.use("/assets", express.static(path.join("public/assets"))); // files stored in the public/assets directory will be accessible to clients making requests.
+app.use("/assets", express.static(path.join("public/assets")));
 
 /* MIDDLEWARE FILE UPLOAD STORAGE */
 const storage = multer.diskStorage({
@@ -54,8 +52,8 @@ app.use("/products", productRoutes);
 app.get("/search", searchProducts);
 app.use("/cart", cartRoutes);
 
-/* PAYMENT SETUP */
-const stripe = new Stripe(process.env.STRIPE_KEY);
+/* STRIPE PAYMENT SETUP */
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 app.post("/create-checkout-session", async (req, res) => {
   const { id } = req.body;
@@ -93,6 +91,9 @@ app.post("/create-checkout-session", async (req, res) => {
   }
 });
 
+/* STRIPE PAYMENT WEBHOOK SETUP */
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
 const fulfillOrder = (lineItems) => {
   console.log("Fulfilling order", lineItems);
 };
@@ -107,27 +108,26 @@ const emailCustomerAboutFailedPayment = (session) => {
 
 app.post(
   "/webhook",
-  bodyParser.raw({ type: "application/json" }),
-  (requests, response) => {
-    const payload = requests.body;
-    const sig = requests.headers["stripe-signature"];
-
+  express.raw({ type: "application/json" }),
+  async (req, res) => {
     let event;
 
     try {
       event = stripe.webhooks.constructEvent(
-        payload,
-        sig,
-        process.env.STRIPE_SIGNING
+        req.body,
+        req.headers["stripe-signature"],
+        endpointSecret
       );
     } catch (err) {
-      response.status(400).send(`Webhook Error: ${err.message}`);
+      res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
+    // Handle the event
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object;
         createOrder(session);
+
         if (session.payment_status === "paid") {
           fulfillOrder(session);
         }
@@ -144,7 +144,7 @@ app.post(
         break;
       }
     }
-    response.status(200).end();
+    res.status(200).end();
   }
 );
 
