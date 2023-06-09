@@ -115,7 +115,8 @@ const fulfillOrder = async (session) => {
 
 app.post(
   "/webhook",
-  express.raw({ type: "application/json" }),
+  // express.raw({ type: "application/json" }),
+  express.raw({ type: "*/*" }),
   async (req, res) => {
     const sig = req.headers["stripe-signature"];
 
