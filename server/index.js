@@ -7,7 +7,6 @@ const morgan = require("morgan");
 const path = require("path");
 const multer = require("multer");
 const Stripe = require("stripe");
-const { buffer } = require("micro");
 const { Cart } = require("./models/Cart");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
@@ -18,20 +17,28 @@ const { verifyToken } = require("./middleware/auth");
 const { searchProducts } = require("./controllers/products");
 
 /* CONFIGURATIONS */
+
 dotenv.config();
 const app = express();
-app.use(express.json());
+app.use((req, res, next) => {
+  if (req.originalUrl === "/webhook") {
+    next();
+  } else {
+    express.json();
+  }
+});
 app.use(express.urlencoded({ extended: true }));
-app.use(helmet()); // HTTP header for safty.
-app.use(morgan("tiny")); // log HTTP requests
 app.use(
   cors({
     origin: [process.env.CLIENT_URL, "https://checkout.stripe.com"],
   })
 );
 app.use("/assets", express.static(path.join("public/assets")));
+app.use(helmet()); // HTTP header for safty.
+app.use(morgan("tiny")); // log HTTP requests
 
 /* MIDDLEWARE FILE UPLOAD STORAGE */
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/assets");
@@ -42,17 +49,18 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-/* ROUTES WIHT FILE */
+/* ROUTES */
+
 app.post("/products", verifyToken, upload.single("file"), createProduct);
 app.put("/products/:id/edit", verifyToken, upload.single("file"), editProduct);
-/* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/products", productRoutes);
 app.get("/search", searchProducts);
 app.use("/cart", cartRoutes);
 
-/* STRIPE PAYMENT SETUP */
+/* STRIPE PAYMENT */
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 app.post("/create-checkout-session", async (req, res) => {
@@ -74,11 +82,11 @@ app.post("/create-checkout-session", async (req, res) => {
     });
 
     const session = await stripe.checkout.sessions.create({
-      client_reference_id: id,
+      client_reference_id: id, // DB cart id
       payment_method_types: ["card"],
       mode: "payment",
       line_items: lineItems,
-      success_url: process.env.CLIENT_URL,
+      success_url: `${process.env.CLIENT_URL}/success`,
       cancel_url: `${process.env.CLIENT_URL}/cart`,
     });
 
@@ -86,16 +94,22 @@ app.post("/create-checkout-session", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).send(err.message);
-  } finally {
-    await Cart.deleteOne({ _id: id });
   }
 });
 
-/* STRIPE PAYMENT WEBHOOK SETUP */
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+/* STRIPE WEBHOOK */
 
-const fulfillOrder = (lineItems) => {
-  console.log("Fulfilling order", lineItems);
+const fulfillOrder = async (session) => {
+  // console.log("Fulfilling order", lineItems);
+  console.log("Fulfilling order", session);
+  const id = session.client_reference_id;
+
+  // create a new order
+  try {
+    await Cart.deleteOne({ _id: id });
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const createOrder = (session) => {
@@ -110,19 +124,20 @@ app.post(
   "/webhook",
   express.raw({ type: "application/json" }),
   async (req, res) => {
+    const payload = req.body;
+    const sig = req.headers["stripe-signature"];
     let event;
 
     try {
       event = stripe.webhooks.constructEvent(
-        req.body,
-        req.headers["stripe-signature"],
-        endpointSecret
+        payload,
+        sig,
+        process.env.STRIPE_WEBHOOK_SECRET
       );
     } catch (err) {
       res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
-    // Handle the event
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object;

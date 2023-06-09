@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "../../state";
 import ProductWidget from "../widgets/ProductWidget";
-import Spinner from "../../components/Spinner";
 import { Box, useMediaQuery } from "@mui/material";
+import { ClipLoader } from "react-spinners";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -42,7 +42,9 @@ const HomePage = () => {
   return (
     <Box m={isDesktop ? "2rem auto" : "1rem auto"} maxWidth="1200px">
       {isLoading ? (
-        <Spinner />
+        <Box textAlign="center">
+          <ClipLoader />
+        </Box>
       ) : (
         <Box
           display="grid"

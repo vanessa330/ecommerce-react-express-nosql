@@ -5,7 +5,7 @@ import { setProducts } from "../../state";
 import UserWidget from "../widgets/UserWidget";
 import ProductWidget from "../widgets/ProductWidget";
 import { Box, useMediaQuery } from "@mui/material";
-import Spinner from "../../components/Spinner";
+import { ClipLoader } from "react-spinners";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -67,7 +67,7 @@ const ProfilePage = () => {
           m={isDesktop ? "2rem 1rem" : "1rem"}
         >
           {isLoading ? (
-            <Spinner />
+            <ClipLoader />
           ) : (
             <Box
               display="grid"
@@ -101,7 +101,6 @@ const ProfilePage = () => {
               )}
             </Box>
           )}
-          
         </Box>
       </Box>
     </Box>

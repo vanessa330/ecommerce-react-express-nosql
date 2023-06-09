@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCart, setCartToNull, setItemCount } from "../../state";
 import CartItem from "./CartItem";
@@ -12,6 +12,7 @@ import {
   Button,
   useMediaQuery,
 } from "@mui/material";
+import { ClipLoader } from "react-spinners";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -26,11 +27,13 @@ const CartPage = () => {
   // CSS
   const theme = useTheme();
   const isDesktop = useMediaQuery("(min-width:1000px)");
+  const [isLoading, setIsLoading] = useState(false);
 
   // Connect to backend
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const getCart = async () => {
+    setIsLoading(true);
     try {
       const res = await fetch(`${rootUrl}cart/${loggedInUser}`, {
         method: "GET",
@@ -46,6 +49,8 @@ const CartPage = () => {
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -93,30 +98,34 @@ const CartPage = () => {
 
         <Divider />
 
-        {cart !== null && (
-          <Box>
-            {items.map(
-              ({
-                _id,
-                productId,
-                productName,
-                picturePath,
-                quantity,
-                price,
-                total,
-              }) => (
-                <CartItem
-                  key={_id}
-                  productId={productId}
-                  productName={productName}
-                  picturePath={picturePath}
-                  quantity={quantity}
-                  price={price}
-                  total={total}
-                />
-              )
-            )}
-          </Box>
+        {isLoading ? (
+          <ClipLoader />
+        ) : (
+          cart !== null && (
+            <Box>
+              {items.map(
+                ({
+                  _id,
+                  productId,
+                  productName,
+                  picturePath,
+                  quantity,
+                  price,
+                  total,
+                }) => (
+                  <CartItem
+                    key={_id}
+                    productId={productId}
+                    productName={productName}
+                    picturePath={picturePath}
+                    quantity={quantity}
+                    price={price}
+                    total={total}
+                  />
+                )
+              )}
+            </Box>
+          )
         )}
 
         <Box display="flex" justifyContent="right" alignItems="center">
@@ -157,7 +166,6 @@ const CartPage = () => {
             </Button>
           </FlexBetween>
         </Box>
-        
       </WidgetWrapper>
     </Box>
   );

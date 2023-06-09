@@ -13,6 +13,7 @@ import CartPage from "./scenes/cartPage/index.jsx";
 import ManageAccountPage from "./scenes/manageAccountPage/index.jsx";
 import ProductFormPage from "./scenes/manageAccountPage/ProductFormPage.jsx";
 import SearchPage from "./scenes/searchPage/index.jsx";
+import SuccessPayment from "./scenes/cartPage/SuccessPayment.jsx";
 
 function App() {
   /* REDUX : grab the state */
@@ -38,6 +39,7 @@ function App() {
               element={<ProductFormPage />}
             />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/success" element={<SuccessPayment />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
