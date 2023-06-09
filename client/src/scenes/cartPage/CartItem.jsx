@@ -86,7 +86,7 @@ const CartItem = ({
         </Box>
 
         <Box
-          flexBasis={isDesktop ? "40%" : undefined}
+          flexBasis={isDesktop ? "35%" : undefined}
           m={isDesktop ? undefined : "1rem"}
         >
           <Typography
@@ -114,7 +114,7 @@ const CartItem = ({
         </Box>
 
         <Box
-          flexBasis={isDesktop ? "30%" : undefined}
+          flexBasis={isDesktop ? "35%" : undefined}
           m={isDesktop ? undefined : "0.8rem"}
         >
           <FlexBetween>

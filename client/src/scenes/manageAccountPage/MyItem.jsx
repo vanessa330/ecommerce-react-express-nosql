@@ -53,7 +53,7 @@ const MyItem = ({ id, productName, price, description, picturePath }) => {
         <FlexBetween
           backgroundColor={theme.palette.neutral.light}
           borderRadius="1rem"
-          padding={isDesktop ? "1.5rem" : undefined}
+          padding={isDesktop ? "1.5rem 1rem" : undefined}
         >
           <Typography
             variant="h4"
@@ -98,7 +98,7 @@ const MyItem = ({ id, productName, price, description, picturePath }) => {
           </Box>
 
           <Box
-            flexBasis={isDesktop ? "50%" : undefined}
+            flexBasis={isDesktop ? "45%" : undefined}
             m={isDesktop ? "1.5rem" : "1rem"}
           >
             <Typography
@@ -126,7 +126,7 @@ const MyItem = ({ id, productName, price, description, picturePath }) => {
           </Box>
 
           <Box
-            flexBasis={isDesktop ? "30%" : undefined}
+            flexBasis={isDesktop ? "35%" : undefined}
             m={isDesktop ? undefined : "0.8rem"}
           >
             <IconButton onClick={() => navigate(`/productform/${id}`)}>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { setProduct } from "../../state";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import FlexBetween from "../../components/FlexBetween";
-import { IconButton, Typography, useTheme} from "@mui/material";
+import { IconButton, Typography, useTheme } from "@mui/material";
 import { FavoriteBorderOutlined, FavoriteOutlined } from "@mui/icons-material";
 
 const ProductWidget = ({
@@ -43,7 +43,6 @@ const ProductWidget = ({
 
   return (
     <WidgetWrapper>
-      
       <FlexBetween m="0.8rem">
         <Typography
           variant="h3"
@@ -52,8 +51,9 @@ const ProductWidget = ({
           fontWeight="500"
           onClick={() => navigate(`/product/${id}`)}
           sx={{
-            height: "4.5rem",
-            overflowY: "auto",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
             "&:hover": {
               color: theme.palette.primary.light,
               cursor: "pointer",
@@ -110,9 +110,7 @@ const ProductWidget = ({
           )}
           <Typography>{Object.keys(likes).length}</Typography>
         </FlexBetween>
-
       </FlexBetween>
-
     </WidgetWrapper>
   );
 };

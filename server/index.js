@@ -82,7 +82,7 @@ app.post("/create-checkout-session", async (req, res) => {
     });
 
     const session = await stripe.checkout.sessions.create({
-      client_reference_id: id, // DB cart id
+      client_reference_id: id,
       payment_method_types: ["card"],
       mode: "payment",
       line_items: lineItems,
@@ -99,41 +99,30 @@ app.post("/create-checkout-session", async (req, res) => {
 
 /* STRIPE WEBHOOK */
 
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
 const fulfillOrder = async (session) => {
-  // console.log("Fulfilling order", lineItems);
-  console.log("Fulfilling order", session);
   const id = session.client_reference_id;
 
-  // create a new order
   try {
+    // handel delete the cart and add an Order schema...
+    // await Cart.findOneAndUpdate({ _id: id }, { status: "processing" });
     await Cart.deleteOne({ _id: id });
   } catch (err) {
     console.error(err);
   }
 };
 
-const createOrder = (session) => {
-  console.log("Creating order", session);
-};
-
-const emailCustomerAboutFailedPayment = (session) => {
-  console.log("Emailing customer", session);
-};
-
 app.post(
   "/webhook",
   express.raw({ type: "application/json" }),
   async (req, res) => {
-    const payload = req.body;
     const sig = req.headers["stripe-signature"];
+
     let event;
 
     try {
-      event = stripe.webhooks.constructEvent(
-        payload,
-        sig,
-        process.env.STRIPE_WEBHOOK_SECRET
-      );
+      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
     } catch (err) {
       res.status(400).send(`Webhook Error: ${err.message}`);
     }
@@ -141,25 +130,20 @@ app.post(
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object;
-        createOrder(session);
-
-        if (session.payment_status === "paid") {
-          fulfillOrder(session);
-        }
-        break;
-      }
-      case "checkout.session.async_payment_succeeded": {
-        const session = event.data.object;
         fulfillOrder(session);
         break;
       }
+      case "checkout.session.async_payment_succeeded": {
+        // const session = event.data.object;
+        break;
+      }
       case "checkout.session.async_payment_failed": {
-        const session = event.data.object;
-        emailCustomerAboutFailedPayment(session);
+        // const session = event.data.object;
         break;
       }
     }
-    res.status(200).end();
+
+    res.status(200).json({ received: true }).end();
   }
 );
 

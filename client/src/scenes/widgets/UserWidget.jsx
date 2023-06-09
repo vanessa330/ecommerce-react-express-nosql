@@ -8,34 +8,15 @@ import WidgetWrapper from "../../components/WidgetWrapper";
 import FlexBetween from "../../components/FlexBetween";
 import { Box, Typography, Divider, useTheme } from "@mui/material";
 
-const UserWidget = ({ userId, picturePath }) => {
+const UserWidget = ({ user, picturePath }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
    // Specified user from Redux state
   const token = useSelector((state) => state.token);
-  const user = useSelector((state) => state.user);
 
   // CSS
   const { palette } = useTheme();
-
-  // Connect to Backend
-  const rootUrl = process.env.REACT_APP_SERVER_URL;
-
-  const getUser = async () => {
-    const res = await fetch(`${rootUrl}users/${userId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const data = await res.json();
-    dispatch(setUser({ user: data }));
-  };
-
-  useEffect(() => {
-    getUser();
-    // eslint-disable-next-line
-  }, []);
 
   if (!user) return null;
 
@@ -50,7 +31,7 @@ const UserWidget = ({ userId, picturePath }) => {
               variant="h4"
               color={palette.neutral.dark}
               fontWeight="500"
-              onClick={() => navigate(`/profile/${userId}`)}
+              onClick={() => navigate(`/profile/${user._id}`)}
               sx={{
                 "&:hover": {
                   color: palette.primary.light,

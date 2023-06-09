@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setProducts } from "../../state";
+import { setUser, setProducts } from "../../state";
 import UserWidget from "../widgets/UserWidget";
 import ProductWidget from "../widgets/ProductWidget";
 import { Box, useMediaQuery } from "@mui/material";
@@ -24,6 +24,16 @@ const ProfilePage = () => {
   // Connect to Backend
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
+  const getUser = async () => {
+    const res = await fetch(`${rootUrl}users/${userId}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await res.json();
+    dispatch(setUser({ user: data }));
+  };
+
   const getUserProducts = async () => {
     setIsLoading(true);
     try {
@@ -42,6 +52,7 @@ const ProfilePage = () => {
   };
 
   useEffect(() => {
+    getUser();
     getUserProducts();
     // eslint-disable-next-line
   }, []);
@@ -59,7 +70,7 @@ const ProfilePage = () => {
           flexBasis={isDesktop ? "30%" : undefined}
           m={isDesktop ? "2rem" : "1rem"}
         >
-          <UserWidget userId={userId} picturePath={user.picturePath} />
+          <UserWidget user={user} picturePath={user.picturePath} />
         </Box>
 
         <Box

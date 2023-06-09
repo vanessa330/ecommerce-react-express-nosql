@@ -1,12 +1,9 @@
 # E-commerce Website
 
-> This is a FAKE e-commerce website built on the MongoDB, Express, React, Node and deploy through [Netlify](https://www.netlify.com/) and [Render](https://dashboard.render.com/).
+> This is a FAKE e-commerce website built on the MongoDB, Express, React, Node, and deployed to [https://ecommerce-react-express-nosql.pages.dev/](https://ecommerce-react-express-nosql.pages.dev/)
 
 <br />
 
-> Deploy to Production : [https://vanessa330ecommerce.netlify.app/](https://vanessa330ecommerce.netlify.app/)
-
-<br />
 
 ![](./appIMG.png)  
 

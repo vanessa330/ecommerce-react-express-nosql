@@ -61,6 +61,11 @@ const Navbar = () => {
     setSearchParam("");
   };
 
+  const handleNavigateToProfile = () => {
+    navigate(`/profile/${loggedInUser._id}`);
+    window.location.reload();
+  };
+
   return (
     <FlexBetween
       padding="1rem 6%"
@@ -87,7 +92,7 @@ const Navbar = () => {
             backgroundColor={theme.palette.neutral.light}
             borderRadius="9px"
             gap="2rem"
-            padding="0.5rem 0.8rem"
+            padding="0.5rem 1rem"
           >
             <InputBase
               placeholder="Searching products..."
@@ -175,10 +180,7 @@ const Navbar = () => {
               input={<InputBase />}
             >
               {fullName !== "Guest" ? (
-                <MenuItem
-                  value={fullName}
-                  onClick={() => navigate(`/profile/${loggedInUser._id}`)}
-                >
+                <MenuItem value={fullName} onClick={handleNavigateToProfile}>
                   <Typography>{fullName}</Typography>
                 </MenuItem>
               ) : (
@@ -333,10 +335,7 @@ const Navbar = () => {
                 input={<InputBase />}
               >
                 {fullName !== "Guest" ? (
-                  <MenuItem
-                    value={fullName}
-                    onClick={() => navigate(`/profile/${loggedInUser._id}`)}
-                  >
+                  <MenuItem value={fullName} onClick={handleNavigateToProfile}>
                     <Typography>{fullName}</Typography>
                   </MenuItem>
                 ) : (
