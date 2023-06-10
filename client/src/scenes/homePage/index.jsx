@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "../../state";
 import ProductWidget from "../widgets/ProductWidget";
 import { Box, useMediaQuery } from "@mui/material";
-import { ClipLoader } from "react-spinners";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -13,13 +12,11 @@ const HomePage = () => {
 
   // CSS
   const isDesktop = useMediaQuery("(min-width:1000px)");
-  const [isLoading, setIsLoading] = useState(false);
 
   // Connect to server
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const getProducts = async () => {
-    setIsLoading(true);
     try {
       const res = await fetch(`${rootUrl}products`, {
         method: "GET",
@@ -29,9 +26,7 @@ const HomePage = () => {
       dispatch(setProducts({ products: data }));
     } catch (err) {
       console.log(err);
-    } finally {
-      setIsLoading(false);
-    }
+    } 
   };
 
   useEffect(() => {
@@ -41,11 +36,6 @@ const HomePage = () => {
 
   return (
     <Box m={isDesktop ? "2rem auto" : "1rem auto"} maxWidth="1200px">
-      {isLoading ? (
-        <Box textAlign="center">
-          <ClipLoader />
-        </Box>
-      ) : (
         <Box
           display="grid"
           gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
@@ -77,7 +67,6 @@ const HomePage = () => {
             )
           )}
         </Box>
-      )}
     </Box>
   );
 };

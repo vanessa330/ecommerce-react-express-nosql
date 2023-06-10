@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCart, setItemCount } from "../../state";
+import ProductImage from "../../components/ProductImage";
 import FlexBetween from "../../components/FlexBetween";
 import {
   Box,
@@ -72,17 +73,8 @@ const CartItem = ({
         alignItems={isDesktop ? "center" : "undefined"}
       >
         <Box flexBasis={isDesktop ? "20%" : undefined}>
-          <img
-            width="100%"
-            height={isDesktop ? "130px" : undefined}
-            alt="product"
-            style={{
-              objectFit: "cover",
-              borderRadius: "0.75rem",
-            }}
-            src={`${rootUrl}assets/${picturePath}`}
-            crossOrigin="anonymous"
-          />
+          <ProductImage src={`${rootUrl}assets/${picturePath}`
+        } width="100%" height="auto"/>
         </Box>
 
         <Box

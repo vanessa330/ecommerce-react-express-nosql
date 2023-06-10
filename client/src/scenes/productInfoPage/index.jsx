@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts, setProduct, setCart, setItemCount } from "../../state";
+import ProductImage from "../../components/ProductImage";
 import UserFollowing from "../../components/UserFollowing";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import FlexBetween from "../../components/FlexBetween";
@@ -95,7 +96,7 @@ const ProductInfoPage = () => {
     <Box
       m={isDesktop ? "2rem auto" : "1rem auto"}
       maxWidth="1200px"
-      p={isDesktop ? "1rem 10rem" : "1rem 0"}
+      p={isDesktop ? "1rem 6rem" : "1rem 0"}
     >
       {product ? (
         <WidgetWrapper>
@@ -109,16 +110,10 @@ const ProductInfoPage = () => {
               p={isDesktop ? "2rem" : "1.5rem"}
             >
               {picturePath && (
-                <img
-                  width="100%"
-                  alt="product"
-                  style={{
-                    objectFit: "cover",
-                    borderRadius: "0.75rem",
-                  }}
-                  src={`${rootUrl}assets/${picturePath}`}
-                  crossOrigin="anonymous"
-                />
+                 <ProductImage
+                 src={`${rootUrl}assets/${picturePath}`}
+                 width="100%"
+               />
               )}
             </Box>
 

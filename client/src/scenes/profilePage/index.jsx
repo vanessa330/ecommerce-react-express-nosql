@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, setProducts } from "../../state";
 import UserWidget from "../widgets/UserWidget";
 import ProductWidget from "../widgets/ProductWidget";
 import { Box, useMediaQuery } from "@mui/material";
-import { ClipLoader } from "react-spinners";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -19,7 +18,6 @@ const ProfilePage = () => {
 
   // CSS
   const isDesktop = useMediaQuery("(min-width:1000px)");
-  const [isLoading, setIsLoading] = useState(false);
 
   // Connect to Backend
   const rootUrl = process.env.REACT_APP_SERVER_URL;
@@ -35,7 +33,6 @@ const ProfilePage = () => {
   };
 
   const getUserProducts = async () => {
-    setIsLoading(true);
     try {
       const res = await fetch(`${rootUrl}products/${userId}`, {
         method: "GET",
@@ -46,8 +43,6 @@ const ProfilePage = () => {
       dispatch(setProducts({ products: data }));
     } catch (err) {
       console.log(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -70,16 +65,13 @@ const ProfilePage = () => {
           flexBasis={isDesktop ? "30%" : undefined}
           m={isDesktop ? "2rem" : "1rem"}
         >
-          <UserWidget user={user} picturePath={user.picturePath} />
+          <UserWidget user={user} />
         </Box>
 
         <Box
           flexBasis={isDesktop ? "70%" : undefined}
           m={isDesktop ? "2rem 1rem" : "1rem"}
         >
-          {isLoading ? (
-            <ClipLoader />
-          ) : (
             <Box
               display="grid"
               gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
@@ -111,7 +103,6 @@ const ProfilePage = () => {
                 )
               )}
             </Box>
-          )}
         </Box>
       </Box>
     </Box>

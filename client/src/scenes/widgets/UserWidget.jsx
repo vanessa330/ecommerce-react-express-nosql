@@ -1,22 +1,21 @@
-import { useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../state";
+import { useSelector } from "react-redux";
 import UserFollowing from "../../components/UserFollowing";
 import UserImage from "../../components/UserImage";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import FlexBetween from "../../components/FlexBetween";
 import { Box, Typography, Divider, useTheme } from "@mui/material";
 
-const UserWidget = ({ user, picturePath }) => {
-  const dispatch = useDispatch();
+const UserWidget = ({ user }) => {
   const navigate = useNavigate();
 
-   // Specified user from Redux state
+  // Specified user from Redux state
   const token = useSelector((state) => state.token);
 
   // CSS
   const { palette } = useTheme();
+
+  const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   if (!user) return null;
 
@@ -24,7 +23,7 @@ const UserWidget = ({ user, picturePath }) => {
     <WidgetWrapper>
       <FlexBetween gap="0.5rem" p="1.5rem 0.5rem">
         <FlexBetween gap="1rem">
-          <UserImage image={picturePath} />
+          <UserImage src={`${rootUrl}assets/${user.picturePath}`} />
 
           <Box>
             <Typography

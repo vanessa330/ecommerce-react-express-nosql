@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setProduct } from "../../state";
+import ProductImage from "../../components/ProductImage";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import FlexBetween from "../../components/FlexBetween";
 import { IconButton, Typography, useTheme } from "@mui/material";
@@ -69,16 +70,10 @@ const ProductWidget = ({
       </FlexBetween>
 
       {picturePath && (
-        <img
-          width="100%"
-          height="330px"
-          alt="product"
-          style={{
-            objectFit: "cover",
-            borderRadius: "0.75rem",
-          }}
+        <ProductImage
           src={`${rootUrl}assets/${picturePath}`}
-          crossOrigin="anonymous"
+          width="100%"
+          height="300px"
         />
       )}
 

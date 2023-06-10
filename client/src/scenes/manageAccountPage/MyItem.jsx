@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import ProductImage from "../../components/ProductImage";
 import FlexBetween from "../../components/FlexBetween";
 import {
   Box,
@@ -84,7 +85,12 @@ const MyItem = ({ id, productName, price, description, picturePath }) => {
           alignItems={isDesktop ? "center" : "undefined"}
         >
           <Box flexBasis={isDesktop ? "20%" : undefined}>
-            <img
+            <ProductImage
+              src={`${rootUrl}assets/${picturePath}`}
+              width="100%"
+              height={isDesktop ? "130px" : undefined}
+            />
+            {/* <img
               width="100%"
               height={isDesktop ? "130px" : undefined}
               alt="product"
@@ -94,7 +100,7 @@ const MyItem = ({ id, productName, price, description, picturePath }) => {
               }}
               src={`${rootUrl}assets/${picturePath}`}
               crossOrigin="anonymous"
-            />
+            /> */}
           </Box>
 
           <Box

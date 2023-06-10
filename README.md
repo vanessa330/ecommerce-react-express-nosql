@@ -21,6 +21,7 @@
    - dotenv
    - formik yup 
    - mui/material mui/icons-material
+   - blurhash react-blurhash
 
 
 <br />

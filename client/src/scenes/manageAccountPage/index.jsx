@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setProducts } from "../../state";
@@ -14,7 +14,6 @@ import {
   Divider,
 } from "@mui/material";
 import { AddCircle } from "@mui/icons-material";
-import { ClipLoader } from "react-spinners";
 
 const ManageAccountPage = () => {
   const dispatch = useDispatch();
@@ -29,13 +28,11 @@ const ManageAccountPage = () => {
   // CSS
   const theme = useTheme();
   const isDesktop = useMediaQuery("(min-width:1000px)");
-  const [isLoading, setIsLoading] = useState(false);
 
   // Connect to backend
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const getUserProducts = async () => {
-    setIsLoading(true);
     try {
       const res = await fetch(`${rootUrl}products/${loggedInUser._id}`, {
         method: "GET",
@@ -46,8 +43,6 @@ const ManageAccountPage = () => {
       dispatch(setProducts({ products: data }));
     } catch (err) {
       console.log(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -92,20 +87,16 @@ const ManageAccountPage = () => {
           m={isDesktop ? "1rem 0" : "0.75rem"}
           p={isDesktop ? "1rem" : "1rem 0.5rem"}
         >
-          {isLoading ? (
-            <ClipLoader />
-          ) : (
-            products.map(
-              ({ _id, productName, price, description, picturePath }) => (
-                <MyItem
-                  key={_id}
-                  id={_id}
-                  productName={productName}
-                  price={price}
-                  description={description}
-                  picturePath={picturePath}
-                />
-              )
+          {products.map(
+            ({ _id, productName, price, description, picturePath }) => (
+              <MyItem
+                key={_id}
+                id={_id}
+                productName={productName}
+                price={price}
+                description={description}
+                picturePath={picturePath}
+              />
             )
           )}
         </Box>

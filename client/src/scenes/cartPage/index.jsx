@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCart, setCartToNull, setItemCount } from "../../state";
 import CartItem from "./CartItem";
@@ -12,7 +12,6 @@ import {
   Button,
   useMediaQuery,
 } from "@mui/material";
-import { ClipLoader } from "react-spinners";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -27,13 +26,11 @@ const CartPage = () => {
   // CSS
   const theme = useTheme();
   const isDesktop = useMediaQuery("(min-width:1000px)");
-  const [isLoading, setIsLoading] = useState(false);
 
   // Connect to backend
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const getCart = async () => {
-    setIsLoading(true);
     try {
       const res = await fetch(`${rootUrl}cart/${loggedInUser}`, {
         method: "GET",
@@ -49,9 +46,7 @@ const CartPage = () => {
       }
     } catch (err) {
       console.log(err);
-    } finally {
-      setIsLoading(false);
-    }
+    } 
   };
 
   const checkOut = async () => {
@@ -98,10 +93,7 @@ const CartPage = () => {
 
         <Divider />
 
-        {isLoading ? (
-          <ClipLoader />
-        ) : (
-          cart !== null && (
+         { cart !== null && (
             <Box>
               {items.map(
                 ({
@@ -125,8 +117,7 @@ const CartPage = () => {
                 )
               )}
             </Box>
-          )
-        )}
+          )}
 
         <Box display="flex" justifyContent="right" alignItems="center">
           <FlexBetween padding="1rem 2rem">

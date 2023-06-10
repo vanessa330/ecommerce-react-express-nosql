@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import { Blurhash } from "react-blurhash";
 
-const UserImage = ({ src, size = "60px" }) => {
+const ProductImage = ({ src, width, height }) => {
   const [imageLoading, setImageLoding] = useState(false);
 
   useEffect(() => {
@@ -12,6 +12,7 @@ const UserImage = ({ src, size = "60px" }) => {
     };
 
     img.src = src;
+
   }, [src]);
 
   return (
@@ -19,8 +20,8 @@ const UserImage = ({ src, size = "60px" }) => {
       {!imageLoading && (
         <Blurhash
           hash="L6PZfSi_.AyE_3t7t7R**0o#DgR4"
-          width={size}
-          height={size}
+          width={width}
+          height={height}
           resolutionX={32}
           resolutionY={32}
           punch={1}
@@ -28,10 +29,10 @@ const UserImage = ({ src, size = "60px" }) => {
       )}
       {imageLoading && (
         <img
-          style={{ objectFit: "cover", borderRadius: "50%" }}
-          width={size}
-          height={size}
-          alt="userImage"
+          style={{ objectFit: "cover", borderRadius: "0.75rem" }}
+          width={width}
+          height={height}
+          alt="productImage"
           src={src}
           crossOrigin="anonymous"
         />
@@ -40,4 +41,4 @@ const UserImage = ({ src, size = "60px" }) => {
   );
 };
 
-export default UserImage;
+export default ProductImage;
