@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setCart, setCartToNull, setItemCount } from "../../state";
+import { setCart, setItemCount } from "../../state";
 import CartItem from "./CartItem";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import FlexBetween from "../../components/FlexBetween";
@@ -63,7 +63,7 @@ const CartPage = () => {
       if (res.status === 303) {
         const session = await res.json();
         window.location.href = session.url;
-        setCartToNull();
+        getCart()
       }
     } catch (err) {
       console.log(err);

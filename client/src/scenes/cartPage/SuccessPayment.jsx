@@ -1,4 +1,7 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setCartToNull } from "../../state";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import {
   Button,
@@ -10,9 +13,16 @@ import {
 
 const SuccessPayment = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
   // CSS
   const theme = useTheme();
   const isDesktop = useMediaQuery("(min-width:1000px)");
+
+  useEffect(() => {
+    dispatch(setCartToNull());
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Box
@@ -34,9 +44,7 @@ const SuccessPayment = () => {
           transaction has been successfully processed.
         </Typography>
 
-        <Box m="1rem auto"
-        maxWidth="200px"
-        >
+        <Box m="1rem auto" maxWidth="200px">
           <Button
             sx={{
               p: "1rem",

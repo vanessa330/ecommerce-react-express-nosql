@@ -60,7 +60,7 @@ export const {
   setProductIds,
   setSearchProducts,
   setCart,
-  setCartToNull,
   setItemCount,
+  setCartToNull,
 } = authSlice.actions;
 export default authSlice.reducer;
