@@ -7,7 +7,6 @@ const LoginPage = () => {
   const isDesktop = useMediaQuery("(min-width: 1000px)");
 
   return (
-    <Box>
       <Box
         width={isDesktop ? "70%" : "96%"}
         maxWidth="800px"
@@ -26,7 +25,6 @@ const LoginPage = () => {
 
         <Form />
       </Box>
-    </Box>
   );
 };
 

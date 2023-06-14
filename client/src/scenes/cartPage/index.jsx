@@ -17,10 +17,11 @@ const CartPage = () => {
   const dispatch = useDispatch();
 
   // User details from Redux state
-  const loggedInUser = useSelector((state) => state.loggedInUser._id);
+  const loggedInUserId = useSelector((state) => state.loggedInUser?._id);
 
   // Cart details from Redux state
   const cart = useSelector((state) => state.cart);
+  const cartId = cart ? cart._id : "";
   const items = cart ? Object.values(cart.items) : [];
 
   // CSS
@@ -32,41 +33,40 @@ const CartPage = () => {
 
   const getCart = async () => {
     try {
-      const res = await fetch(`${rootUrl}cart/${loggedInUser}`, {
+      const res = await fetch(`${rootUrl}cart`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: cartId }),
       });
 
       const data = await res.json();
       if (res.status === 200) {
         dispatch(setCart({ cart: data }));
         dispatch(setItemCount({ items: data.items }));
-      } else if (res.status === 400) {
-        console.log(data.error);
       }
     } catch (err) {
       console.log(err);
-    } 
+    }
   };
 
   const checkOut = async () => {
-    const data = { id: cart._id };
-
     try {
       const res = await fetch(`${rootUrl}create-checkout-session`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          id: cart._id,
+          userId: loggedInUserId || "",
+        }),
       });
 
       if (res.status === 303) {
         const session = await res.json();
         window.location.href = session.url;
+        setCartToNull();
       }
     } catch (err) {
       console.log(err);
-    } finally {
-      dispatch(setCartToNull());
     }
   };
 
@@ -78,8 +78,8 @@ const CartPage = () => {
   return (
     <Box
       m={isDesktop ? "2rem auto" : "1rem auto"}
-      maxWidth="1200px"
-      p={isDesktop ? "1rem 10rem" : "1rem 0"}
+      maxWidth="1000px"
+      p={isDesktop ? "1rem 5rem" : "1rem 0"}
     >
       <WidgetWrapper>
         <Typography
@@ -93,70 +93,90 @@ const CartPage = () => {
 
         <Divider />
 
-         { cart !== null && (
+        {items.length === 0 ? (
+          <Typography
+            variant="h5"
+            color={theme.palette.neutral.main}
+            fontWeight="500"
+            padding={isDesktop ? "3rem" : "1rem"}
+            textAlign="center"
+          >
+            Your cart is empty...
+          </Typography>
+        ) : (
+          <>
             <Box>
               {items.map(
                 ({
                   _id,
                   productId,
                   productName,
-                  picturePath,
                   quantity,
                   price,
                   total,
+                  picturePath,
                 }) => (
                   <CartItem
                     key={_id}
                     productId={productId}
                     productName={productName}
-                    picturePath={picturePath}
                     quantity={quantity}
                     price={price}
                     total={total}
+                    picturePath={picturePath}
                   />
                 )
               )}
             </Box>
-          )}
 
-        <Box display="flex" justifyContent="right" alignItems="center">
-          <FlexBetween padding="1rem 2rem">
-            <Typography
-              variant="h3"
-              color={theme.palette.neutral.dark}
-              fontWeight="500"
-              margin={isDesktop ? "2rem" : "1rem"}
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent={isDesktop ? "right" : "center"}
             >
-              Total :
-            </Typography>
-            <Typography
-              variant="h2"
-              color={theme.palette.neutral.dark}
-              fontWeight="500"
-              margin={isDesktop ? "1.5rem" : "1rem"}
-            >
-              HK$ {cart === null ? "0" : `${cart.subTotal}`}
-            </Typography>
-          </FlexBetween>
-        </Box>
+              <FlexBetween padding="1rem 2rem">
+                <Typography
+                  variant="h3"
+                  color={theme.palette.neutral.dark}
+                  fontWeight="500"
+                  margin={isDesktop ? "2rem" : "1rem"}
+                >
+                  Total :
+                </Typography>
+                <Typography
+                  variant="h2"
+                  color={theme.palette.neutral.dark}
+                  fontWeight="500"
+                  margin={isDesktop ? "1.5rem" : "1rem"}
+                >
+                  $ {cart === null ? "0" : `${cart.subTotal.toFixed(2)}`}
+                </Typography>
+              </FlexBetween>
+            </Box>
 
-        <Box display="flex" justifyContent="right" alignItems="center">
-          <FlexBetween padding="1rem 2rem 3rem">
-            <Button
-              fullWidth
-              onClick={checkOut}
-              type="submit"
-              sx={{
-                p: "1rem 8rem",
-                backgroundColor: theme.palette.primary.main,
-                color: theme.palette.background.alt,
-                "&:hover": { color: theme.palette.primary.main },
-              }}
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent={isDesktop ? "right" : "center"}
             >
-              CHECKOUT
-            </Button>
-          </FlexBetween>
-        </Box>
+              <FlexBetween padding="1rem 2rem 3rem">
+                <Button
+                  fullWidth
+                  onClick={checkOut}
+                  type="submit"
+                  sx={{
+                    p: "1rem 8rem",
+                    backgroundColor: theme.palette.primary.main,
+                    color: theme.palette.background.alt,
+                    "&:hover": { color: theme.palette.primary.main },
+                  }}
+                >
+                  CHECKOUT
+                </Button>
+              </FlexBetween>
+            </Box>
+          </>
+        )}
       </WidgetWrapper>
     </Box>
   );

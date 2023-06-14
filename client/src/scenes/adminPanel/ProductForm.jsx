@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Dropzone from "react-dropzone";
-import { useDispatch, useSelector } from "react-redux";
-import { setProducts, setProduct } from "../../state";
+import { useSelector } from "react-redux";
 import FlexBetween from "../../components/FlexBetween";
 import {
   useMediaQuery,
@@ -16,26 +15,22 @@ import {
 import { DeleteOutlined, EditOutlined } from "@mui/icons-material";
 import WidgetWrapper from "../../components/WidgetWrapper";
 
-const ProductFormPage = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+const ProductForm = () => {
   const { productId } = useParams();
+  const navigate = useNavigate();
 
   // User details from Redux state
   const token = useSelector((state) => state.token);
-  const { _id } = useSelector((state) => state.loggedInUser);
+  const loggedInUserId = useSelector((state) => state.loggedInUser._id);
 
-  // Product details from Redux state
-  const product = useSelector((state) =>
-    state.products.find((product) => product._id === productId)
-  );
-  const initialProductName = product?.productName || "";
-  const initialPrice = product?.price || "";
-  const initialDescription = product?.description || "";
-
-  const [newProductName, setNewProductName] = useState(initialProductName);
-  const [newProductPrice, setNewProductPrice] = useState(initialPrice);
-  const [newProductDes, setNewProdcutDes] = useState(initialDescription);
+  // Product details
+  const [product, setProduct] = useState({}); // for editing product
+  const [newProductName, setNewProductName] = useState("");
+  const [newPrice, setNewPrice] = useState("");
+  const [newQuantity, setNewQuantity] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [newCategory, setNewCategory] = useState("");
+  const [newBrand, setNewBrand] = useState("");
   const [newImage, setNewImage] = useState("");
 
   // CSS
@@ -44,70 +39,109 @@ const ProductFormPage = () => {
 
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
-  const createProduct = async () => {
+  const getProduct = async () => {
+    try {
+      const res = await fetch(`${rootUrl}products/${productId}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+
+      if (res.status === 200) {
+        setProduct(data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (productId) {
+      getProduct();
+    }
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    setNewProductName(product.productName || "");
+    setNewPrice(product.price || "");
+    setNewQuantity(product.quantity || "");
+    setNewDescription(product.description || "");
+    setNewCategory(product.category || "");
+    setNewBrand(product.brand || "");
+  }, [product]);
+
+  const addProduct = async () => {
     const formData = new FormData();
-    formData.append("userId", _id);
     formData.append("productName", newProductName);
-    formData.append("price", newProductPrice);
-    formData.append("description", newProductDes);
+    formData.append("price", Number(newPrice));
+    formData.append("quantity", Number(newQuantity));
+    formData.append("description", newDescription);
+    formData.append("category", newCategory);
+    formData.append("brand", newBrand);
     if (newImage) {
-      formData.append("file", newImage); // "file" refer to Backend
+      formData.append("file", newImage);
       formData.append("picturePath", newImage.name);
     }
 
-    const res = await fetch(`${rootUrl}products`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
+    try {
+      const res = await fetch(`${rootUrl}products/${loggedInUserId}`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      await res.json();
 
-    const data = await res.json();
-
-    if (res.status === 201) {
-      dispatch(setProducts({ products: data }));
-      window.alert("You have successfully created a new product.");
-      setNewProductName("");
-      setNewProductPrice("");
-      setNewProdcutDes("");
-      setNewImage("");
-      navigate(`/manage`);
+      if (res.status === 201) {
+        window.alert("You have successfully created a new product.");
+        navigate(`/admin`);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
   const editProduct = async () => {
     const formData = new FormData();
     formData.append("productName", newProductName);
-    formData.append("price", newProductPrice);
-    formData.append("description", newProductDes);
+    formData.append("price", Number(newPrice));
+    formData.append("quantity", Number(newQuantity));
+    formData.append("description", newDescription);
+    formData.append("category", newCategory);
+    formData.append("brand", newBrand);
     if (newImage) {
-      formData.append("file", newImage); // "file" refer to Backend
+      formData.append("file", newImage);
       formData.append("picturePath", newImage.name);
     }
 
-    const res = await fetch(`${rootUrl}products/${productId}/edit`, {
-      method: "PUT",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
+    try {
+      const res = await fetch(
+        `${rootUrl}products/${productId}/edit/${loggedInUserId}`,
+        {
+          method: "PUT",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        }
+      );
+      await res.json();
 
-    const data = await res.json();
-
-    if (res.status === 200) {
-      dispatch(setProduct({ product: data }));
-      window.alert("You have successfully edited the product.");
-      setNewProductName("");
-      setNewProductPrice("");
-      setNewProdcutDes("");
-      setNewImage("");
-      navigate(`/manage`);
+      if (res.status === 200) {
+        window.alert("You have successfully edited the product.");
+        navigate(`/admin`);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
   return (
     <Box
-      m={isDesktop ? "2rem auto" : "1rem auto"}
-      maxWidth="1200px"
-      p={isDesktop ? "1rem 10rem" : "1rem 0"}
+      width={isDesktop ? "80%" : "96%"}
+      maxWidth="1000px"
+      p="2rem"
+      m="2rem auto"
+      borderRadius="1.5rem"
+      backgroundColor={theme.palette.background.alt}
     >
       <WidgetWrapper>
         <Typography
@@ -116,7 +150,7 @@ const ProductFormPage = () => {
           fontWeight="500"
           padding={isDesktop ? "1rem 3rem" : "1rem"}
         >
-          {productId ? "Edit the product :" : "Create a product :"}
+          {!productId ? "Add a product :" : "Edit the product :"}
         </Typography>
 
         <Divider />
@@ -136,8 +170,8 @@ const ProductFormPage = () => {
 
           <TextField
             label="Price"
-            onChange={(e) => setNewProductPrice(e.target.value)}
-            value={newProductPrice}
+            onChange={(e) => setNewPrice(e.target.value)}
+            value={newPrice}
             name="price"
             type="number"
             sx={{
@@ -148,12 +182,49 @@ const ProductFormPage = () => {
           />
 
           <TextField
+            label="Quantity"
+            onChange={(e) => setNewQuantity(e.target.value)}
+            value={newQuantity}
+            name="quantity"
+            type="number"
+            sx={{
+              width: "100%",
+              borderRadius: "2rem",
+              margin: "1rem 0",
+            }}
+          />
+
+          <TextField
             label="Description"
-            onChange={(e) => setNewProdcutDes(e.target.value)}
-            value={newProductDes}
+            onChange={(e) => setNewDescription(e.target.value)}
+            value={newDescription}
             name="description"
             multiline
             rows={4}
+            sx={{
+              width: "100%",
+              borderRadius: "2rem",
+              margin: "1rem 0",
+            }}
+          />
+
+          <TextField
+            label="Category"
+            onChange={(e) => setNewCategory(e.target.value)}
+            value={newCategory}
+            name="category"
+            sx={{
+              width: "100%",
+              borderRadius: "2rem",
+              margin: "1rem 0",
+            }}
+          />
+
+          <TextField
+            label="Brand"
+            onChange={(e) => setNewBrand(e.target.value)}
+            value={newBrand}
+            name="brand"
             sx={{
               width: "100%",
               borderRadius: "2rem",
@@ -221,9 +292,9 @@ const ProductFormPage = () => {
                 color: theme.palette.background.alt,
                 "&:hover": { color: theme.palette.primary.main },
               }}
-              onClick={productId ? editProduct : createProduct}
+              onClick={!productId ? addProduct : editProduct}
             >
-              {productId ? "Save Changes" : "Create Product"}
+              {!productId ? "Add Product" : "Save Changes"}
             </Button>
 
             <Button
@@ -234,7 +305,7 @@ const ProductFormPage = () => {
                 color: theme.palette.background.alt,
                 "&:hover": { color: theme.palette.primary.main },
               }}
-              onClick={() => navigate(`/manage`)}
+              onClick={() => navigate(`/admin`)}
             >
               Cancel
             </Button>
@@ -245,4 +316,4 @@ const ProductFormPage = () => {
   );
 };
 
-export default ProductFormPage;
+export default ProductForm;

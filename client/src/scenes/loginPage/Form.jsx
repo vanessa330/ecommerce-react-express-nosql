@@ -13,8 +13,6 @@ import {
   useTheme,
 } from "@mui/material";
 
-
-
 /* Formik validationSchema settings */
 
 const registerSchema = yup.object().shape({
@@ -35,8 +33,6 @@ const loginSchema = yup.object().shape({
     .required("required"),
 });
 
-
-
 /* Formik initialValues settings */
 
 const initialValuesRegister = {
@@ -51,22 +47,20 @@ const initialValuesLogin = {
   password: "",
 };
 
-
-
 const Form = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // CSS
-  const { palette } = useTheme();
+  const theme = useTheme();
   const isDesktop = useMediaQuery("(min-width:1000px)");
   const [pageType, setPageType] = useState("login");
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
 
-  const rootUrl = process.env.REACT_APP_SERVER_URL;
-
   /* Register Control */
+
+  const rootUrl = process.env.REACT_APP_SERVER_URL;
 
   const register = async (values, onSubmitProps) => {
     try {
@@ -75,7 +69,6 @@ const Form = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
-
       const data = await res.json();
 
       if (res.status === 201) {
@@ -121,12 +114,12 @@ const Form = () => {
 
   return (
     <Formik
+      validationSchema={isLogin ? loginSchema : registerSchema}
+      initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
       onSubmit={async (values, onSubmitProps) => {
         if (isRegister) await register(values, onSubmitProps);
         if (isLogin) await login(values, onSubmitProps);
       }}
-      validationSchema={isLogin ? loginSchema : registerSchema}
-      initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
     >
       {({
         values,
@@ -203,9 +196,9 @@ const Form = () => {
               sx={{
                 m: "2rem 0",
                 p: "1rem",
-                backgroundColor: palette.primary.main,
-                color: palette.background.alt,
-                "&:hover": { color: palette.primary.main },
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.background.alt,
+                "&:hover": { color: theme.palette.primary.main },
               }}
             >
               {isLogin ? "LOGIN" : "REGISTER"}
@@ -218,10 +211,10 @@ const Form = () => {
               }}
               sx={{
                 textDecoration: "underline",
-                color: palette.primary.main,
+                color: theme.palette.primary.main,
                 "&:hover": {
                   cursor: "pointer",
-                  color: palette.primary.light,
+                  color: theme.palette.primary.light,
                 },
               }}
             >

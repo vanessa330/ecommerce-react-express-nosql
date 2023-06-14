@@ -12,12 +12,11 @@ const ProductImage = ({ src, width, height }) => {
     };
 
     img.src = src;
-
   }, [src]);
 
   return (
-    <Box>
-      {!imageLoading && (
+    <>
+      <Box style={{ display: imageLoading ? "none" : "inline" }}>
         <Blurhash
           hash="L6PZfSi_.AyE_3t7t7R**0o#DgR4"
           width={width}
@@ -26,18 +25,20 @@ const ProductImage = ({ src, width, height }) => {
           resolutionY={32}
           punch={1}
         />
-      )}
-      {imageLoading && (
-        <img
-          style={{ objectFit: "cover", borderRadius: "0.75rem" }}
-          width={width}
-          height={height}
-          alt="productImage"
-          src={src}
-          crossOrigin="anonymous"
-        />
-      )}
-    </Box>
+      </Box>
+      <img
+        style={{
+          display: !imageLoading ? "none" : "inline",
+          objectFit: "cover",
+          borderRadius: "0.75rem",
+        }}
+        width={width}
+        height={height}
+        alt="productImage"
+        src={src}
+        crossOrigin="anonymous"
+      />
+    </>
   );
 };
 

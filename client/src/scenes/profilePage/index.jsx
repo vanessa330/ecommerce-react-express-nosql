@@ -1,61 +1,29 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser, setProducts } from "../../state";
-import UserWidget from "../widgets/UserWidget";
-import ProductWidget from "../widgets/ProductWidget";
-import { Box, useMediaQuery } from "@mui/material";
+import { setLogout } from "../../state";
+import UserOrder from "./UserOrder";
+import WidgetWrapper from "../../components/WidgetWrapper";
+import { Box, useMediaQuery, Typography, useTheme } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
-  const { userId } = useParams();
+  const navigate = useNavigate();
 
-  // Specified user from Redux state
-  const user = useSelector((state) => state.user);
-
-  // Products from Redux state []
-  const products = useSelector((state) => state.products);
+  // User details from Redux state
+  const loggedInUser = useSelector((state) => state.loggedInUser);
 
   // CSS
   const isDesktop = useMediaQuery("(min-width:1000px)");
+  const theme = useTheme();
 
   // Connect to Backend
-  const rootUrl = process.env.REACT_APP_SERVER_URL;
+  // const rootUrl = process.env.REACT_APP_SERVER_URL;
 
-  const getUser = async () => {
-    const res = await fetch(`${rootUrl}users/${userId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const data = await res.json();
-    dispatch(setUser({ user: data }));
-  };
-
-  const getUserProducts = async () => {
-    try {
-      const res = await fetch(`${rootUrl}products/${userId}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const data = await res.json();
-      dispatch(setProducts({ products: data }));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    getUser();
-    getUserProducts();
-    // eslint-disable-next-line
-  }, []);
-
-  if (!user) return null;
+  if (!loggedInUser) return null;
 
   return (
-    <Box m={isDesktop ? "2rem auto" : "1rem auto"} maxWidth="1200px">
+    <Box m={isDesktop ? "2rem auto" : "1rem auto"} maxWidth="1000px">
       <Box
         display={isDesktop ? "flex" : "block"}
         justifyContent="center"
@@ -63,46 +31,63 @@ const ProfilePage = () => {
       >
         <Box
           flexBasis={isDesktop ? "30%" : undefined}
-          m={isDesktop ? "2rem" : "1rem"}
+          m={isDesktop ? "2rem 1.5rem" : "1rem"}
         >
-          <UserWidget user={user} />
+          <WidgetWrapper>
+            <Box p="1.5rem 0">
+              <Typography
+                textAlign="center"
+                padding="1rem"
+                variant="h4"
+                color={theme.palette.neutral.dark}
+                fontWeight="500"
+                sx={{
+                  "&:hover": {
+                    color: theme.palette.primary.light,
+                    cursor: "pointer",
+                  },
+                }}
+                onClick={() => navigate(`/profile`)}
+              >
+                My orders
+              </Typography>
+              <Typography
+                textAlign="center"
+                padding="1rem"
+                variant="h4"
+                color={theme.palette.neutral.dark}
+                fontWeight="500"
+              >
+                My address
+              </Typography>
+              <Typography
+                textAlign="center"
+                padding="1rem"
+                variant="h4"
+                color={theme.palette.neutral.dark}
+                fontWeight="500"
+                sx={{
+                  "&:hover": {
+                    color: theme.palette.primary.light,
+                    cursor: "pointer",
+                  },
+                }}
+                onClick={() => {
+                  dispatch(setLogout());
+                  navigate("/");
+                }}
+              >
+                Logout
+              </Typography>
+            </Box>
+          </WidgetWrapper>
         </Box>
 
         <Box
           flexBasis={isDesktop ? "70%" : undefined}
           m={isDesktop ? "2rem 1rem" : "1rem"}
         >
-            <Box
-              display="grid"
-              gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
-              gap="1.8rem"
-            >
-              {products.map(
-                ({
-                  _id,
-                  userId,
-                  firstName,
-                  lastName,
-                  productName,
-                  price,
-                  description,
-                  picturePath,
-                  likes,
-                }) => (
-                  <ProductWidget
-                    key={_id}
-                    id={_id}
-                    userId={userId}
-                    name={`${firstName} ${lastName}`}
-                    productName={productName}
-                    price={price}
-                    description={description}
-                    picturePath={picturePath}
-                    likes={likes}
-                  />
-                )
-              )}
-            </Box>
+          <UserOrder />
         </Box>
       </Box>
     </Box>

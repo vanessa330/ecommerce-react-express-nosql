@@ -10,9 +10,11 @@ const register = async (req, res) => {
       lastName,
       email,
       password,
-      picturePath,
-      followers,
-      following,
+      phone,
+      address,
+      orders,
+      wishlist,
+      role,
     } = req.body;
 
     // 1. Check if the user exists
@@ -30,9 +32,11 @@ const register = async (req, res) => {
       lastName,
       email,
       password: hashed,
-      picturePath: "default_icon.png",
-      followers,
-      following,
+      phone,
+      address,
+      orders,
+      wishlist,
+      role,
     });
 
     await newUser.save();

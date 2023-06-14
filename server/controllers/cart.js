@@ -1,13 +1,13 @@
 const { Item, Cart } = require("../models/Cart");
 const Product = require("../models/Product");
-const User = require("../models/User");
 
 /* CREATE */
 
 const addItemToCart = async (req, res) => {
-  // URL/cart/add/:productId/:userId
+  // URL/cart/add/:productId
   try {
-    const { productId, userId } = req.params;
+    const { productId } = req.params;
+    const { id, userId } = req.body;
     const product = await Product.findById(productId);
 
     const productName = product.productName;
@@ -17,8 +17,11 @@ const addItemToCart = async (req, res) => {
     let total = price * quantity;
 
     // 1. create a new cart schema
-    let cart = await Cart.findOne({ userId });
-    if (!cart) cart = new Cart({ userId });
+    let cart;
+    if (id) cart = await Cart.findById(id);
+    if (!cart) cart = new Cart({
+      userId: userId || "Guest",
+    });
 
     // 2. find the item in Cart schema
     let itemIndex = cart.items.findIndex(
@@ -33,8 +36,8 @@ const addItemToCart = async (req, res) => {
           productName,
           picturePath,
           quantity,
-          price,
-          total,
+          price: parseFloat(price).toFixed(2),
+          total: parseFloat(total).toFixed(2),
         })
       );
     } else {
@@ -42,11 +45,13 @@ const addItemToCart = async (req, res) => {
       cart.items[itemIndex].total += price * quantity;
     }
 
-    cart.subTotal = cart.items.reduce((acc, item) => (acc += item.total), 0);
+    cart.subTotal = cart.items
+      .reduce((acc, item) => (acc += item.total), 0)
+      .toFixed(2);
 
     await cart.save();
 
-    return res.status(201).json(cart.toObject());
+    return res.status(201).json(cart);
   } catch (err) {
     res.status(409).json({ error: err.message });
   }
@@ -55,10 +60,10 @@ const addItemToCart = async (req, res) => {
 /* READ */
 
 const getCart = async (req, res) => {
-  // URL/cart/:userId
+  // URL/cart
   try {
-    const { userId } = req.params;
-    const cart = await Cart.findOne({ userId });
+    const { id } = req.body;
+    const cart = await Cart.findById(id);
 
     if (!cart)
       return res
@@ -74,11 +79,11 @@ const getCart = async (req, res) => {
 /* UPDATE */
 
 const subtractItem = async (req, res) => {
-  // URL/subtract/:productId/:userId
+  // URL/subtract/:productId
   try {
-    const { productId, userId } = req.params;
-
-    const cart = await Cart.findOne({ userId });
+    const { productId } = req.params;
+    const { id } = req.body;
+    const cart = await Cart.findById(id);
 
     const item = cart.items.find(
       (item) => item.productId.toString() === productId
@@ -96,7 +101,9 @@ const subtractItem = async (req, res) => {
       item.total = item.price * item.quantity;
     }
 
-    cart.subTotal = cart.items.reduce((acc, item) => acc + item.total, 0);
+    cart.subTotal = cart.items
+      .reduce((acc, item) => acc + item.total, 0)
+      .toFixed(2);
 
     await cart.save();
 

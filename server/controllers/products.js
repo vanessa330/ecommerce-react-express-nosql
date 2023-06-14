@@ -3,30 +3,43 @@ const User = require("../models/User");
 
 /* CREATE */
 
-const createProduct = async (req, res) => {
-  // URL/products
+const addProduct = async (req, res) => {
+  // URL/products/:adminId
   try {
-    // req.file
-    const { userId, productName, price, description, picturePath } = req.body;
-    const user = await User.findById(userId);
+    const { adminId } = req.params;
+    const admin = await User.findById(adminId);
+    if (admin.role !== "admin")
+      return res.status(404).json({ error: "You do not have permission." });
 
-    const newProduct = new Product({
-      userId,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      userPicturePath: user.picturePath,
+    const {
       productName,
       price,
+      quantity,
+      description,
+      picturePath, // req.file
+      category,
+      brand,
+      likes,
+      reviews,
+    } = req.body;
+
+    const newProduct = new Product({
+      productName,
+      price: parseFloat(price).toFixed(2),
+      quantity: parseInt(quantity).toFixed(0),
       description,
       picturePath,
+      category,
+      brand,
       likes: {},
+      reviews,
     });
 
     await newProduct.save();
 
-    const products = await Product.find().sort({ updatedAt: -1 });
+    const savedProduct = await Product.findById(newProduct._id);
 
-    res.status(201).json(products);
+    res.status(201).json(savedProduct);
   } catch (err) {
     res.status(409).json({ error: err.message });
   }
@@ -34,25 +47,26 @@ const createProduct = async (req, res) => {
 
 /* READ */
 
-const getProducts = async (req, res) => {
+const getProductIds = async (req, res) => {
   // URL/products
   try {
     const products = await Product.find().sort({ updatedAt: -1 });
 
-    res.status(200).json(products);
+    const productIds = products.map((p) => p._id);
+
+    res.status(200).json(productIds);
   } catch (err) {
     res.status(404).json({ error: err.message });
   }
 };
 
-const getUserProducts = async (req, res) => {
-  // URL/products/:userId
+const getProduct = async (req, res) => {
+  // URL/products/:id
   try {
-    const { userId } = req.params;
+    const { id } = req.params;
+    const product = await Product.findById(id);
 
-    const products = await Product.find({ userId }).sort({ updatedAt: -1 });
-
-    res.status(200).json(products);
+    res.status(200).json(product);
   } catch (err) {
     res.status(404).json({ error: err.message });
   }
@@ -65,7 +79,7 @@ const searchProducts = async (req, res) => {
     const regexString = query.replace(/\s+/g, "\\s+"); // Replace spaces with pattern that matches any white space character
     const regex = new RegExp(regexString, "i"); // "i" ignore the uppercase or lowercase
 
-    const searchProducts = await Product.find({ productName: regex });
+    const searchProducts = await Product.find({ productName: regex }).limit(8);
 
     res.status(200).json(searchProducts);
   } catch (err) {
@@ -76,22 +90,38 @@ const searchProducts = async (req, res) => {
 /* UPDATE */
 
 const editProduct = async (req, res) => {
-  // URL/products/:id/edit
+  // URL/products/:id/edit/:adminId
   try {
-    const { id } = req.params;
-    const { productName, price, description, picturePath } = req.body;
+    const { id, adminId } = req.params;
+    const {
+      productName,
+      price,
+      quantity,
+      description,
+      picturePath,
+      category,
+      brand,
+    } = req.body;
+
+    const admin = await User.findById(adminId);
+
+    if (admin.role !== "admin")
+      return res.status(404).json({ error: "You do not have permission." });
 
     const updatedProduct = await Product.findOneAndUpdate(
       { _id: id },
       {
         $set: {
           productName: productName,
-          price: price,
+          price,
+          quantity: quantity,
           description: description,
           picturePath: picturePath,
+          category: category,
+          brand: brand,
         },
       },
-      { returnNewDocument: true }
+      { new: true }
     );
 
     res.status(200).json(updatedProduct);
@@ -104,20 +134,18 @@ const likeProdcut = async (req, res) => {
   // URL/products/:id/like
   try {
     const { id } = req.params;
-    const guestOrUserId =
-      req.body.userId || Math.floor(Math.random() * 10000000).toString();
+    const { userId } = req.body;
+
+    const user = await User.findById(userId);
     const product = await Product.findById(id);
-    const isLiked = product.likes.get(guestOrUserId);
+    const isLiked = product.likes.get(userId);
 
-    if (!product) {
-      return res.status(404).send({ error: "Product not found" });
-    }
-
-    // Check the userId is already exists
     if (isLiked) {
-      product.likes.delete(guestOrUserId);
+      product.likes.delete(userId);
+      user.wishlist = user.wishlist.filter((p) => p !== id);
     } else {
-      product.likes.set(guestOrUserId, true);
+      product.likes.set(userId, true);
+      user.wishlist.push(id);
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(
@@ -126,7 +154,13 @@ const likeProdcut = async (req, res) => {
       { new: true }
     );
 
-    res.status(200).json(updatedProduct);
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { wishlist: user.wishlist },
+      { new: true }
+    );
+
+    res.status(200).json({ updatedProduct, updatedUser });
   } catch (err) {
     res.status(409).json({ error: err.message });
   }
@@ -135,11 +169,15 @@ const likeProdcut = async (req, res) => {
 /* DELETE */
 
 const deleteProduct = async (req, res) => {
-  // URL/products/:id/delete
+  // URL/products/:id/delete/:adminId
   try {
-    const { id } = req.params;
+    const { id, adminId } = req.params;
 
     const deletedProduct = await Product.findByIdAndDelete(id);
+    const admin = await User.findById(adminId);
+
+    if (admin.role !== "admin")
+      return res.status(404).json({ error: "You do not have permission." });
 
     if (!deletedProduct) {
       return res.status(404).json({ error: "Product not found" });
@@ -152,9 +190,9 @@ const deleteProduct = async (req, res) => {
 };
 
 module.exports = {
-  createProduct,
-  getProducts,
-  getUserProducts,
+  addProduct,
+  getProductIds,
+  getProduct,
   searchProducts,
   editProduct,
   likeProdcut,

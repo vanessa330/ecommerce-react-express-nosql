@@ -4,12 +4,12 @@ const { addItemToCart, getCart, subtractItem } = require("../controllers/cart");
 const router = express.Router();
 
 /* CREATE */
-router.post("/add/:productId/:userId", addItemToCart);
+router.post("/add/:productId", addItemToCart);
 
 /* READ */
-router.get("/:userId", getCart);
+router.get("/", getCart);
 
 /* UPDATE */
-router.patch("/subtract/:productId/:userId", subtractItem);
+router.patch("/subtract/:productId", subtractItem);
 
 module.exports = router;

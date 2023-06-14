@@ -7,12 +7,13 @@ const morgan = require("morgan");
 const path = require("path");
 const multer = require("multer");
 const Stripe = require("stripe");
-const { Cart } = require("./models/Cart");
+const { Cart, Order } = require("./models/Cart");
+const User = require("./models/User");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const productRoutes = require("./routes/product");
 const cartRoutes = require("./routes/cart");
-const { createProduct, editProduct } = require("./controllers/products");
+const { addProduct, editProduct } = require("./controllers/products");
 const { verifyToken } = require("./middleware/auth");
 const { searchProducts } = require("./controllers/products");
 
@@ -51,11 +52,16 @@ const upload = multer({ storage });
 
 /* ROUTES */
 
-app.post("/products", verifyToken, upload.single("file"), createProduct);
-app.put("/products/:id/edit", verifyToken, upload.single("file"), editProduct);
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/products", productRoutes);
+app.post("/products/:adminId", verifyToken, upload.single("file"), addProduct);
+app.put(
+  "/products/:id/edit/:adminId",
+  verifyToken,
+  upload.single("file"),
+  editProduct
+);
 app.get("/search", searchProducts);
 app.use("/cart", cartRoutes);
 
@@ -63,10 +69,11 @@ app.use("/cart", cartRoutes);
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-app.post("/create-checkout-session", async (req, res) => {
+app.post(`/create-checkout-session`, async (req, res) => {
   const { id } = req.body;
   const cart = await Cart.findById(id);
   const items = cart.items;
+
   try {
     const lineItems = items.map((item) => {
       return {
@@ -75,7 +82,7 @@ app.post("/create-checkout-session", async (req, res) => {
           product_data: {
             name: item.productName,
           },
-          unit_amount: item.price * 100,
+          unit_amount: Math.round(item.price * 100),
         },
         quantity: item.quantity,
       };
@@ -83,10 +90,12 @@ app.post("/create-checkout-session", async (req, res) => {
 
     const session = await stripe.checkout.sessions.create({
       client_reference_id: id,
+      // customer_email: userEmail,
+      // billing_address_collection: "required",
       payment_method_types: ["card"],
       mode: "payment",
       line_items: lineItems,
-      success_url: `${process.env.CLIENT_URL}/success`,
+      success_url: `${process.env.CLIENT_URL}/cart/success`,
       cancel_url: `${process.env.CLIENT_URL}/cart`,
     });
 
@@ -102,12 +111,20 @@ app.post("/create-checkout-session", async (req, res) => {
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const fulfillOrder = async (session) => {
-  const id = session.client_reference_id;
+  const { id } = session.client_reference_id; // cart id
 
   try {
-    // handel delete the cart and add an Order schema...
-    // await Cart.findOneAndUpdate({ _id: id }, { status: "processing" });
-    await Cart.deleteOne({ _id: id });
+    const cart = await Cart.findById(id);
+
+    const newOrder = new Order({
+      userId: cart.userId,
+      items: cart.items,
+      subTotal: cart.subTotal,
+      status: "processing",
+    });
+
+    await newOrder.save();
+    await cart.deleteOne({ _id: id });
   } catch (err) {
     console.error(err);
   }

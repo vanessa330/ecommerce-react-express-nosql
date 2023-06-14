@@ -26,20 +26,32 @@ const UserSchema = mongoose.Schema(
       required: true,
       min: 6,
     },
-    picturePath: {
+    phone: {
       type: String,
-      default: "",
+      min: 10,
+      max: 15,
     },
-    followers: {
-      type: Array,
-      default: [],
+    address: {
+      street: String,
+      city: String,
+      state: String,
+      country: String,
+      zip: String,
     },
-    following: {
-      type: Array,
-      default: [],
+    orders: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
+    wishlist: [],
+    role: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
     },
   },
-  { timestamps: true } 
+  { timestamps: true }
 );
 
 const User = mongoose.model("User", UserSchema);

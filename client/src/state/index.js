@@ -7,11 +7,10 @@ const initialState = {
   mode: "light",
   token: null,
   loggedInUser: null,
-  user: null,
-  products: [],
-  searchProducts: [],
+  productIds: [],
   cart: null,
   itemCount: 0,
+  searchProducts: [],
 };
 
 // useDispatch()
@@ -30,21 +29,8 @@ export const authSlice = createSlice({
       state.token = null;
       state.loggedInUser = null;
     },
-    setLoggedInUser: (state, action) => {
-      state.loggedInUser = action.payload.loggedInUser;
-    },
-    setUser: (state, action) => {
-      state.user = action.payload.user;
-    },
-    setProducts: (state, action) => {
-      state.products = action.payload.products;
-    },
-    setProduct: (state, action) => {
-      const updatedProducts = state.products.map((p) => {
-        if (p._id === action.payload.product._id) return action.payload.product;
-        return p;
-      });
-      state.products = updatedProducts;
+    setProductIds: (state, action) => {
+      state.productIds = action.payload.productIds;
     },
     setSearchProducts: (state, action) => {
       state.searchProducts = action.payload.searchProducts;
@@ -71,10 +57,7 @@ export const {
   setMode,
   setLogin,
   setLogout,
-  setLoggedInUser,
-  setUser,
-  setProducts,
-  setProduct,
+  setProductIds,
   setSearchProducts,
   setCart,
   setCartToNull,

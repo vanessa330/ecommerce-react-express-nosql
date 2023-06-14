@@ -17,7 +17,7 @@ const SuccessPayment = () => {
   return (
     <Box
       m={isDesktop ? "2rem auto" : "1rem auto"}
-      maxWidth="1200px"
+      maxWidth="1000px"
       p={isDesktop ? "1rem 10rem" : "1rem 0"}
     >
       <WidgetWrapper>
