@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 
 const SearchPage = () => {
-
   // Search Products from Redux state
   const searchProducts = useSelector((state) => state.searchProducts);
 
@@ -41,8 +40,15 @@ const SearchPage = () => {
           gap="2rem"
           m="2rem auto"
         >
-          {searchProducts.map(({ _id }) => (
-            <ProductWidget key={_id} id={_id} />
+          {searchProducts.map((product) => (
+            <ProductWidget
+              key={product._id}
+              id={product._id}
+              productName={product.productName}
+              price={product.price}
+              quantity={product.quantity}
+              picturePath={product.picturePath}
+            />
           ))}
         </Box>
       )}

@@ -1,4 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import ProductWidget from "../../components/ProductWidget";
 import {
   Box,
@@ -9,17 +10,42 @@ import {
 } from "@mui/material";
 
 const WishlistPage = () => {
-  const dispatch = useDispatch();
+  const [products, setProduct] = useState([]);
 
   // Products from Redux state []
-  const wishlist = useSelector((state) => state.loggedInUser?.wishlist);
+  const loggedInUserId = useSelector((state) => state.loggedInUser?._id);
+  const [wishlist, setWishlist] = useState([]);
+
+
 
   // CSS
   const theme = useTheme();
   const isDesktop = useMediaQuery("(min-width:1000px)");
 
   // Connect to server
-  //   const rootUrl = process.env.REACT_APP_SERVER_URL;
+  const rootUrl = process.env.REACT_APP_SERVER_URL;
+
+  const getProducts = async () => {
+    try {
+      const res = await fetch(`${rootUrl}products`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+
+      if (res.status === 200) {
+        setProduct(data);
+        console.log(products);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getProducts();
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Box
@@ -36,8 +62,7 @@ const WishlistPage = () => {
         My Wishlist :
       </Typography>
 
-      <Divider
-      />
+      <Divider />
 
       {!wishlist ? (
         <Typography
@@ -56,8 +81,15 @@ const WishlistPage = () => {
           gap="2rem"
           m={isDesktop ? "1rem 0.5rem" : "0.8rem"}
         >
-          {wishlist?.map((id) => (
-            <ProductWidget key={id} id={id} />
+          {wishlist?.map((product) => (
+            <ProductWidget
+              key={product._id}
+              id={product._id}
+              productName={product.productName}
+              price={product.price}
+              quantity={product.quantity}
+              picturePath={product.picturePath}
+            />
           ))}
         </Box>
       )}

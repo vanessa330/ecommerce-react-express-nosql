@@ -40,7 +40,7 @@ const AdminPanel = () => {
   // Connect to server
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
-  const getProductIds = async () => {
+  const getProducts = async () => {
     try {
       const res = await fetch(`${rootUrl}products`, {
         method: "GET",
@@ -49,28 +49,7 @@ const AdminPanel = () => {
       const data = await res.json();
 
       if (res.status === 200) {
-        dispatch(setProductIds({ productIds: data }));
-
-        const formattedData = await Promise.all(
-          data.map(async (id) => {
-            try {
-              const res = await fetch(`${rootUrl}products/${id}`, {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-              });
-              const data = await res.json();
-
-              if (res.status === 200) {
-                const { _id, productName, price, quantity, category, brand } =
-                  data;
-                return { id, productName, price, quantity, category, brand };
-              }
-            } catch (err) {
-              console.log(err);
-            }
-          })
-        );
-        setProductsDetails(formattedData);
+        setProductsDetails(data);
       }
     } catch (err) {
       console.log(err);
@@ -78,7 +57,7 @@ const AdminPanel = () => {
   };
 
   useEffect(() => {
-    getProductIds();
+    getProducts();
     // eslint-disable-next-line
   }, []);
 
@@ -153,7 +132,7 @@ const AdminPanel = () => {
                     }
                   );
                   if (res.status === 200) {
-                    getProductIds();
+                    getProducts();
                     setDeleteMsg(true);
                   }
                 }}

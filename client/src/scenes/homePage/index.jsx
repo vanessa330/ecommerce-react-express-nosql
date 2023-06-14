@@ -1,14 +1,10 @@
+import { useState } from "react";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setProductIds } from "../../state";
 import ProductWidget from "../../components/ProductWidget";
 import { Box, useMediaQuery } from "@mui/material";
 
 const HomePage = () => {
-  const dispatch = useDispatch();
-
-  // Products from Redux state []
-  const productIds = useSelector((state) => state.productIds);
+  const [products, setProduct] = useState([]);
 
   // CSS
   const isDesktop = useMediaQuery("(min-width:1000px)");
@@ -16,7 +12,7 @@ const HomePage = () => {
   // Connect to server
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
-  const getProductIds = async () => {
+  const getProducts = async () => {
     try {
       const res = await fetch(`${rootUrl}products`, {
         method: "GET",
@@ -25,7 +21,7 @@ const HomePage = () => {
       const data = await res.json();
 
       if (res.status === 200) {
-        dispatch(setProductIds({ productIds: data }));
+        setProduct(data);
       }
     } catch (err) {
       console.log(err);
@@ -33,7 +29,7 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    getProductIds();
+    getProducts();
     // eslint-disable-next-line
   }, []);
 
@@ -45,8 +41,15 @@ const HomePage = () => {
         gap="2rem"
         m={isDesktop ? "0 0.5rem" : "0.8rem"}
       >
-        {productIds.map((id) => (
-          <ProductWidget key={id} id={id} />
+        {products.map((product) => (
+          <ProductWidget
+            key={product._id}
+            id={product._id}
+            productName={product.productName}
+            price={product.price}
+            quantity={product.quantity}
+            picturePath={product.picturePath}
+          />
         ))}
       </Box>
     </Box>

@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Product = require("../models/Product");
 
 /* READ */
 
@@ -29,10 +30,23 @@ const getUserWishlist = async (req, res) => {
   // URL/users/:id/wishlist
   try {
     const { id } = req.params;
+    const user = await User.findById(id);
+    const wishlist = user.wishlist;
 
-    const user = await User.findById(id).populate("wishlist");
+    const products = await Promise.all(
+      wishlist.map(async (productId) => {
+        const product = await Product.findById(productId);
+        return {
+          _id: product._id,
+          productName: product.productName,
+          price: product.price,
+          quantity: product.quantity,
+          picturePath: product.picturePath,
+        };
+      })
+    );
 
-    res.status(200).json(user.wishlist);
+    res.status(200).json(products);
   } catch (err) {
     res.status(404).send({ message: err.message });
   }

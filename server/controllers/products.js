@@ -47,14 +47,12 @@ const addProduct = async (req, res) => {
 
 /* READ */
 
-const getProductIds = async (req, res) => {
+const getProducts = async (req, res) => {
   // URL/products
   try {
-    const products = await Product.find().sort({ updatedAt: -1 });
+    const products = await Product.find().sort({ updatedAt: -1 }).limit(8);
 
-    const productIds = products.map((p) => p._id);
-
-    res.status(200).json(productIds);
+    res.status(200).json(products);
   } catch (err) {
     res.status(404).json({ error: err.message });
   }
@@ -191,7 +189,7 @@ const deleteProduct = async (req, res) => {
 
 module.exports = {
   addProduct,
-  getProductIds,
+  getProducts,
   getProduct,
   searchProducts,
   editProduct,

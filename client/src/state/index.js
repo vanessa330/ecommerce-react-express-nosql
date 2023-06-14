@@ -7,7 +7,6 @@ const initialState = {
   mode: "light",
   token: null,
   loggedInUser: null,
-  productIds: [],
   cart: null,
   itemCount: 0,
   searchProducts: [],
@@ -28,9 +27,6 @@ export const authSlice = createSlice({
     setLogout: (state) => {
       state.token = null;
       state.loggedInUser = null;
-    },
-    setProductIds: (state, action) => {
-      state.productIds = action.payload.productIds;
     },
     setSearchProducts: (state, action) => {
       state.searchProducts = action.payload.searchProducts;
@@ -57,7 +53,6 @@ export const {
   setMode,
   setLogin,
   setLogout,
-  setProductIds,
   setSearchProducts,
   setCart,
   setItemCount,

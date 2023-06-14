@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-  getProductIds,
+  getProducts,
   getProduct,
   likeProdcut,
   deleteProduct,
@@ -13,7 +13,7 @@ const router = express.Router();
 // router.post("/", verifyToken, upload.single("file"), addProduct);
 
 /* READ */
-router.get("/", getProductIds);
+router.get("/", getProducts);
 router.get("/:id", getProduct);
 
 /* UPDATE */
