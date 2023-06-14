@@ -160,7 +160,7 @@ app.post(
       }
     }
 
-    res.status(200).json({ received: true }).end();
+    res.status(200).json(event.data.object).end();
   }
 );
 
