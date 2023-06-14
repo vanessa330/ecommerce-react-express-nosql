@@ -111,15 +111,15 @@ app.post(`/create-checkout-session`, async (req, res) => {
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const fulfillOrder = async (session) => {
-  const { id } = session.client_reference_id; // cart id
+  const id = session.client_reference_id; // cart id
 
   try {
     const cart = await Cart.findById(id);
 
     const newOrder = new Order({
-      userId: cart.userId,
-      items: cart.items,
-      subTotal: cart.subTotal,
+      userId: cart?.userId || "Guest",
+      items: cart?.items,
+      subTotal: cart?.subTotal,
       status: "processing",
     });
 

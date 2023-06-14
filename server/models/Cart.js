@@ -44,10 +44,7 @@ const CartSchema = mongoose.Schema(
 
 const OrderSchema = mongoose.Schema(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
+    userId: String, // or Guest
     items: [ItemSchema],
     subTotal: {
       type: Number,
