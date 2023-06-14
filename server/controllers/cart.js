@@ -7,7 +7,7 @@ const addItemToCart = async (req, res) => {
   // URL/cart/add/:productId
   try {
     const { productId } = req.params;
-    const { id, userId } = req.body;
+    const { id } = req.body; // cart id
     const product = await Product.findById(productId);
 
     const productName = product.productName;
@@ -18,10 +18,12 @@ const addItemToCart = async (req, res) => {
 
     // 1. create a new cart schema
     let cart;
-    if (id) cart = await Cart.findById(id);
-    if (!cart) cart = new Cart({
-      userId: userId || "Guest",
-    });
+
+    if (id) {
+      cart = await Cart.findById(id);
+    } else {
+      cart = new Cart();
+    }
 
     // 2. find the item in Cart schema
     let itemIndex = cart.items.findIndex(
@@ -51,7 +53,7 @@ const addItemToCart = async (req, res) => {
 
     await cart.save();
 
-    return res.status(201).json(cart);
+    res.status(201).json(cart);
   } catch (err) {
     res.status(409).json({ error: err.message });
   }
@@ -60,9 +62,9 @@ const addItemToCart = async (req, res) => {
 /* READ */
 
 const getCart = async (req, res) => {
-  // URL/cart
+  // URL/cart/:id?
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     const cart = await Cart.findById(id);
 
     if (!cart)
@@ -70,7 +72,7 @@ const getCart = async (req, res) => {
         .status(400)
         .send({ error: "There are no products in the cart." });
 
-    res.status(200).json(cart.toObject());
+    res.status(200).json(cart);
   } catch (err) {
     res.status(404).json({ error: err.message });
   }
@@ -107,10 +109,40 @@ const subtractItem = async (req, res) => {
 
     await cart.save();
 
-    return res.status(200).json(cart.toObject());
+    res.status(200).json(cart.toObject());
   } catch (err) {
     res.status(409).json({ error: err.message });
   }
 };
 
-module.exports = { addItemToCart, getCart, subtractItem };
+const updatedCartUserId = async (req, res) => {
+  // URL/cart/:id?
+  try {
+    const { id } = req.params;
+    const { userId } = req.body;
+    let cart = await Cart.findById(id);
+
+    if (!cart)
+      return res
+        .status(400)
+        .send({ error: "There are no products in the cart." });
+
+    if (userId) {
+      cart = await Cart.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: {
+            userId: userId,
+          },
+        },
+        { new: true }
+      );
+    }
+
+    res.status(200).json(cart);
+  } catch (err) {
+    res.status(409).json({ error: err.message });
+  }
+};
+
+module.exports = { addItemToCart, getCart, subtractItem, updatedCartUserId };

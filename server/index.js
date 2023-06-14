@@ -6,9 +6,9 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const path = require("path");
 const multer = require("multer");
+const ejs = require("ejs");
 const Stripe = require("stripe");
 const { Cart, Order } = require("./models/Cart");
-const User = require("./models/User");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const productRoutes = require("./routes/product");
@@ -21,6 +21,7 @@ const { searchProducts } = require("./controllers/products");
 
 dotenv.config();
 const app = express();
+app.set("view engine", "ejs");
 app.use((req, res, next) => {
   if (req.originalUrl === "/webhook") {
     next();
@@ -34,34 +35,27 @@ app.use(
     origin: [process.env.CLIENT_URL, "https://checkout.stripe.com"],
   })
 );
-app.use("/assets", express.static(path.join("public/assets")));
+app.use(express.static("./public"));
 app.use(helmet()); // HTTP header for safty.
 app.use(morgan("tiny")); // log HTTP requests
 
 /* MIDDLEWARE FILE UPLOAD STORAGE */
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/assets");
-  },
+  destination: "./public/assets",
   filename: function (req, file, cb) {
     cb(null, file.originalname);
   },
 });
-const upload = multer({ storage });
+const upload = multer({ storage: storage }).single("file");
 
 /* ROUTES */
 
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/products", productRoutes);
-app.post("/products/:adminId", verifyToken, upload.single("file"), addProduct);
-app.put(
-  "/products/:id/edit/:adminId",
-  verifyToken,
-  upload.single("file"),
-  editProduct
-);
+app.post("/products/:adminId", verifyToken, upload, addProduct);
+app.put("/products/:id/edit/:adminId", verifyToken, upload, editProduct);
 app.get("/search", searchProducts);
 app.use("/cart", cartRoutes);
 
@@ -117,7 +111,7 @@ const fulfillOrder = async (session) => {
     const cart = await Cart.findById(id);
 
     const newOrder = new Order({
-      userId: cart?.userId || "Guest",
+      userId: cart?.userId,
       items: cart?.items,
       subTotal: cart?.subTotal,
       status: "processing",

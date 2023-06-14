@@ -168,6 +168,12 @@ const Navbar = () => {
                   <>
                     {role === "admin" && (
                       <Typography
+                        sx={{
+                          "&:hover": {
+                            color: theme.palette.primary.light,
+                            cursor: "pointer",
+                          },
+                        }}
                         onClick={() => {
                           setIsMobileMenuToggled(false);
                           navigate("/admin");
@@ -177,6 +183,12 @@ const Navbar = () => {
                       </Typography>
                     )}
                     <Typography
+                      sx={{
+                        "&:hover": {
+                          color: theme.palette.primary.light,
+                          cursor: "pointer",
+                        },
+                      }}
                       onClick={() => {
                         dispatch(setLogout());
                         setIsMobileMenuToggled(false);

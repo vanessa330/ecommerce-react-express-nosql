@@ -33,10 +33,27 @@ const CartPage = () => {
 
   const getCart = async () => {
     try {
-      const res = await fetch(`${rootUrl}cart`, {
+      const res = await fetch(`${rootUrl}cart/${cartId}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: cartId }),
+      });
+
+      const data = await res.json();
+      if (res.status === 200) {
+        dispatch(setCart({ cart: data }));
+        dispatch(setItemCount({ items: data.items }));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const updatedCartUserId = async () => {
+    try {
+      const res = await fetch(`${rootUrl}cart/${cartId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: loggedInUserId }),
       });
 
       const data = await res.json();
@@ -63,7 +80,7 @@ const CartPage = () => {
       if (res.status === 303) {
         const session = await res.json();
         window.location.href = session.url;
-        getCart()
+        getCart();
       }
     } catch (err) {
       console.log(err);
@@ -72,6 +89,7 @@ const CartPage = () => {
 
   useEffect(() => {
     getCart();
+    if (loggedInUserId) updatedCartUserId();
     // eslint-disable-next-line
   }, []);
 
@@ -106,27 +124,17 @@ const CartPage = () => {
         ) : (
           <>
             <Box>
-              {items.map(
-                ({
-                  _id,
-                  productId,
-                  productName,
-                  quantity,
-                  price,
-                  total,
-                  picturePath,
-                }) => (
-                  <CartItem
-                    key={_id}
-                    productId={productId}
-                    productName={productName}
-                    quantity={quantity}
-                    price={price}
-                    total={total}
-                    picturePath={picturePath}
-                  />
-                )
-              )}
+              {items.map((item) => (
+                <CartItem
+                  key={item._id}
+                  productId={item.productId}
+                  productName={item.productName}
+                  quantity={item.quantity}
+                  price={item.price}
+                  total={item.total}
+                  picturePath={item.picturePath}
+                />
+              ))}
             </Box>
 
             <Box

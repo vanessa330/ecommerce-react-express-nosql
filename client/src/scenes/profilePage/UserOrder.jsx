@@ -1,62 +1,125 @@
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setCart, setItemCount } from "../../state";
-import ProductImage from "../../components/ProductImage";
 import FlexBetween from "../../components/FlexBetween";
+import WidgetWrapper from "../../components/WidgetWrapper";
 import {
   Box,
-  IconButton,
   Typography,
   useTheme,
   useMediaQuery,
+  Divider,
 } from "@mui/material";
-import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
 
-const UserOrder = ({}) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  // User details from Redux state
-  const loggedInUserId = useSelector((state) => state.loggedInUser._id);
-
-  // Order details
-
+const UserOrder = ({ id, items, subTotal, status }) => {
   // CSS
   const theme = useTheme();
   const isDesktop = useMediaQuery("(min-width:1000px)");
 
-  // Connect to backend
-  const rootUrl = process.env.REACT_APP_SERVER_URL;
-
   return (
-    <Box
-      p="1rem 2rem"
-      display={isDesktop ? "flex" : "block"}
-      justifyContent={isDesktop ? "space-between" : "undefined"}
-      alignItems={isDesktop ? "center" : "undefined"}
-    >
-      <Box
-        flexBasis={isDesktop ? "45%" : undefined}
-        m={isDesktop ? "1rem" : "1rem"}
-      >
+    <WidgetWrapper p="1rem 2rem">
+      <FlexBetween>
         <Typography
           variant="h4"
           color={theme.palette.neutral.dark}
           fontWeight="500"
-          paddingBottom="0.8rem"
-          sx={{
-            "&:hover": {
-              color: theme.palette.primary.light,
-              cursor: "pointer",
-            },
-          }}
+          padding="0.5rem"
         >
-          User order
+          Ref No :
         </Typography>
- 
+        <Typography
+          variant="h5"
+          color={theme.palette.neutral.main}
+          fontWeight="500"
+          padding="0.5rem"
+        >
+          {id}
+        </Typography>
+      </FlexBetween>
+
+      <FlexBetween>
+        <Typography
+          variant="h4"
+          color={theme.palette.neutral.dark}
+          fontWeight="500"
+          padding="0.5rem"
+        >
+          Status :
+        </Typography>
+        <Typography
+          variant="h5"
+          color={theme.palette.neutral.main}
+          fontWeight="500"
+          padding="0.5rem"
+        >
+          {status.charAt(0).toUpperCase() + status.slice(1)}
+        </Typography>
+      </FlexBetween>
+
+      <Box>
+        <Typography
+          variant="h4"
+          color={theme.palette.neutral.dark}
+          fontWeight="500"
+          padding="0.5rem"
+        >
+          Items :
+        </Typography>
+        {items.map(({ productId, productName, quantity, price }) => (
+          <Box key={productId}>
+            <FlexBetween>
+              <Typography
+                variant="h5"
+                color={theme.palette.neutral.main}
+                fontWeight="500"
+                padding="0.5rem"
+                paddingLeft="1rem"
+              >
+                {productName}
+              </Typography>
+
+              <Typography
+                variant="h5"
+                color={theme.palette.neutral.main}
+                fontWeight="500"
+                padding="0.5rem"
+              >
+                {`x ${quantity}`}
+              </Typography>
+
+              <Typography
+                variant="h5"
+                color={theme.palette.neutral.main}
+                fontWeight="500"
+                padding="0.5rem"
+              >
+                {`$ ${price.toFixed(2)}`}
+              </Typography>
+            </FlexBetween>
+          </Box>
+        ))}
       </Box>
 
-    </Box>
+      <Divider />
+
+      <Box>
+        <FlexBetween>
+          <Typography
+            variant="h4"
+            color={theme.palette.neutral.dark}
+            fontWeight="500"
+            padding="0.5rem"
+          >
+            Total :
+          </Typography>
+          <Typography
+            variant="h4"
+            color={theme.palette.neutral.dark}
+            fontWeight="500"
+            padding="0.5rem"
+          >
+            $ {subTotal.toFixed(2)}
+          </Typography>
+        </FlexBetween>
+      </Box>
+    </WidgetWrapper>
   );
 };
 

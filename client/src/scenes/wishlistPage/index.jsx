@@ -10,13 +10,10 @@ import {
 } from "@mui/material";
 
 const WishlistPage = () => {
-  const [products, setProduct] = useState([]);
-
-  // Products from Redux state []
-  const loggedInUserId = useSelector((state) => state.loggedInUser?._id);
   const [wishlist, setWishlist] = useState([]);
 
-
+  // User details from Redux state []
+  const loggedInUserId = useSelector((state) => state.loggedInUser?._id);
 
   // CSS
   const theme = useTheme();
@@ -25,17 +22,16 @@ const WishlistPage = () => {
   // Connect to server
   const rootUrl = process.env.REACT_APP_SERVER_URL;
 
-  const getProducts = async () => {
+  const getUserWishlist = async () => {
     try {
-      const res = await fetch(`${rootUrl}products`, {
+      const res = await fetch(`${rootUrl}users/${loggedInUserId}/wishlist`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
       const data = await res.json();
 
       if (res.status === 200) {
-        setProduct(data);
-        console.log(products);
+        setWishlist(data);
       }
     } catch (err) {
       console.log(err);
@@ -43,7 +39,9 @@ const WishlistPage = () => {
   };
 
   useEffect(() => {
-    getProducts();
+    if (loggedInUserId) {
+      getUserWishlist();
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -77,7 +75,7 @@ const WishlistPage = () => {
       ) : (
         <Box
           display="grid"
-          gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))"
+          gridTemplateColumns="repeat(auto-fit, minmax(350px, 1fr))"
           gap="2rem"
           m={isDesktop ? "1rem 0.5rem" : "0.8rem"}
         >

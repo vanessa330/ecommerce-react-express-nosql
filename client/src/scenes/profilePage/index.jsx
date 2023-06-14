@@ -1,26 +1,47 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { setLogout } from "../../state";
 import UserOrder from "./UserOrder";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { Box, useMediaQuery, Typography, useTheme } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  // User details from Redux state
-  const loggedInUser = useSelector((state) => state.loggedInUser);
+  const [orders, setOrders] = useState([]);
+
+  // User details from Redux state []
+  const loggedInUserId = useSelector((state) => state.loggedInUser?._id);
 
   // CSS
   const isDesktop = useMediaQuery("(min-width:1000px)");
   const theme = useTheme();
 
   // Connect to Backend
-  // const rootUrl = process.env.REACT_APP_SERVER_URL;
+  const rootUrl = process.env.REACT_APP_SERVER_URL;
 
-  if (!loggedInUser) return null;
+  const getUserOrder = async () => {
+    try {
+      const res = await fetch(`${rootUrl}users/${loggedInUserId}/order`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+
+      if (res.status === 200) {
+        setOrders(data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getUserOrder();
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Box m={isDesktop ? "2rem auto" : "1rem auto"} maxWidth="1000px">
@@ -87,7 +108,15 @@ const ProfilePage = () => {
           flexBasis={isDesktop ? "70%" : undefined}
           m={isDesktop ? "2rem 1rem" : "1rem"}
         >
-          <UserOrder />
+            {orders.map((order) => (
+              <UserOrder
+                key={order.orderId}
+                id={order.orderId}
+                items={order.items}
+                subTotal={order.subTotal}
+                status={order.status}
+              />
+            ))}
         </Box>
       </Box>
     </Box>

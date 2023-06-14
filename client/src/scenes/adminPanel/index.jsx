@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setProductIds} from "../../state";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import {
   Box,
@@ -166,16 +165,16 @@ const AdminPanel = () => {
               </TableHead>
               <TableBody>
                 {productsDetails.map(
-                  ({ id, productName, price, quantity, category, brand }) => {
-                    const isSelected = selectedItemId === id;
+                  ({ _id, productName, price, quantity, category, brand }) => {
+                    const isSelected = selectedItemId === _id;
                     return (
                       <TableRow
                         hover
-                        key={id}
+                        key={_id}
                         aria-checked={isSelected}
                         selected={isSelected}
                         sx={{ cursor: "pointer" }}
-                        onClick={() => setSelectedItemId(id)}
+                        onClick={() => setSelectedItemId(_id)}
                       >
                         <TableCell component="th" scope="row">
                           {productName}

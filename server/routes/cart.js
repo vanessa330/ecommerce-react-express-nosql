@@ -1,5 +1,5 @@
 const express = require("express");
-const { addItemToCart, getCart, subtractItem } = require("../controllers/cart");
+const { addItemToCart, getCart, subtractItem, updatedCartUserId } = require("../controllers/cart");
 
 const router = express.Router();
 
@@ -7,9 +7,10 @@ const router = express.Router();
 router.post("/add/:productId", addItemToCart);
 
 /* READ */
-router.get("/", getCart);
+router.get("/:id?", getCart);
 
 /* UPDATE */
 router.patch("/subtract/:productId", subtractItem);
+router.patch("/:id?", updatedCartUserId);
 
 module.exports = router;
