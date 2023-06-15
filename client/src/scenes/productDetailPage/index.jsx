@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCart, setItemCount, setLogin } from "../../state";
 import ProductImage from "../../components/ProductImage";
@@ -18,7 +18,6 @@ import { FavoriteBorderOutlined, FavoriteOutlined } from "@mui/icons-material";
 const ProductDetailPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [product, setProduct] = useState(null);
 
@@ -30,7 +29,7 @@ const ProductDetailPage = () => {
   const cartId = cart ? cart._id : "";
 
   // CSS
-  const { palette } = useTheme();
+  const theme = useTheme();
   const isDesktop = useMediaQuery("(min-width:1000px)");
 
   const rootUrl = process.env.REACT_APP_SERVER_URL;
@@ -107,143 +106,123 @@ const ProductDetailPage = () => {
       brand,
       picturePath,
       likes,
-      review,
+      // review,
     } = product;
     const isLiked = null || Boolean(likes[loggedInUserId]);
 
     return (
-      <Box
-        m={isDesktop ? "2rem auto" : "1rem auto"}
-        maxWidth="1000px"
-        p={isDesktop ? "1rem 6rem" : "1rem 0"}
-      >
-        <WidgetWrapper>
-          <FlexBetween p={isDesktop ? "1rem 2rem" : "1.5rem"}>
-            <Typography
-              variant="h3"
-              color={palette.neutral.dark}
-              fontWeight="500"
-            >
-              {productName}
-            </Typography>
-          </FlexBetween>
+      <Box m="1rem auto" maxWidth="1000px">
+        <Box
+          display={isDesktop ? "flex" : "block"}
+          justifyContent="center"
+          alignContent="center"
+        >
           <Box
-            display={isDesktop ? "flex" : "block"}
-            justifyContent="center"
-            alignItems="center"
+            flexBasis={isDesktop ? "35%" : undefined}
+            m={isDesktop ? "2rem 1.5rem" : "1rem"}
           >
-            <Box
-              flexBasis={isDesktop ? "50%" : undefined}
-              p={isDesktop ? "2rem" : "1.5rem"}
-            >
+            <WidgetWrapper>
               {picturePath && (
                 <ProductImage
                   src={`${rootUrl}assets/${picturePath}`}
                   width="100%"
                 />
               )}
-            </Box>
+            </WidgetWrapper>
+          </Box>
 
-            <Box
-              flexBasis={isDesktop ? "50%" : undefined}
-              p={isDesktop ? "2rem" : "1.5rem"}
-            >
-              <FlexBetween padding="1rem 0">
-                <FlexBetween gap="1rem" marginTop="2rem">
+          <Box
+            flexBasis={isDesktop ? "60%" : undefined}
+            m={isDesktop ? "2rem 1.5rem" : "1rem"}
+          >
+            <WidgetWrapper>
+              <Box p="1rem">
+                <Typography
+                  variant="h3"
+                  color={theme.palette.neutral.dark}
+                  fontWeight="500"
+                >
+                  {productName}
+                </Typography>
+
+                <FlexBetween m="2rem 0">
                   <Typography
                     variant="h4"
-                    color={palette.neutral.dark}
+                    color={theme.palette.neutral.dark}
                     fontWeight="500"
                   >
                     Price :
                   </Typography>
-                  <Typography variant="h3" color={palette.neutral.dark}>
+                  <Typography variant="h3" color={theme.palette.neutral.dark}>
                     $ {price.toFixed(2)}
                   </Typography>
                 </FlexBetween>
-              </FlexBetween>
 
-              <Typography
-                variant="h4"
-                color={palette.neutral.dark}
-                fontWeight="500"
-                marginTop="2rem"
-              >
-                Description :
-              </Typography>
-              <Typography
-                variant="h5"
-                color={palette.neutral.main}
-                marginTop="1rem"
-              >
-                {description}
-              </Typography>
+                <Typography
+                  variant="h4"
+                  color={theme.palette.neutral.dark}
+                  fontWeight="500"
+                  marginTop="2rem"
+                >
+                  Description :
+                </Typography>
+                <Typography
+                  variant="h5"
+                  color={theme.palette.neutral.main}
+                  marginTop="1rem"
+                >
+                  {description}
+                </Typography>
 
-              <Typography
-                variant="h4"
-                color={palette.neutral.dark}
-                fontWeight="500"
-                marginTop="2rem"
-              >
-                Brand :
-              </Typography>
-              <Typography
-                variant="h5"
-                color={palette.neutral.main}
-                marginTop="1rem"
-              >
-                {brand}
-              </Typography>
-
-              <FlexBetween marginTop="2rem">
-                <FlexBetween gap="0.3rem">
-                  {isLiked !== null && (
-                    <IconButton onClick={likeProduct}>
-                      {isLiked ? (
-                        <FavoriteOutlined
-                          sx={{ color: palette.primary.main }}
-                        />
-                      ) : (
-                        <FavoriteBorderOutlined />
-                      )}
-                    </IconButton>
-                  )}
-                  <Typography>{Object.keys(likes).length}</Typography>
-                </FlexBetween>
-              </FlexBetween>
-
-              <FlexBetween padding="0.8rem 0rem">
-                <FlexBetween gap="1rem">
-                  {quantity > 0 ? (
-                    <Typography variant="h5" color="green">
-                      In Stock
-                    </Typography>
-                  ) : (
-                    <Typography variant="h5" color="red">
-                      Out Of Stock
-                    </Typography>
-                  )}
+                <FlexBetween marginTop="3rem">
+                  <FlexBetween gap="0.3rem">
+                    {isLiked !== null && (
+                      <IconButton onClick={likeProduct}>
+                        {isLiked ? (
+                          <FavoriteOutlined
+                            sx={{ color: theme.palette.primary.main }}
+                          />
+                        ) : (
+                          <FavoriteBorderOutlined />
+                        )}
+                      </IconButton>
+                    )}
+                    <Typography>{Object.keys(likes).length}</Typography>
+                  </FlexBetween>
                 </FlexBetween>
 
-                {quantity > 0 && (
-                  <Box margin="2rem">
+                <FlexBetween marginTop="2rem">
+                  <FlexBetween>
+                    {quantity > 0 ? (
+                      <Typography variant="h5" color="green">
+                        In Stock
+                      </Typography>
+                    ) : (
+                      <Typography variant="h5" color="red">
+                        Out Of Stock
+                      </Typography>
+                    )}
+                  </FlexBetween>
+
+                  {quantity > 0 && (
                     <Button
                       sx={{
-                        backgroundColor: palette.neutral.light,
-                        color: palette.neutral.dark,
-                        borderRadius: "3rem",
-                        padding: "1rem",
+                        p: "1rem",
+                        m: "0.5rem",
+                        backgroundColor: theme.palette.primary.main,
+                        color: theme.palette.background.alt,
+                        "&:hover": { color: theme.palette.primary.main },
                       }}
                       onClick={addItemToCart}
                     >
                       ADD TO CART
                     </Button>
-                  </Box>
-                )}
-              </FlexBetween>
-            </Box>
+                  )}
+                </FlexBetween>
+              </Box>
+            </WidgetWrapper>
           </Box>
-        </WidgetWrapper>
+        </Box>
       </Box>
     );
   }

@@ -24,7 +24,6 @@ import {
   Close,
   ShoppingCart,
   FavoriteRounded,
-  Home,
 } from "@mui/icons-material";
 
 const Navbar = () => {
@@ -39,7 +38,6 @@ const Navbar = () => {
   // CSS
   const isDesktop = useMediaQuery("(min-width: 1000px)");
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
-  const [showSearchInput, setShowSearchInput] = useState(false);
   const itemCount = useSelector((state) => state.itemCount).toString();
   const theme = useTheme();
 
@@ -50,6 +48,8 @@ const Navbar = () => {
 
   const searchProducts = async () => {
     try {
+      if (!searchParam) return window.alert("Please enter your search term...");
+
       const res = await fetch(`${rootUrl}search?product=${searchParam}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -77,7 +77,6 @@ const Navbar = () => {
         setIsMobileMenuToggled(true);
       }
     };
-
     document.addEventListener("mousedown", handler);
 
     return () => {
@@ -86,102 +85,94 @@ const Navbar = () => {
   });
 
   return (
-    <>
-      <FlexBetween
-        padding="1rem 6%"
-        backgroundColor={theme.palette.background.alt}
-      >
-        {!isDesktop && (
-          <IconButton
-            onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
+    <Box backgroundColor={theme.palette.background.alt}>
+      <Box ref={menuRef} display={isDesktop ? "none" : undefined}>
+        {!isDesktop && isMobileMenuToggled && (
+          <Box
+            position="fixed"
+            left="0"
+            bottom="0"
+            height="100%"
+            zIndex="10"
+            maxWidth="500px"
+            minWidth="300px"
+            backgroundColor={theme.palette.background.default}
           >
-            <Menu />
-          </IconButton>
-        )}
-        <Box ref={menuRef} display={isDesktop ? "none" : undefined}>
-          {!isDesktop && isMobileMenuToggled && (
-            <Box
-              position="fixed"
-              left="0"
-              bottom="0"
-              height="100%"
-              zIndex="10"
-              maxWidth="500px"
-              minWidth="300px"
-              backgroundColor={theme.palette.background.default}
-            >
-              <Box display="flex" justifyContent="flex-end" p="1rem">
-                <IconButton
-                  onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-                >
-                  <Close />
-                </IconButton>
-              </Box>
-
-              <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-                alignItems="center"
-                gap="3rem"
+            <Box display="flex" justifyContent="flex-end" p="1rem">
+              <IconButton
+                onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
               >
-                <IconButton
-                  sx={{ fontSize: "25px" }}
-                  onClick={() => {
-                    setIsMobileMenuToggled(false);
-                    navigate("/");
-                  }}
-                >
-                  <Home
+                <Close />
+              </IconButton>
+            </Box>
+
+            <FlexBetween
+              backgroundColor={theme.palette.neutral.light}
+              borderRadius="9px"
+              gap="2rem"
+              padding="0.8rem 1rem"
+              m="1rem 1rem 2rem"
+            >
+              <InputBase
+                placeholder="Searching products..."
+                value={searchParam}
+                onChange={(e) => setSearchParam(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    searchProducts();
+                  }
+                }}
+              />
+              <IconButton onClick={searchProducts}>
+                <Search sx={{ fontSize: "25px" }} />
+              </IconButton>
+            </FlexBetween>
+
+            <Box
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+              gap="3rem"
+            >
+              <Typography>New Arrival</Typography>
+              <Typography>Category</Typography>
+              <Typography>Brand</Typography>
+              <Typography>Contact Us</Typography>
+
+              <IconButton
+                onClick={() => dispatch(setMode())}
+                sx={{ fontSize: "25px" }}
+              >
+                {theme.palette.mode === "dark" ? (
+                  <DarkMode sx={{ fontSize: "25px" }} />
+                ) : (
+                  <LightMode
                     sx={{
                       color: theme.palette.neutral.dark,
                       fontSize: "25px",
                     }}
                   />
-                </IconButton>
+                )}
+              </IconButton>
 
-                <Typography>New Arrival</Typography>
-
-                <Typography>Category</Typography>
-
-                <Typography>Brand</Typography>
-
-                <Typography>Contact Us</Typography>
-
-                <IconButton
-                  onClick={() => dispatch(setMode())}
-                  sx={{ fontSize: "25px" }}
-                >
-                  {theme.palette.mode === "dark" ? (
-                    <DarkMode sx={{ fontSize: "25px" }} />
-                  ) : (
-                    <LightMode
-                      sx={{
-                        color: theme.palette.neutral.dark,
-                        fontSize: "25px",
-                      }}
-                    />
-                  )}
-                </IconButton>
-
-                {loggedInUser ? (
-                  <>
-                    {role === "admin" && (
-                      <Typography
-                        sx={{
-                          "&:hover": {
-                            color: theme.palette.primary.light,
-                            cursor: "pointer",
-                          },
-                        }}
-                        onClick={() => {
-                          setIsMobileMenuToggled(false);
-                          navigate("/admin");
-                        }}
-                      >
-                        Admin Panel
-                      </Typography>
-                    )}
+              {loggedInUser ? (
+                <>
+                  <Typography
+                    sx={{
+                      "&:hover": {
+                        color: theme.palette.primary.light,
+                        cursor: "pointer",
+                      },
+                    }}
+                    onClick={() => {
+                      setIsMobileMenuToggled(false);
+                      navigate("/profile");
+                    }}
+                  >
+                    My Profile
+                  </Typography>
+                  {role === "admin" && (
                     <Typography
                       sx={{
                         "&:hover": {
@@ -190,28 +181,54 @@ const Navbar = () => {
                         },
                       }}
                       onClick={() => {
-                        dispatch(setLogout());
                         setIsMobileMenuToggled(false);
-                        navigate("/");
+                        navigate("/admin");
                       }}
                     >
-                      Log Out
+                      Admin Panel
                     </Typography>
-                  </>
-                ) : (
+                  )}
                   <Typography
+                    sx={{
+                      "&:hover": {
+                        color: theme.palette.primary.light,
+                        cursor: "pointer",
+                      },
+                    }}
                     onClick={() => {
+                      dispatch(setLogout());
                       setIsMobileMenuToggled(false);
-                      navigate("/auth");
+                      navigate("/");
                     }}
                   >
-                    Log In
+                    Log Out
                   </Typography>
-                )}
-              </Box>
+                </>
+              ) : (
+                <Typography
+                  onClick={() => {
+                    setIsMobileMenuToggled(false);
+                    navigate("/auth");
+                  }}
+                >
+                  Log In
+                </Typography>
+              )}
             </Box>
-          )}
-        </Box>
+          </Box>
+        )}
+      </Box>
+
+      <FlexBetween padding="1rem 6%">
+        {!isDesktop && (
+          <IconButton
+            onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
+          >
+            <Menu
+              sx={{ color: theme.palette.neutral.dark, fontSize: "25px" }}
+            />
+          </IconButton>
+        )}
 
         <FlexBetween gap="2rem">
           <Typography
@@ -282,17 +299,6 @@ const Navbar = () => {
                 <Typography p="0.5rem">Wishlist</Typography>
               </IconButton>
             </>
-          )}
-
-          {!isDesktop && (
-            <IconButton onClick={() => setShowSearchInput(!showSearchInput)}>
-              <Search
-                sx={{
-                  color: theme.palette.neutral.dark,
-                  fontSize: "25px",
-                }}
-              />
-            </IconButton>
           )}
 
           <IconButton onClick={() => navigate(`/cart`)}>
@@ -382,38 +388,7 @@ const Navbar = () => {
           )}
         </FlexBetween>
       </FlexBetween>
-
-      <FlexBetween>
-        {showSearchInput && (
-          <Box
-            width="100%"
-            padding="0.8rem 6% 1.5rem"
-            backgroundColor={theme.palette.background.alt}
-          >
-            <FlexBetween
-              backgroundColor={theme.palette.neutral.light}
-              borderRadius="9px"
-              gap="2rem"
-              padding="0.5rem 1rem"
-            >
-              <InputBase
-                placeholder="Searching products..."
-                value={searchParam}
-                onChange={(e) => setSearchParam(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    searchProducts();
-                  }
-                }}
-              />
-              <IconButton onClick={searchProducts}>
-                <Search sx={{ fontSize: "25px" }} />
-              </IconButton>
-            </FlexBetween>
-          </Box>
-        )}
-      </FlexBetween>
-    </>
+    </Box>
   );
 };
 

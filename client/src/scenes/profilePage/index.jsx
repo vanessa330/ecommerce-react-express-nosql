@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { setLogout } from "../../state";
+import { useSelector } from "react-redux";
 import UserOrder from "./UserOrder";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { Box, useMediaQuery, Typography, useTheme } from "@mui/material";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const [orders, setOrders] = useState([]);
 
@@ -44,7 +42,7 @@ const ProfilePage = () => {
   }, []);
 
   return (
-    <Box m={isDesktop ? "2rem auto" : "1rem auto"} maxWidth="1000px">
+    <Box m="1rem auto" maxWidth="1000px">
       <Box
         display={isDesktop ? "flex" : "block"}
         justifyContent="center"
@@ -55,7 +53,7 @@ const ProfilePage = () => {
           m={isDesktop ? "2rem 1.5rem" : "1rem"}
         >
           <WidgetWrapper>
-            <Box p="1.5rem 0">
+            <Box p="1rem" display={isDesktop ? "block" : "flex"}>
               <Typography
                 textAlign="center"
                 padding="1rem"
@@ -70,7 +68,7 @@ const ProfilePage = () => {
                 }}
                 onClick={() => navigate(`/profile`)}
               >
-                My orders
+                My Orders
               </Typography>
               <Typography
                 textAlign="center"
@@ -79,26 +77,7 @@ const ProfilePage = () => {
                 color={theme.palette.neutral.dark}
                 fontWeight="500"
               >
-                My address
-              </Typography>
-              <Typography
-                textAlign="center"
-                padding="1rem"
-                variant="h4"
-                color={theme.palette.neutral.dark}
-                fontWeight="500"
-                sx={{
-                  "&:hover": {
-                    color: theme.palette.primary.light,
-                    cursor: "pointer",
-                  },
-                }}
-                onClick={() => {
-                  dispatch(setLogout());
-                  navigate("/");
-                }}
-              >
-                Logout
+                My Address
               </Typography>
             </Box>
           </WidgetWrapper>
@@ -108,15 +87,15 @@ const ProfilePage = () => {
           flexBasis={isDesktop ? "70%" : undefined}
           m={isDesktop ? "2rem 1rem" : "1rem"}
         >
-            {orders.map((order) => (
-              <UserOrder
-                key={order.orderId}
-                id={order.orderId}
-                items={order.items}
-                subTotal={order.subTotal}
-                status={order.status}
-              />
-            ))}
+          {orders.map((order) => (
+            <UserOrder
+              key={order.orderId}
+              id={order.orderId}
+              items={order.items}
+              subTotal={order.subTotal}
+              status={order.status}
+            />
+          ))}
         </Box>
       </Box>
     </Box>

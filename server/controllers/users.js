@@ -57,7 +57,7 @@ const getUserOrder = async (req, res) => {
   // URL/users/:id/order
   try {
     const { id } = req.params;
-    const userOrders = await Order.find({ userId: id });
+    const userOrders = await Order.find({ userId: id }).sort({ updatedAt: -1 });
 
     const orders = userOrders.map((order) => {
       return {

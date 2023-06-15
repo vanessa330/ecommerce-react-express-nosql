@@ -6,7 +6,6 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const path = require("path");
 const multer = require("multer");
-const ejs = require("ejs");
 const Stripe = require("stripe");
 const { Cart, Order } = require("./models/Cart");
 const authRoutes = require("./routes/auth");
@@ -35,18 +34,21 @@ app.use(
     origin: [process.env.CLIENT_URL, "https://checkout.stripe.com"],
   })
 );
-app.use(express.static("./public"));
+app.use("/assets", express.static(path.join("public/assets")));
 app.use(helmet()); // HTTP header for safty.
 app.use(morgan("tiny")); // log HTTP requests
 
 /* MIDDLEWARE FILE UPLOAD STORAGE */
 
 const storage = multer.diskStorage({
-  destination: "./public/assets",
+  destination: function (req, file, cb) {
+    cb(null, "public/assets");
+  },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
   },
 });
+
 const upload = multer({ storage: storage }).single("file");
 
 /* ROUTES */
