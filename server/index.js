@@ -31,9 +31,17 @@ app.use((req, res, next) => {
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: [process.env.CLIENT_URL, "https://checkout.stripe.com"],
+    origin: [
+      process.env.CLIENT_URL,
+      process.env.CLIENT_IOS_AOS_URL,
+      "https://checkout.stripe.com",
+    ],
   })
 );
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "*");
+//   next();
+// });
 app.use("/assets", express.static(path.join("public/assets")));
 app.use(helmet()); // HTTP header for safty.
 app.use(morgan("tiny")); // log HTTP requests

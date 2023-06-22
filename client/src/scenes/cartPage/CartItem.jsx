@@ -23,9 +23,6 @@ const CartItem = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // User details from Redux state
-  const loggedInUserId = useSelector((state) => state.loggedInUser?._id);
-
   // Cart details from Redux state
   const cart = useSelector((state) => state.cart);
   const cartId = cart ? cart._id : "";

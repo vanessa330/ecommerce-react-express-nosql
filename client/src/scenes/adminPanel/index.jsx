@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import {
   Box,
@@ -21,7 +21,6 @@ import { AddCircle, Edit, Delete } from "@mui/icons-material";
 
 const AdminPanel = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   // User details from Redux state
   const token = useSelector((state) => state.token);

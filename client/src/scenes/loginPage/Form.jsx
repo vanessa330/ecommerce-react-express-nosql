@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setCart, setLogin } from "../../state";
+import { setLogin } from "../../state";
 import { Formik } from "formik";
 import * as yup from "yup";
 import {

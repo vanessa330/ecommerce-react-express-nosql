@@ -14,7 +14,7 @@ const HomePage = () => {
 
   const getProducts = async () => {
     try {
-      const res = await fetch(`${rootUrl}products`, {
+      const res = await fetch(`${rootUrl}/products`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -35,6 +35,7 @@ const HomePage = () => {
 
   return (
     <Box m={isDesktop ? "2rem auto" : "1rem auto"} maxWidth="1000px">
+      <Box display="flex"></Box>
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"

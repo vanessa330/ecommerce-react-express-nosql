@@ -5,7 +5,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme.js";
 import Navbar from "./components/Navbar.jsx";
-import HomePage from "./scenes/homePage";
+import HomePage from "./scenes/homePage/index.jsx";
 import LoginPage from "./scenes/loginPage/index.jsx";
 import ProfilePage from "./scenes/profilePage/index.jsx";
 import ProductDetailPage from "./scenes/productDetailPage/index.jsx";

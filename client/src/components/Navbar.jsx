@@ -96,6 +96,7 @@ const Navbar = () => {
             zIndex="10"
             maxWidth="500px"
             minWidth="300px"
+            maxHeight="100vh"
             backgroundColor={theme.palette.background.default}
           >
             <Box display="flex" justifyContent="flex-end" p="1rem">
@@ -135,27 +136,6 @@ const Navbar = () => {
               alignItems="center"
               gap="3rem"
             >
-              <Typography>New Arrival</Typography>
-              <Typography>Category</Typography>
-              <Typography>Brand</Typography>
-              <Typography>Contact Us</Typography>
-
-              <IconButton
-                onClick={() => dispatch(setMode())}
-                sx={{ fontSize: "25px" }}
-              >
-                {theme.palette.mode === "dark" ? (
-                  <DarkMode sx={{ fontSize: "25px" }} />
-                ) : (
-                  <LightMode
-                    sx={{
-                      color: theme.palette.neutral.dark,
-                      fontSize: "25px",
-                    }}
-                  />
-                )}
-              </IconButton>
-
               {loggedInUser ? (
                 <>
                   <Typography
@@ -214,6 +194,21 @@ const Navbar = () => {
                   Log In
                 </Typography>
               )}
+                     <IconButton
+                onClick={() => dispatch(setMode())}
+                sx={{ fontSize: "25px" }}
+              >
+                {theme.palette.mode === "dark" ? (
+                  <DarkMode sx={{ fontSize: "25px" }} />
+                ) : (
+                  <LightMode
+                    sx={{
+                      color: theme.palette.neutral.dark,
+                      fontSize: "25px",
+                    }}
+                  />
+                )}
+              </IconButton>
             </Box>
           </Box>
         )}

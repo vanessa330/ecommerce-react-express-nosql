@@ -103,7 +103,7 @@ const ProductDetailPage = () => {
       price,
       quantity,
       description,
-      brand,
+      // brand,
       picturePath,
       likes,
       // review,

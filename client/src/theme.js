@@ -20,7 +20,7 @@ export const colorTokens = {
       200: "#FDBF80",
       300: "#FDAF60",
       400: "#FD9F40",
-      500: "#FD8F20",
+      500: "#FD8F20", // orange
       600: "#FD7F00",
       700: "#E86E00",
       800: "#B45900",
