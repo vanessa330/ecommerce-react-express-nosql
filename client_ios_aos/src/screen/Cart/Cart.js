@@ -2,7 +2,6 @@ import React, { useEffect, useContext, useMemo } from "react";
 import { Text, ScrollView, SafeAreaView, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { setCart, setItemCount } from "../../state/action";
-import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { REACT_APP_SERVER_URL } from "@env";
 import themeContext from "../../themeContext";
@@ -10,7 +9,6 @@ import Button from "../../components/Button";
 import CartItems from "./CartItem";
 
 const Cart = () => {
-  const navigation = useNavigation();
   const dispatch = useDispatch();
 
   // User details from Redux state
@@ -62,7 +60,6 @@ const Cart = () => {
       //     userId: loggedInUserId || "",
       //   }
       // );
-
       // if (res.status === 303) {
       //   navigation.navigate("HOME");
       //   getCart();
@@ -79,26 +76,14 @@ const Cart = () => {
   }, []);
 
   return (
-    <SafeAreaView
+    <View
       style={{
-        backgroundColor: theme.bgDefault,
-        borderRadius: 15,
-        margin: 15,
         flex: 1,
+        backgroundColor: theme.bgDefault,
+        paddingHorizontal: 20,
       }}
     >
       <ScrollView>
-        <Text
-          style={{
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            color: theme.fontDefault,
-            fontSize: 30,
-            fontWeight: "bold",
-          }}
-        >
-          My cart :
-        </Text>
         {!items ? (
           <Text
             style={{
@@ -112,7 +97,7 @@ const Cart = () => {
           </Text>
         ) : (
           <>
-            {items?.map((item) => {
+            {items.map((item) => {
               return (
                 <CartItems
                   key={item.productId}
@@ -129,7 +114,7 @@ const Cart = () => {
           </>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

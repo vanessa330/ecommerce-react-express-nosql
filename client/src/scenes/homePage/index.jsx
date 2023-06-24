@@ -14,7 +14,7 @@ const HomePage = () => {
 
   const getProducts = async () => {
     try {
-      const res = await fetch(`${rootUrl}/products`, {
+      const res = await fetch(`${rootUrl}products`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });

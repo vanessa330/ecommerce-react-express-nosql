@@ -1,20 +1,16 @@
-import React, { useEffect, useState, useContext } from "react";
-import {
-  ScrollView,
-  View,
-  SafeAreaView,
-  Alert,
-  StatusBar,
-  Text,
-} from "react-native";
+import React, { useEffect, useState, useContext, useCallback } from "react";
+import { View, Alert, ScrollView } from "react-native";
 import axios from "axios";
 import { REACT_APP_SERVER_URL } from "@env";
+import { useNavigation } from "@react-navigation/native";
 import ProductWidget from "../../components/ProductWidget";
 import { Searchbar } from "react-native-paper";
 import themeContext from "../../themeContext";
 import Button from "../../components/Button";
 
 const Home = () => {
+  const navigation = useNavigation();
+
   const [products, setProduct] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -59,40 +55,43 @@ const Home = () => {
 
   return (
     <View
-      style={{
-        flex: 1,
-        paddingTop: StatusBar.currentHeight,
-        backgroundColor: theme.bgAlt,
-      }}
+      style={{ flex: 1, backgroundColor: theme.bgAlt, paddingHorizontal: 20 }}
     >
+      <Searchbar
+        placeholder="Search..."
+        onChangeText={(query) => setSearchQuery(query)}
+        value={searchQuery}
+        style={{ paddingVertical: 10 }}
+        onIconPress={searchProducts}
+        onSubmitEditing={searchProducts}
+      />
       <ScrollView
-        keyboardShouldPersistTaps="always"
-        style={{ flex: 1, padding: 10 }}
+      // contentContainerStyle={{
+      //   flexGrow: 1,
+      // }}
       >
-        <Searchbar
-          placeholder="Search..."
-          onChangeText={(query) => setSearchQuery(query)}
-          value={searchQuery}
-          style={{ marginHorizontal: 10, marginVertical: 10 }}
-          onIconPress={searchProducts}
-          onSubmitEditing={searchProducts}
-        />
+        {products.map((product) => (
+          <ProductWidget
+            key={product._id}
+            id={product._id}
+            productName={product.productName}
+            price={product.price}
+            quantity={product.quantity}
+            picturePath={product.picturePath}
+          />
+        ))}
 
-        {products.map((product) => {
-          return (
-            <ProductWidget
-              key={product._id}
-              id={product._id}
-              productName={product.productName}
-              price={product.price}
-              quantity={product.quantity}
-              picturePath={product.picturePath}
+        {searchQuery && (
+          <View style={{ backgroundColor: theme.bgAlt, margin: 5 }}>
+            <Button
+              title="BACK"
+              onPress={() => {
+                getProducts();
+                setSearchQuery("");
+              }}
             />
-          );
-        })}
-        <View style={{ backgroundColor: theme.bgAlt, margin: 5 }}>
-          <Button title="BACK" />
-        </View>
+          </View>
+        )}
       </ScrollView>
     </View>
   );

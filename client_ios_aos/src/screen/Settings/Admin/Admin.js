@@ -10,8 +10,8 @@ const Admin = () => {
   const [mode, setMode] = useState(false);
 
   return (
-    <View style={{ flex: 1, paddingTop: "20%" }}>
-      <Text style={{ padding: "5% 8%" }}>Admin</Text>
+    <View style={{ flex: 1 }}>
+      <Text style={{ padding: 20 }}>Admin</Text>
     </View>
   );
 };

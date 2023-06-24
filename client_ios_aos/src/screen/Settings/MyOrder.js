@@ -10,8 +10,8 @@ const MyOrder = () => {
   const [mode, setMode] = useState(false);
 
   return (
-    <View style={{ flex: 1, paddingTop: "20%" }}>
-      <Text style={{ padding: "5% 8%" }}>MyOrder</Text>
+    <View style={{ flex: 1 }}>
+      <Text>MyOrder</Text>
     </View>
   );
 };

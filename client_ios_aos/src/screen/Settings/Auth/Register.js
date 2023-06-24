@@ -18,9 +18,10 @@ const Register = () => {
   // Connect to the server
   const register = async () => {
     try {
-      const res = await axios.post(`${REACT_APP_SERVER_URL}auth/register`, inputs, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await axios.post(
+        `${REACT_APP_SERVER_URL}auth/register`,
+        inputs
+      );
       const data = res.data;
 
       if (res.status === 201) {

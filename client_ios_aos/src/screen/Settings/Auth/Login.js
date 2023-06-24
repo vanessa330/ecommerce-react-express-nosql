@@ -21,15 +21,13 @@ const Login = () => {
   // Connect to the server
   const login = async () => {
     try {
-      const res = await axios.post(`${REACT_APP_SERVER_URL}auth/login`, inputs, {
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await axios.post(`${REACT_APP_SERVER_URL}auth/login`, inputs);
 
       const data = res.data;
 
       if (res.status === 200) {
         dispatch(setLogin(data));
-        
+
         navigation.navigate("SETTINGS");
         navigation.navigate("HOME");
       } else if (res.status === 400) {

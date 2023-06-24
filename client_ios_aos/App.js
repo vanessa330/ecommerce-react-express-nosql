@@ -41,6 +41,14 @@ function WishlistStack() {
   );
 }
 
+function CartStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="MY CART" component={Cart} />
+    </Stack.Navigator>
+  );
+}
+
 function SettingsStack() {
   return (
     <Stack.Navigator>
@@ -83,8 +91,8 @@ export default function App() {
             <Tab.Navigator
               screenOptions={({ route }) => ({
                 tabBarActiveTintColor: "orange",
-                tabBarStyle: [{ display: "flex" }, null],
                 headerShown: false,
+                tabBarShowLabel: false,
                 tabBarIcon: ({ size, color }) => {
                   let iconName;
                   if (route.name === "Home") {
@@ -106,8 +114,7 @@ export default function App() {
               <Tab.Screen name="Wishlist" component={WishlistStack} />
               <Tab.Screen
                 name="Cart"
-                component={Cart}
-                options={{ tabBarBadge: 3 }}
+                component={CartStack}
               />
               <Tab.Screen name="Settings" component={SettingsStack} />
             </Tab.Navigator>

@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Text, ScrollView, View, SafeAreaView, Alert } from "react-native";
+import { Text, ScrollView, View, Image, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { setCart, setUser } from "../../state/action";
 import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 import { REACT_APP_SERVER_URL } from "@env";
-import ProductImage from "../../components/ProductImage";
 import themeContext from "../../themeContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import Button from "../../components/Button";
@@ -89,136 +88,159 @@ const ProductDetails = () => {
     const isLiked = null || Boolean(likes[loggedInUserId]);
 
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView
-          contentContainerStyle={{
-            paddingHorizontal: 10,
-            backgroundColor: theme.bgDefault,
+      <ScrollView
+        contentContainerStyle={{
+          borderRadius: 15,
+          backgroundColor: theme.bgDefault,
+          paddingHorizontal: 20,
+          paddingVertical: 20,
+        }}
+      >
+        <Text
+          style={{
+            color: theme.fontDefault,
+            fontSize: 25,
+            fontWeight: "bold",
           }}
         >
-          {picturePath && <ProductImage picturePath={picturePath} />}
+          {productName}
+        </Text>
 
+        {picturePath && (
+          <View
+            style={{
+              backgroundColor: theme.bgDefault,
+              alignItems: "center",
+              justifyContent: "center",
+              paddingVertical: 20,
+            }}
+          >
+            <Image
+              style={{
+                width: 300,
+                height: 280,
+              }}
+              source={{
+                uri: `${REACT_APP_SERVER_URL}assets/${picturePath}`,
+              }}
+            />
+          </View>
+        )}
+
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: 20,
+            paddingVertical: 15,
+          }}
+        >
           <Text
             style={{
-              padding: "5%",
               color: theme.fontDefault,
-              fontSize: 20,
-              fontWeight: "bold",
+              fontSize: 18,
+              fontWeight: 500,
             }}
           >
-            {productName}
+            Price :
           </Text>
+          <Text
+            style={{
+              color: theme.fontAlt,
+              fontSize: 18,
+              fontWeight: 500,
+            }}
+          >
+            $ {price.toFixed(2)}
+          </Text>
+        </View>
 
+        <View
+          style={{
+            paddingHorizontal: 20,
+            paddingVertical: 15,
+          }}
+        >
+          <Text
+            style={{
+              color: theme.fontDefault,
+              fontSize: 18,
+              fontWeight: 500,
+              paddingVertical: 15,
+            }}
+          >
+            Description :
+          </Text>
+          <Text
+            style={{
+              color: theme.fontAlt,
+              fontSize: 18,
+            }}
+          >
+            {description}
+          </Text>
+        </View>
+
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            backgroundColor: theme.bgDefault,
+            paddingHorizontal: 20,
+          }}
+        >
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "space-between",
+              justifyContent: "center",
               alignItems: "center",
+              backgroundColor: theme.bgDefault,
             }}
           >
+            {isLiked ? (
+              <MaterialIcons
+                name="favorite"
+                size={28}
+                color="orange"
+                onPress={likeProduct}
+              />
+            ) : (
+              <MaterialIcons
+                name="favorite-border"
+                size={28}
+                color="orange"
+                onPress={likeProduct}
+              />
+            )}
+
             <Text
               style={{
-                padding: "5%",
-                color: theme.fontDefault,
-                fontSize: 18,
-                fontWeight: 500,
-              }}
-            >
-              Price :
-            </Text>
-            <Text
-              style={{
-                padding: "5%",
                 color: theme.fontAlt,
                 fontSize: 18,
                 fontWeight: 500,
+                paddingHorizontal: 15,
               }}
             >
-              $ {price.toFixed(2)}
+              {Object.keys(likes).length}
             </Text>
           </View>
+        </View>
 
-          {/* <View
-            style={{
-              paddingTop: 0,
-            }}
-          >
-            <Text
-              style={{
-                padding: "5%",
-                color: theme.fontDefault,
-                fontSize: 18,
-                fontWeight: 500,
-              }}
-            >
-              Description :
-            </Text>
-            <Text
-              style={{
-                padding: "5%",
-                paddingTop: 0,
-                color: theme.fontAlt,
-                fontSize: 18,
-                fontWeight: 500,
-              }}
-            >
-              {description}
-            </Text>
-          </View> */}
-
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              backgroundColor: "white",
-            }}
-          >
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                alignItems: "center",
-                padding: "5%",
-                backgroundColor: "white",
-              }}
-            >
-              {isLiked ? (
-                <MaterialIcons
-                  name="favorite"
-                  size={28}
-                  color="orange"
-                  onPress={likeProduct}
-                />
-              ) : (
-                <MaterialIcons
-                  name="favorite-border"
-                  size={28}
-                  color="orange"
-                  onPress={likeProduct}
-                />
-              )}
-
-              <Text
-                style={{
-                  padding: "5%",
-                  color: theme.fontAlt,
-                  fontSize: 18,
-                  fontWeight: 500,
-                }}
-              >
-                {Object.keys(likes).length}
-              </Text>
-            </View>
-          </View>
+        <View
+          style={{
+            backgroundColor: theme.bgDefault,
+            paddingHorizontal: 20,
+            paddingVertical: 20,
+          }}
+        >
           {quantity > 0 ? (
             <Button title="ADD TO CART" onPress={addItemToCart} />
           ) : (
             <Text
               style={{
                 color: "red",
-                paddingHorizontal: 20,
                 fontSize: 18,
                 fontWeight: "bold",
               }}
@@ -226,8 +248,8 @@ const ProductDetails = () => {
               Out Of Stock
             </Text>
           )}
-        </ScrollView>
-      </SafeAreaView>
+        </View>
+      </ScrollView>
     );
   }
 };

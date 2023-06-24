@@ -36,32 +36,15 @@ const Wishlist = () => {
   }, []);
 
   return (
-    <SafeAreaView
-      style={{
-        backgroundColor: theme.bgDefault,
-        borderRadius: 15,
-        margin: 15,
-        flex: 1,
-      }}
+    <View
+      style={{ flex: 1, backgroundColor: theme.bgAlt, paddingHorizontal: 20 }}
     >
       <ScrollView>
-        <Text
-          style={{
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            color: theme.fontDefault,
-            fontSize: 30,
-            fontWeight: "bold",
-          }}
-        >
-          My wishlist :
-        </Text>
-
         {!wishlist ? (
           <Text
             style={{
-              paddingVertical: 10,
-              paddingHorizontal: 20,
+              paddingVertical: 20,
+              paddingHorizontal: 15,
               color: theme.fontDefault,
               fontSize: 15,
             }}
@@ -70,22 +53,20 @@ const Wishlist = () => {
           </Text>
         ) : (
           <>
-            {wishlist?.map((product) => {
-              return (
-                <ProductWidget
-                  key={product._id}
-                  id={product._id}
-                  productName={product.productName}
-                  price={product.price}
-                  quantity={product.quantity}
-                  picturePath={product.picturePath}
-                />
-              );
-            })}
+            {wishlist.map((product) => (
+              <ProductWidget
+                key={product._id}
+                id={product._id}
+                productName={product.productName}
+                price={product.price}
+                quantity={product.quantity}
+                picturePath={product.picturePath}
+              />
+            ))}
           </>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
