@@ -1,12 +1,6 @@
 # E-commerce Website
 
-> This is a FAKE e-commerce website built on the MongoDB, Express, React, Node, and deployed to [https://ecommerce-react-express-nosql.pages.dev/](https://ecommerce-react-express-nosql.pages.dev/)
-
-<br />
-
-![](./appIMG.png)
-
-<br />
+> This is a FAKE e-commerce website built on the MongoDB, Express, React, Node.
 
 ## Client Side - WEB
 
